@@ -46,7 +46,7 @@ export function PhoneMockup() {
         <div className="relative overflow-hidden rounded-[2.1rem] bg-background">
           <header className="flex items-center gap-2.5 px-4 pb-4 pt-5">
             <img
-              src="/brand/logo-64.webp"
+              src="/brand/mandala.svg"
               alt=""
               width={30}
               height={30}

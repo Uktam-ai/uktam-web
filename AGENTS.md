@@ -17,14 +17,14 @@ bun run lint
 
 ## Layout
 
-| Path | Purpose |
-| --- | --- |
-| `src/routes/` | File-based routes. `__root.tsx` is the only shell. |
-| `src/components/landing/` | Page sections and motion primitives. |
-| `src/components/ui/` | shadcn primitives. Mostly unused — don't extend. |
-| `src/hooks/` | Scroll, reveal, and pointer hooks. |
-| `src/lib/` | Motion tokens, shared ticker/observer, SSR error plumbing. |
-| `src/styles.css` | Design tokens and motion utilities. Single source of truth. |
+| Path                      | Purpose                                                     |
+| ------------------------- | ----------------------------------------------------------- |
+| `src/routes/`             | File-based routes. `__root.tsx` is the only shell.          |
+| `src/components/landing/` | Page sections and motion primitives.                        |
+| `src/components/ui/`      | shadcn primitives. Mostly unused — don't extend.            |
+| `src/hooks/`              | Scroll, reveal, and pointer hooks.                          |
+| `src/lib/`                | Motion tokens, shared ticker/observer, SSR error plumbing.  |
+| `src/styles.css`          | Design tokens and motion utilities. Single source of truth. |
 
 ## Conventions
 

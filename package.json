@@ -10,7 +10,8 @@
     "preview": "wrangler dev -c .output/server/wrangler.json",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "fonts": "bun scripts/fetch-fonts.mjs"
+    "fonts": "bun scripts/fetch-fonts.mjs",
+    "logo": "bun scripts/trace-logo.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

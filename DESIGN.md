@@ -14,16 +14,16 @@ dark. A light site would misrepresent the thing it is selling.
 
 Sampled from the Android app and the logo, not invented.
 
-| Role | Token | Value | Source |
-|---|---|---|---|
-| Canvas | `--background` | `oklch(0.168 0.036 266)` | one step below the app |
-| Surface | `--surface` | `oklch(0.208 0.04 266)` | the app's exact canvas `#0F172A` |
-| Deep panel | `--panel-deep` | `oklch(0.098 0.024 266)` | Languages section only |
-| Blue — source | `--primary` / `--blue-deep` | `0.62 0.173 259` / `0.37 0.147 265` | app outbound bubble |
-| Green — target | `--emerald` / `--green-deep` | `0.773 0.153 163` / `0.432 0.085 168` | app reply bubble |
-| Violet | `--purple` | `0.491 0.241 293` | mandala diamond points; accent only |
+| Role           | Token                        | Value                                 | Source                              |
+| -------------- | ---------------------------- | ------------------------------------- | ----------------------------------- |
+| Canvas         | `--background`               | `oklch(0.168 0.036 266)`              | one step below the app              |
+| Surface        | `--surface`                  | `oklch(0.208 0.04 266)`               | the app's exact canvas `#0F172A`    |
+| Deep panel     | `--panel-deep`               | `oklch(0.098 0.024 266)`              | Languages section only              |
+| Blue — source  | `--primary` / `--blue-deep`  | `0.62 0.173 259` / `0.37 0.147 265`   | app outbound bubble                 |
+| Green — target | `--emerald` / `--green-deep` | `0.773 0.153 163` / `0.432 0.085 168` | app reply bubble                    |
+| Violet         | `--purple`                   | `0.491 0.241 293`                     | mandala diamond points; accent only |
 
-**Strategy: Committed.** Blue and green are a *paired semantic system*, not a
+**Strategy: Committed.** Blue and green are a _paired semantic system_, not a
 palette. The app encodes translation direction as colour — your turn is blue,
 the reply is green — so the site does too. Both the logo (blue petals, green
 petals, teal core) and the app agree on this independently.
@@ -52,13 +52,13 @@ matras and descenders collide at display tracking.
 
 Two speeds, and the split is the whole idea:
 
-| Token | Duration | Use |
-|---|---|---|
-| `--duration-instant` | 90ms | colour, opacity |
-| `--duration-fast` | 180ms | hover, focus, underline |
-| `--duration-base` | 420ms | state change |
-| `--duration-reveal` | 900ms | entrance |
-| `--duration-wipe` | 1100ms | clip-path mask |
+| Token                | Duration | Use                     |
+| -------------------- | -------- | ----------------------- |
+| `--duration-instant` | 90ms     | colour, opacity         |
+| `--duration-fast`    | 180ms    | hover, focus, underline |
+| `--duration-base`    | 420ms    | state change            |
+| `--duration-reveal`  | 900ms    | entrance                |
+| `--duration-wipe`    | 1100ms   | clip-path mask          |
 
 **No hover or focus transition may exceed 220ms.** Entrances are slow; feedback
 is close to instant. Easing: expo-out for entrances, quart-in-out for wipes,

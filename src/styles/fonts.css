@@ -38,7 +38,9 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "IBM Plex Mono";
@@ -46,7 +48,9 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: "Noto Sans Devanagari";
@@ -54,7 +58,10 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a, U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942, U+947-949, U+94b, U+94d, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a,
+    U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942,
+    U+947-949, U+94b, U+94d, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Devanagari";
@@ -62,7 +69,10 @@
   font-weight: 600;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a, U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942, U+947-949, U+94b, U+94d, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a,
+    U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942,
+    U+947-949, U+94b, U+94d, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Kannada";
@@ -70,7 +80,10 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c82, U+c87-c88, U+c8e, U+c95, U+c97, U+c9c, U+c9f, U+ca1, U+ca4, U+ca6, U+ca8, U+cb0, U+cb2, U+cb8-cb9, U+cbe-cc2, U+cc6-cc7, U+cca-ccb, U+ccd, U+cd5, U+ceb, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c82, U+c87-c88, U+c8e, U+c95, U+c97, U+c9c, U+c9f, U+ca1,
+    U+ca4, U+ca6, U+ca8, U+cb0, U+cb2, U+cb8-cb9, U+cbe-cc2, U+cc6-cc7, U+cca-ccb, U+ccd, U+cd5,
+    U+ceb, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Kannada";
@@ -78,7 +91,10 @@
   font-weight: 600;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c82, U+c87-c88, U+c8e, U+c95, U+c97, U+c9c, U+c9f, U+ca1, U+ca4, U+ca6, U+ca8, U+cb0, U+cb2, U+cb8-cb9, U+cbe-cc2, U+cc6-cc7, U+cca-ccb, U+ccd, U+cd5, U+ceb, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c82, U+c87-c88, U+c8e, U+c95, U+c97, U+c9c, U+c9f, U+ca1,
+    U+ca4, U+ca6, U+ca8, U+cb0, U+cb2, U+cb8-cb9, U+cbe-cc2, U+cc6-cc7, U+cca-ccb, U+ccd, U+cd5,
+    U+ceb, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Tamil";
@@ -86,7 +102,9 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+b86-b87, U+b95, U+b99-b9a, U+ba3-ba4, U+ba8, U+baa, U+bae-bb5, U+bbe-bbf, U+bc1, U+bc6-bc8, U+bca-bcb, U+bcd, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+b86-b87, U+b95, U+b99-b9a, U+ba3-ba4, U+ba8, U+baa,
+    U+bae-bb5, U+bbe-bbf, U+bc1, U+bc6-bc8, U+bca-bcb, U+bcd, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Tamil";
@@ -94,7 +112,9 @@
   font-weight: 600;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+b86-b87, U+b95, U+b99-b9a, U+ba3-ba4, U+ba8, U+baa, U+bae-bb5, U+bbe-bbf, U+bc1, U+bc6-bc8, U+bca-bcb, U+bcd, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+b86-b87, U+b95, U+b99-b9a, U+ba3-ba4, U+ba8, U+baa,
+    U+bae-bb5, U+bbe-bbf, U+bc1, U+bc6-bc8, U+bca-bcb, U+bcd, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Telugu";
@@ -102,7 +122,9 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c0e, U+c15, U+c17, U+c21, U+c24, U+c28, U+c2e, U+c30, U+c32-c33, U+c35, U+c3e-c41, U+c46, U+c4d, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c0e, U+c15, U+c17, U+c21, U+c24, U+c28, U+c2e, U+c30,
+    U+c32-c33, U+c35, U+c3e-c41, U+c46, U+c4d, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Telugu";
@@ -110,5 +132,7 @@
   font-weight: 600;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c0e, U+c15, U+c17, U+c21, U+c24, U+c28, U+c2e, U+c30, U+c32-c33, U+c35, U+c3e-c41, U+c46, U+c4d, U+2014;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c0e, U+c15, U+c17, U+c21, U+c24, U+c28, U+c2e, U+c30,
+    U+c32-c33, U+c35, U+c3e-c41, U+c46, U+c4d, U+2014;
 }

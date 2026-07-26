@@ -16,8 +16,13 @@ import { LANGUAGES, STATS } from "./data";
  */
 export function Languages() {
   return (
-    <section id="languages" className="section-deep relative py-24 sm:py-32">
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+    <section id="languages" className="section-deep relative overflow-hidden py-24 sm:py-32">
+      {/* The mark is 8-fold symmetric, so it reads as ornament at this scale
+          rather than as a logo someone forgot to shrink. Cropped by the section
+          edge on purpose: a whole centred logo would be a watermark. */}
+      <img src="/brand/mandala.svg" alt="" aria-hidden className="ambient-mandala" />
+
+      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <Reveal>
             <h2 className="text-3xl sm:text-4xl md:text-5xl">

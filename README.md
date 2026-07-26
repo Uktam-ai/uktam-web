@@ -17,13 +17,13 @@ bun run dev
 
 The dev server listens on <http://localhost:8080>.
 
-| Script | Does |
-| --- | --- |
-| `bun run dev` | Start the dev server |
-| `bun run build` | Production build |
+| Script            | Does                       |
+| ----------------- | -------------------------- |
+| `bun run dev`     | Start the dev server       |
+| `bun run build`   | Production build           |
 | `bun run preview` | Serve the production build |
-| `bun run lint` | ESLint |
-| `bun run format` | Prettier |
+| `bun run lint`    | ESLint                     |
+| `bun run format`  | Prettier                   |
 
 ## Built with
 

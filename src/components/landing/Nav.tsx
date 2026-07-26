@@ -66,7 +66,7 @@ export function Nav() {
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label="Uktam.ai, back to top">
           <img
-            src="/brand/logo-96.webp"
+            src="/brand/mandala.svg"
             alt=""
             width={32}
             height={32}

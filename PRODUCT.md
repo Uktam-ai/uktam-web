@@ -2,7 +2,7 @@
 
 ## Register
 
-**Brand.** A single-page marketing site. The design *is* the product here — the
+**Brand.** A single-page marketing site. The design _is_ the product here — the
 page's job is to make an unbelievable-sounding claim believable.
 
 ## What it is

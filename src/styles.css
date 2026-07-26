@@ -60,11 +60,11 @@
    * render that script.
    */
   --font-display:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil",
-    "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil", "Noto Sans Telugu",
+    ui-sans-serif, system-ui, sans-serif;
   --font-sans:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil",
-    "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil", "Noto Sans Telugu",
+    ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
@@ -88,8 +88,6 @@
   --duration-reveal: 900ms;
   --duration-wipe: 1100ms;
   --duration-ambient: 2400ms;
-
-
 
   /*
    * Sampled from the Android app and the logo, not invented.
@@ -161,13 +159,14 @@
     color-mix(in oklab, var(--indigo) 38%, transparent) 0%,
     transparent 66%
   );
-  --glow-primary: 0 0 0 1px color-mix(in oklab, var(--primary) 45%, transparent),
+  --glow-primary:
+    0 0 0 1px color-mix(in oklab, var(--primary) 45%, transparent),
     0 20px 70px -18px color-mix(in oklab, var(--indigo) 78%, transparent);
-  --glow-emerald: 0 0 0 1px color-mix(in oklab, var(--emerald) 40%, transparent),
+  --glow-emerald:
+    0 0 0 1px color-mix(in oklab, var(--emerald) 40%, transparent),
     0 14px 44px -20px color-mix(in oklab, var(--emerald) 62%, transparent);
   --shadow-elevated: 0 28px 90px -32px oklch(0.05 0.05 275 / 92%);
 }
-
 
 @layer base {
   * {
@@ -305,7 +304,6 @@
   }
 }
 
-
 /* ---------- reveal primitives ---------- */
 
 /*
@@ -398,20 +396,13 @@
   }
 }
 
-
 /* ---------- infinite marquee ---------- */
 
 @utility marquee {
   position: relative;
   display: flex;
   overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 
   &:hover .marquee-track {
     animation-play-state: paused;
@@ -599,6 +590,39 @@
 @utility section-deep {
   background-color: var(--panel-deep);
   color: var(--panel-deep-foreground);
+}
+
+/*
+ * The brand mark used as ornament rather than identification.
+ *
+ * It sits off the right edge so the section crops it — a whole logo floated in
+ * the background is a watermark, a fragment of one is pattern. The rotation is
+ * slow enough to be felt rather than watched: at two minutes a turn the eye
+ * never catches it moving, but the section is never quite the same twice. The
+ * mark's 8-fold symmetry means it also never looks tilted while it does so.
+ */
+@utility ambient-mandala {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: clamp(22rem, 42vw, 40rem);
+  aspect-ratio: 1;
+  translate: 32% -50%;
+  opacity: 0.07;
+  pointer-events: none;
+  /* Painting on its own layer keeps the rotation off the main thread; without
+     it the whole section repaints every frame for an effect nobody can see. */
+  will-change: transform;
+}
+
+.js .ambient-mandala {
+  animation: mandala-drift 120s linear infinite;
+}
+
+@keyframes mandala-drift {
+  to {
+    rotate: 360deg;
+  }
 }
 
 @utility specimen {
@@ -954,7 +978,6 @@
   transform: translate3d(0, var(--py-shift, 0px), 0);
 }
 
-
 /* ---------- texture ---------- */
 
 @utility grain {
@@ -985,7 +1008,6 @@
 }
 
 @keyframes drift {
-
   0% {
     transform: translate3d(0, 0, 0) scale(1);
   }
@@ -1035,6 +1057,12 @@
   .js .reveal-wipe-inner,
   .js .split-inner {
     transform: none;
+  }
+
+  /* The blanket override below would collapse this to a 0.001ms loop rather
+     than stopping it, which spins the mark once per frame instead of never. */
+  .js .ambient-mandala {
+    animation: none;
   }
 
   *,
