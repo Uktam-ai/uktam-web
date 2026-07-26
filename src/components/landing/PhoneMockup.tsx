@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeftRight, Mic, Volume2 } from "lucide-react";
+import { ArrowLeftRight, Info, Mic, Settings, Sun, Volume2 } from "lucide-react";
 
 import { usePrefersReducedMotion } from "@/hooks/use-reveal";
 import { cn } from "@/lib/utils";
@@ -10,14 +10,11 @@ const TURN_INTERVAL_MS = 2200;
 const byCode = new Map(LANGUAGES.map((language) => [language.code, language]));
 
 /**
- * The app's translate screen, rebuilt from a real screenshot rather than
- * imagined: a two-way conversation where each turn shows what was heard above
- * what was said, the direction is carried by colour, and every turn reports its
- * own measured latency.
+ * The app's translate screen.
  *
- * Turns arrive on a timer and the whole exchange loops. State changes once per
- * turn, not per frame — the previous version re-rendered once per typed
- * character, forever.
+ * Blue is your turn, green is the reply coming back, and the pills track
+ * whichever direction is currently being spoken. Every turn reports its own
+ * measured latency, exactly as the app does.
  */
 export function PhoneMockup() {
   const reduced = usePrefersReducedMotion();
@@ -29,49 +26,58 @@ export function PhoneMockup() {
       return;
     }
     const id = window.setInterval(() => {
-      // Pause on a full transcript before starting over, so the loop reads as
-      // a conversation rather than a ticker.
+      // Hold on the full transcript for one beat before restarting, so it
+      // reads as a conversation rather than a ticker.
       setShown((count) => (count > CONVERSATION.length ? 1 : count + 1));
     }, TURN_INTERVAL_MS);
     return () => window.clearInterval(id);
   }, [reduced]);
 
-  const latest = CONVERSATION[Math.min(shown, CONVERSATION.length) - 1] ?? CONVERSATION[0];
+  const current = CONVERSATION[Math.min(Math.max(shown, 1), CONVERSATION.length) - 1];
 
   return (
-    <div className="relative mx-auto w-[298px] sm:w-[326px]">
-      <div className="absolute -inset-10 rounded-[3rem] bg-gradient-hero opacity-20 blur-3xl" />
+    <div className="relative mx-auto w-[292px] sm:w-[320px]">
+      {/* A radial falloff, not a blurred rectangle. The old glow was an inset
+          box with a blur on it, which still resolved to a visible lighter
+          panel with discernible edges behind the phone. */}
+      <div className="phone-glow" aria-hidden />
 
       <div className="shadow-elevated relative rounded-[2.6rem] border border-border bg-surface p-2.5">
         <div className="relative overflow-hidden rounded-[2.1rem] bg-background">
-          <header className="flex items-center gap-2.5 px-4 pb-3 pt-5">
+          <header className="flex items-center gap-2.5 px-4 pb-4 pt-5">
             <img
               src="/brand/logo-64.webp"
               alt=""
-              width={26}
-              height={26}
-              className="h-[26px] w-[26px] rounded-full bg-white p-[3px]"
+              width={30}
+              height={30}
+              className="h-[30px] w-[30px] rounded-full bg-white p-[3px]"
               decoding="async"
             />
-            <span className="font-display text-[15px] font-bold tracking-tight">Uktam.ai</span>
-            <span className="ml-auto mono-label text-[9px] text-emerald">offline</span>
+            <span className="font-display text-base font-bold tracking-tight">Uktam.ai</span>
+            <span className="ml-auto flex items-center gap-2.5 text-foreground/85">
+              <Sun className="h-[15px] w-[15px]" />
+              <Info className="h-[15px] w-[15px]" />
+              <Settings className="h-[15px] w-[15px]" />
+            </span>
           </header>
 
-          <div className="flex items-center gap-2 border-b border-border px-4 pb-4">
-            <LanguagePill code={latest.from} active />
-            <ArrowLeftRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-            <LanguagePill code={latest.to} />
+          {/* Follows the turn being spoken, so the pills flip when the reply
+              comes back. */}
+          <div className="flex items-center gap-2 border-b border-border/60 px-3.5 pb-4">
+            <LanguagePill code={current.from} active />
+            <ArrowLeftRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <LanguagePill code={current.to} />
           </div>
 
-          <div className="flex min-h-[330px] flex-col gap-3 px-3 py-4">
+          <div className="flex min-h-[318px] flex-col gap-3 px-3 py-4">
             {CONVERSATION.map((turn, i) => (
               <Turn key={i} turn={turn} visible={i < shown} />
             ))}
           </div>
 
-          <div className="flex justify-center pb-7 pt-2">
-            <div className="relative grid h-14 w-14 place-items-center rounded-full bg-primary">
-              <Mic className="h-5 w-5 text-primary-foreground" />
+          <div className="flex justify-center pb-7 pt-1">
+            <div className="relative grid h-16 w-16 place-items-center rounded-full bg-primary">
+              <Mic className="h-6 w-6 text-primary-foreground" />
               <span className="absolute inset-0 rounded-full border border-primary [animation:pulse-ring_2.4s_ease-out_infinite]" />
             </div>
           </div>
@@ -82,50 +88,53 @@ export function PhoneMockup() {
 }
 
 function LanguagePill({ code, active = false }: { code: string; active?: boolean }) {
-  const language = byCode.get(code);
   return (
     <span
       lang={code}
       className={cn(
-        "flex-1 truncate rounded-full px-3 py-1.5 text-center text-[13px] transition-colors duration-(--duration-fast)",
+        "flex-1 truncate rounded-full px-3 py-2 text-center text-sm",
         active ? "bg-primary font-medium text-primary-foreground" : "bg-secondary text-foreground",
       )}
     >
-      {language?.script}
+      {byCode.get(code)?.script}
     </span>
   );
 }
 
 function Turn({ turn, visible }: { turn: (typeof CONVERSATION)[number]; visible: boolean }) {
+  // Your turn sits left in blue; the reply comes back right in green.
   const outbound = turn.direction === "out";
 
   return (
     <article
       data-visible={visible || undefined}
-      className={cn("phone-turn", outbound ? "mr-6 bg-blue-deep" : "ml-6 bg-green-deep")}
+      className={cn(
+        "phone-turn max-w-[87%]",
+        outbound ? "self-start bg-blue-deep" : "self-end bg-green-deep",
+      )}
     >
-      {/* What was heard, quieter than what was said — the translation is the
-          thing the user is reaching for. */}
-      <p lang={turn.from} className="text-[11px] leading-snug text-white/60">
+      {/* What was heard, set quieter than what was said — the translation is
+          the thing being reached for. */}
+      <p lang={turn.from} className="text-[11px] leading-relaxed text-white/55">
         {turn.source}
       </p>
 
-      <div className="mt-1.5 flex items-start gap-2">
-        <p lang={turn.to} className="flex-1 text-[15px] font-semibold leading-snug text-white">
+      <div className="mt-1.5 flex items-end gap-2">
+        <p lang={turn.to} className="flex-1 text-[15px] font-semibold leading-relaxed text-white">
           {turn.target}
         </p>
         <span
           className={cn(
-            "mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full",
+            "grid h-8 w-8 shrink-0 place-items-center rounded-full",
             outbound ? "bg-primary" : "bg-emerald",
           )}
         >
-          <Volume2 className={cn("h-3.5 w-3.5", outbound ? "text-white" : "text-green-deep")} />
+          <Volume2 className={cn("h-4 w-4", outbound ? "text-white" : "text-green-deep")} />
         </span>
       </div>
 
       <p className="mt-2 font-mono text-[9px] text-white/45">
-        ASR {turn.asrMs} ms · Translation {turn.translateS}s
+        ASR: {turn.asrMs}ms | Translation {turn.translateS}s
       </p>
     </article>
   );

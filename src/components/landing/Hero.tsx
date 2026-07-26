@@ -29,25 +29,25 @@ export function Hero() {
     <section id="top" className="relative overflow-hidden pb-20 pt-28 sm:pb-28 sm:pt-32">
       <Aurora />
 
-      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <Reveal delay={STEP.badge}>
-          <span className="offline-pill">
-            <ShieldCheck className="h-3.5 w-3.5" />
-            Zero data leaves your phone
-          </span>
-        </Reveal>
+      {/*
+        One row, phone included, aligned to the top. Putting the phone in a
+        second row left it stranded low with a pool of empty canvas beside the
+        headline; here it reads as part of the opening statement.
+      */}
+      <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start lg:gap-14">
+        <div>
+          <Reveal delay={STEP.badge}>
+            <span className="offline-pill">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Zero data leaves your phone
+            </span>
+          </Reveal>
 
-        <Reveal delay={STEP.headline} className="mt-8">
-          <LivingHeadline />
-        </Reveal>
+          <Reveal delay={STEP.headline} className="mt-8">
+            <LivingHeadline />
+          </Reveal>
 
-        {/*
-          items-start, not items-end. The phone is the tallest thing in this
-          row, and bottom-aligning pushed the primary CTA below the fold on a
-          900px viewport.
-        */}
-        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_auto] lg:items-start lg:gap-16">
-          <div>
+          <div className="mt-10">
             <Reveal delay={STEP.subhead}>
               <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 A real-time Indic speech-to-speech pipeline that runs entirely on your Android
@@ -91,15 +91,15 @@ export function Hero() {
               </dl>
             </Reveal>
           </div>
-
-          <Reveal
-            variant="wipe"
-            delay={STEP.phone}
-            className="justify-self-center lg:justify-self-end"
-          >
-            <PhoneMockup />
-          </Reveal>
         </div>
+
+        <Reveal
+          variant="wipe"
+          delay={STEP.phone}
+          className="justify-self-center lg:justify-self-end"
+        >
+          <PhoneMockup />
+        </Reveal>
       </div>
     </section>
   );

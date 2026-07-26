@@ -228,6 +228,18 @@
   ::selection {
     background: color-mix(in oklab, var(--purple) 45%, transparent);
   }
+
+  /*
+   * Emerald because it is the one colour reserved for "this is safe and
+   * local", and because it clears contrast against both the dark canvas and
+   * the paper section. The site hides the system cursor over interactive
+   * elements, so the keyboard affordance has to be unmistakable.
+   */
+  :focus-visible {
+    outline: 2px solid var(--emerald);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 }
 
 @utility text-gradient {
@@ -272,21 +284,30 @@
 }
 
 @utility card-ring {
-  background-color: color-mix(in oklab, var(--surface) 70%, transparent);
+  background-color: var(--surface);
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px);
+  /*
+   * 180ms, not 600. A hover is a reply to the pointer, and anything slower
+   * stops reading as a response and starts reading as lag. Entrances are the
+   * slow things on this page; feedback is not.
+   *
+   * No will-change either: it pinned a compositor layer for every card on the
+   * page permanently, to serve a transition that only runs while hovered.
+   * Backdrop-filter went the same way — these sit on an opaque surface, so it
+   * cost a full-card blur pass and bought nothing.
+   */
   transition:
-    border-color 0.6s var(--ease-out-expo),
-    background-color 0.6s var(--ease-out-expo),
-    transform 0.7s var(--ease-out-expo),
-    box-shadow 0.7s var(--ease-out-expo);
-  will-change: transform;
+    border-color var(--duration-fast) var(--ease-snap),
+    background-color var(--duration-fast) var(--ease-snap),
+    transform var(--duration-fast) var(--ease-out-quint),
+    box-shadow var(--duration-fast) var(--ease-out-quint);
 
-  &:hover {
-    border-color: color-mix(in oklab, var(--indigo) 55%, transparent);
-    background-color: color-mix(in oklab, var(--surface-raised) 82%, transparent);
-    transform: translate3d(0, -6px, 0);
-    box-shadow: 0 28px 70px -32px color-mix(in oklab, var(--indigo) 85%, transparent);
+  &:hover,
+  &:focus-visible {
+    border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+    background-color: var(--surface-raised);
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 22px 60px -32px color-mix(in oklab, var(--primary) 85%, transparent);
   }
 }
 
@@ -753,6 +774,23 @@
 
 /* ---------- phone mockup ---------- */
 
+/*
+ * A radial falloff reaching full transparency well inside its own box, so it
+ * has no edge to see. A blurred rectangle -- even at blur-3xl -- still resolves
+ * to a lighter panel with visible boundaries against a flat canvas.
+ */
+@utility phone-glow {
+  position: absolute;
+  inset: -22%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side ellipse,
+    color-mix(in oklab, var(--primary) 26%, transparent),
+    color-mix(in oklab, var(--indigo) 12%, transparent) 55%,
+    transparent 76%
+  );
+}
+
 @utility phone-turn {
   border-radius: 1rem;
   padding: 0.75rem 0.875rem;
@@ -903,7 +941,9 @@
   position: relative;
   transform-style: preserve-3d;
   transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  /* The tilt tracks the pointer, so it has to keep up with it. At 500ms the
+     card visibly lagged behind the cursor that was steering it. */
+  transition: transform var(--duration-fast) var(--ease-out-quint);
 
   &::before {
     content: "";
@@ -912,7 +952,7 @@
     border-radius: inherit;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity var(--duration-fast) var(--ease-snap);
     background: radial-gradient(
       340px circle at var(--mx) var(--my),
       color-mix(in oklab, var(--cyan) 16%, transparent),
