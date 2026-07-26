@@ -4,7 +4,7 @@ import { PhoneMockup } from "./PhoneMockup";
 import { Reveal } from "./Reveal";
 
 import { SplitText } from "./SplitText";
-import { PLAY_STORE_URL } from "./data";
+import { HERO_STATS, PLAY_STORE_URL } from "./data";
 
 export function Hero() {
   return (
@@ -69,14 +69,10 @@ export function Hero() {
 
           <Reveal delay={330}>
             <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-7">
-              {[
-                ["4", "Indic languages"],
-                ["0 ms", "Network latency"],
-                ["GPL-3.0", "Open source"],
-              ].map(([v, k]) => (
-                <div key={k}>
-                  <dt className="font-mono text-lg font-bold text-foreground">{v}</dt>
-                  <dd className="mt-1 text-xs text-muted-foreground">{k}</dd>
+              {HERO_STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="font-mono text-lg font-bold text-foreground">{stat.value}</dt>
+                  <dd className="mt-1 text-xs text-muted-foreground">{stat.label}</dd>
                 </div>
               ))}
             </dl>

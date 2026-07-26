@@ -1,4 +1,5 @@
 @import "tailwindcss" source(none);
+@import "./styles/fonts.css";
 @source "../src";
 @import "tw-animate-css";
 
@@ -43,40 +44,90 @@
   --color-purple: var(--purple);
   --color-emerald: var(--emerald);
   --color-cyan: var(--cyan);
+  --color-blue-deep: var(--blue-deep);
+  --color-green-deep: var(--green-deep);
+  --color-teal: var(--teal);
+  --color-paper: var(--paper);
+  --color-paper-foreground: var(--paper-foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
-  --font-display: "Satoshi", "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  /*
+   * Satoshi carries no Indic glyphs, so the Noto faces sit behind it in the
+   * same stack and the browser falls through per codepoint. Each Noto is
+   * subset with a unicode-range, so they only download on pages that actually
+   * render that script.
+   */
+  --font-display:
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil",
+    "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil",
+    "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 :root {
   --radius: 0.875rem;
 
-  /* motion */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.32, 0.5, 1);
+  /*
+   * Motion. Mirrors src/lib/motion.ts — change both together.
+   * Two speeds: entrances are slow and deliberate, feedback is near-instant.
+   * Nothing driven by hover or focus may exceed --duration-hover-max.
+   */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-quart: cubic-bezier(0.86, 0, 0.07, 1);
+  --ease-snap: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  --duration-instant: 90ms;
+  --duration-fast: 180ms;
+  --duration-hover-max: 220ms;
+  --duration-base: 420ms;
+  --duration-reveal: 900ms;
+  --duration-wipe: 1100ms;
+  --duration-ambient: 2400ms;
 
 
 
-  /* Deep ink-blue canvas so blue -> violet -> cyan light reads as emission. */
-  --background: oklch(0.128 0.03 271);
+  /*
+   * Sampled from the Android app and the logo, not invented.
+   *
+   * The app encodes translation direction as colour: an outbound turn is blue,
+   * the reply is green. That is the product's own semantic, so it is the site's
+   * too — blue and green are a paired system, never decoration. Violet comes
+   * from the mandala's diamond points and stays a sparing accent.
+   *
+   * --surface is the app's exact canvas (#0F172A). The page sits a step darker
+   * so cards read as raised against it.
+   */
+  --background: oklch(0.168 0.036 266);
   --foreground: oklch(0.982 0.006 268);
-  --surface: oklch(0.178 0.035 272);
-  --surface-raised: oklch(0.222 0.043 273);
+  --surface: oklch(0.208 0.04 266);
+  --surface-raised: oklch(0.253 0.049 268);
 
-  --card: oklch(0.178 0.035 272);
+  --card: oklch(0.208 0.04 266);
   --card-foreground: oklch(0.982 0.006 268);
-  --popover: oklch(0.178 0.035 272);
+  --popover: oklch(0.208 0.04 266);
   --popover-foreground: oklch(0.982 0.006 268);
 
-  --primary: oklch(0.618 0.222 262);
+  /* Blue — the outbound voice. */
+  --primary: oklch(0.62 0.173 259);
   --primary-foreground: oklch(0.995 0.004 268);
-  --indigo: oklch(0.558 0.235 277);
-  --purple: oklch(0.585 0.248 300);
-  --cyan: oklch(0.79 0.145 205);
-  --emerald: oklch(0.735 0.158 163);
+  --blue-deep: oklch(0.37 0.147 265);
+  --indigo: oklch(0.485 0.242 263);
+  --cyan: oklch(0.613 0.188 253);
+
+  /* Green — the returning voice, and every offline signal. */
+  --emerald: oklch(0.773 0.153 163);
+  --green-deep: oklch(0.432 0.085 168);
+  --teal: oklch(0.477 0.086 182);
+
+  /* Accent only. */
+  --purple: oklch(0.491 0.241 293);
+
+  /* The inverted Languages section. Cool, not cream. */
+  --paper: oklch(0.958 0.005 165);
+  --paper-foreground: oklch(0.208 0.04 266);
 
   --secondary: oklch(0.222 0.043 273);
   --secondary-foreground: oklch(0.982 0.006 268);
@@ -135,12 +186,43 @@
     overflow-x: hidden;
   }
 
+  /*
+   * Display type is set tight — leading below 1 and heavy negative tracking.
+   * At these sizes the default 1.2 leading opens gaps that read as slack, and
+   * the optical letterfit of a geometric grotesque needs pulling in.
+   */
   h1,
-  h2,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+   * Indic scripts carry tall ascenders and deep matras that collide at the
+   * tracking and leading above. Give any element holding one room to breathe.
+   */
+  [lang="hi"],
+  [lang="kn"],
+  [lang="ta"],
+  [lang="te"] {
+    line-height: 1.45;
+    letter-spacing: 0;
   }
 
   ::selection {

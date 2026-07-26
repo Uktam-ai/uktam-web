@@ -19,10 +19,17 @@ export const PILLARS = [
     body: "Multi-billion parameter models custom-quantized to GGUF and ONNX for this project, cutting memory and battery cost while holding near-parity accuracy.",
   },
   {
-    label: "04 / Speed",
-    title: "Zero latency, no internet",
-    body: "No round trip, no API queue. Once the models are on device you translate in remote areas, dead zones and aeroplanes without a single byte of data.",
+    label: "04 / Independence",
+    title: "No round trip, ever",
+    body: "Speech lands as text in about 200 ms on device. Nothing queues behind an API and nothing degrades when the signal does — dead zones, remote areas and aeroplanes all behave identically.",
   },
+];
+
+/** Headline figures under the hero. Every one is measured, not aspirational. */
+export const HERO_STATS = [
+  { value: "~200 ms", label: "On-device ASR" },
+  { value: "0", label: "Network calls" },
+  { value: "GPL-3.0", label: "Open source" },
 ];
 
 export const PIPELINE = [
@@ -30,33 +37,72 @@ export const PIPELINE = [
     step: "01",
     title: "Speak",
     engine: "Microphone",
+    timing: null,
     body: "Talk naturally in Hindi, Kannada, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
   },
   {
     step: "02",
     title: "Recognise",
     engine: "Sherpa-ONNX · IndicConformer",
-    body: "AI4Bharat's IndicConformer transcribes speech in real time, entirely locally, with no cloud ASR endpoint involved.",
+    timing: "~200 ms",
+    body: "AI4Bharat's IndicConformer transcribes speech in about 200 ms, entirely locally, with no cloud ASR endpoint involved.",
   },
   {
     step: "03",
     title: "Translate",
     engine: "llama.cpp · Sarvam Translate",
-    body: "The Sarvam Translate model runs through custom JNI bindings over llama.cpp for accurate offline machine translation.",
+    timing: "7–11 s",
+    body: "Sarvam Translate runs through custom JNI bindings over llama.cpp. A multi-billion parameter model on phone silicon takes a few seconds — and it takes them whether or not you have signal.",
   },
   {
     step: "04",
     title: "Speak back",
     engine: "Android native TTS",
+    timing: "instant",
     body: "The translated text is spoken aloud through Android's offline text-to-speech engine — a full speech-to-speech loop.",
   },
 ];
 
 export const LANGUAGES = [
-  { script: "हिन्दी", name: "Hindi", code: "hi" },
-  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn" },
-  { script: "தமிழ்", name: "Tamil", code: "ta" },
-  { script: "తెలుగు", name: "Telugu", code: "te" },
+  { script: "हिन्दी", name: "Hindi", code: "hi", font: "devanagari" },
+  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn", font: "kannada" },
+  { script: "தமிழ்", name: "Tamil", code: "ta", font: "tamil" },
+  { script: "తెలుగు", name: "Telugu", code: "te", font: "telugu" },
+];
+
+/**
+ * A real exchange captured from the Android app, timings included. `direction`
+ * mirrors the app's own colour semantics: outbound turns are blue, the reply
+ * is green.
+ */
+export const CONVERSATION = [
+  {
+    direction: "out",
+    from: "hi",
+    to: "kn",
+    source: "मैं अभी बाहर जा रहा हूं",
+    target: "ನಾನು ಈಗಲೇ ಹೊರಡುತ್ತಿದ್ದೇನೆ.",
+    asrMs: 198,
+    translateS: 7.58,
+  },
+  {
+    direction: "in",
+    from: "kn",
+    to: "hi",
+    source: "ನೀನು ಎಲ್ಲಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ",
+    target: "तुम कहाँ जा रहे हो?",
+    asrMs: 203,
+    translateS: 7.656,
+  },
+  {
+    direction: "out",
+    from: "hi",
+    to: "kn",
+    source: "मैं अभी कॉलेज को जाके वापस शाम पांच बजे को आऊंगा",
+    target: "ನಾನು ಕಾಲೇಜಿಗೆ ಹೋಗಿ ಸಂಜೆ ೫ ಗಂಟೆಗೆ ಹಿಂತಿರುಗುತ್ತೇನೆ.",
+    asrMs: 314,
+    translateS: 11.024,
+  },
 ];
 
 export const STATS = [
