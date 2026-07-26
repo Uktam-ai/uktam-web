@@ -47,8 +47,8 @@
   --color-blue-deep: var(--blue-deep);
   --color-green-deep: var(--green-deep);
   --color-teal: var(--teal);
-  --color-paper: var(--paper);
-  --color-paper-foreground: var(--paper-foreground);
+  --color-panel-deep: var(--panel-deep);
+  --color-panel-deep-foreground: var(--panel-deep-foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   /*
@@ -125,9 +125,14 @@
   /* Accent only. */
   --purple: oklch(0.491 0.241 293);
 
-  /* The inverted Languages section. Cool, not cream. */
-  --paper: oklch(0.958 0.005 165);
-  --paper-foreground: oklch(0.208 0.04 266);
+  /*
+   * The Languages section breaks the page's rhythm by going *darker* than
+   * everything else, not lighter. A bright panel between dark sections reads
+   * as a flash when you scroll into it; dropping below the canvas gets the
+   * same structural contrast and lets the scripts sit at maximum legibility.
+   */
+  --panel-deep: oklch(0.098 0.024 266);
+  --panel-deep-foreground: oklch(0.975 0.006 268);
 
   --secondary: oklch(0.222 0.043 273);
   --secondary-foreground: oklch(0.982 0.006 268);
@@ -232,7 +237,7 @@
   /*
    * Emerald because it is the one colour reserved for "this is safe and
    * local", and because it clears contrast against both the dark canvas and
-   * the paper section. The site hides the system cursor over interactive
+   * the deep panel. The site hides the system cursor over interactive
    * elements, so the keyboard affordance has to be unmistakable.
    */
   :focus-visible {
@@ -602,18 +607,9 @@
 
 /* ---------- inverted section ---------- */
 
-/*
- * Cool paper, not cream. A warm off-white with a serif would be the default
- * "editorial" move; this stays in the product's own cool cast so the flip
- * reads as the same brand under different light.
- */
-@utility section-paper {
-  background-color: var(--paper);
-  color: var(--paper-foreground);
-
-  & ::selection {
-    background: color-mix(in oklab, var(--green-deep) 30%, transparent);
-  }
+@utility section-deep {
+  background-color: var(--panel-deep);
+  color: var(--panel-deep-foreground);
 }
 
 @utility specimen {
@@ -621,13 +617,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--paper);
+  background-color: var(--panel-deep);
   padding: 1.5rem 0.75rem;
   text-align: center;
   transition: background-color var(--duration-fast) var(--ease-snap);
 
   &:hover {
-    background-color: color-mix(in oklab, var(--paper-foreground) 5%, var(--paper));
+    background-color: color-mix(in oklab, var(--panel-deep-foreground) 6%, var(--panel-deep));
   }
 }
 

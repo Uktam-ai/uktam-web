@@ -8,19 +8,18 @@ import { Reveal } from "./Reveal";
 import { LANGUAGES, STATS } from "./data";
 
 /**
- * The one inverted section on the page.
- *
- * Every other surface is dark, which flattens the Indic scripts into glowing
- * tiles. On paper they read as what they are — typography — and the break in
- * the page's rhythm marks this as the section about the languages themselves.
+ * The one section that breaks the page's surface rhythm, by dropping below the
+ * canvas rather than rising above it. The scripts get their contrast — they are
+ * the subject here, not decoration — without a bright panel flashing at anyone
+ * scrolling through in a dark room.
  */
 export function Languages() {
   return (
-    <section id="languages" className="section-paper relative py-24 sm:py-32">
+    <section id="languages" className="section-deep relative py-24 sm:py-32">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <Reveal>
-            <span className="mono-label text-green-deep">Languages</span>
+            <span className="mono-label text-emerald">Languages</span>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl">
