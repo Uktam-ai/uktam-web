@@ -123,6 +123,19 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/*
+          Marks the document as scripted before first paint. Reveal styles are
+          scoped to `.js`, so without this the page renders in its final,
+          readable state instead of a screen of invisible content. It has to be
+          inline and synchronous — a deferred script would let the unrevealed
+          state paint first. The payload is a fixed literal with no
+          interpolation, so there is nothing here to inject into.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add("js")`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>

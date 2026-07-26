@@ -1,11 +1,15 @@
 import type { ReactNode } from "react";
+
 import { useScrollVelocity } from "@/hooks/use-scroll-fx";
 import { cn } from "@/lib/utils";
 
 /**
- * Infinite horizontal marquee. The children list is duplicated so the
- * translation loop is seamless. Scroll velocity skews and stretches the
- * track, so flicking the page visibly drags the strip.
+ * Infinite horizontal marquee. The children are duplicated so the translation
+ * loop is seamless, and scroll velocity skews the track, so flicking the page
+ * visibly drags the strip.
+ *
+ * The skew arrives as a CSS custom property written by the hook on each frame —
+ * it never passes through React state.
  */
 export function Marquee({
   children,
@@ -14,22 +18,16 @@ export function Marquee({
   className,
 }: {
   children: ReactNode;
+  /** Seconds for one full pass. */
   speed?: number;
   reverse?: boolean;
   className?: string;
 }) {
-  const velocity = useScrollVelocity();
-  const clamped = Math.max(-28, Math.min(28, velocity));
+  const skewRef = useScrollVelocity<HTMLDivElement>();
 
   return (
     <div className={cn("marquee", className)} data-cursor="text">
-      <div
-        className="w-max"
-        style={{
-          transform: `skewX(${(clamped * -0.22).toFixed(2)}deg)`,
-          transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
-      >
+      <div ref={skewRef} className="marquee-skew">
         <div
           className="marquee-track"
           style={{

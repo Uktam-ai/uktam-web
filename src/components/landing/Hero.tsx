@@ -21,13 +21,13 @@ export function Hero() {
 
           <h1 className="mt-7 text-[2.6rem] font-bold leading-[1.03] sm:text-6xl lg:text-[4.1rem]">
             <span className="block">
-              <SplitText text="Speak Hindi." delay={120} stagger={26} />
+              <SplitText text="Speak Hindi." mode="chars" delay={120} />
             </span>
             <span className="block">
-              <SplitText text="Hear Tamil." delay={420} stagger={26} />
+              <SplitText text="Hear Tamil." mode="chars" delay={420} />
             </span>
             <span className="block">
-              <SplitText text="No internet." delay={720} stagger={26} gradient />
+              <SplitText text="No internet." mode="chars" delay={720} gradient />
             </span>
           </h1>
 

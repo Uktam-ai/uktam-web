@@ -1,11 +1,20 @@
 import { useEffect, useRef } from "react";
-import { usePrefersReducedMotion } from "@/hooks/use-reveal";
 
+import { usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { hasFinePointer, pointer, trackPointer } from "@/lib/pointer";
+import { damp, onTick } from "@/lib/ticker";
+
+/**
+ * Ambient light behind the hero.
+ *
+ * Two orbs rather than four, and blur capped well below the previous 130px.
+ * A blurred element is rasterised at full size before the blur is applied, so a
+ * 32rem orb at 130px blur is an enormous surface to recompose every frame —
+ * and there were four of them drifting continuously.
+ */
 const ORBS = [
-  { key: "a", className: "left-[4%] top-[6%] h-[28rem] w-[28rem] bg-primary/50" },
-  { key: "b", className: "right-[2%] top-[0%] h-[32rem] w-[32rem] bg-purple/45" },
-  { key: "c", className: "left-[34%] top-[44%] h-[26rem] w-[26rem] bg-indigo/45" },
-  { key: "d", className: "right-[26%] top-[56%] h-[18rem] w-[18rem] bg-cyan/25" },
+  { key: "blue", className: "left-[6%] top-[4%] h-[24rem] w-[24rem] bg-primary/45" },
+  { key: "green", className: "right-[8%] top-[38%] h-[20rem] w-[20rem] bg-emerald/25" },
 ];
 
 export function Aurora() {
@@ -13,71 +22,53 @@ export function Aurora() {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (reduced || !root.current) return;
-    let cancelled = false;
     const node = root.current;
-    const orbs = Array.from(node.querySelectorAll<HTMLElement>("[data-orb]"));
+    if (!node || reduced || !hasFinePointer()) return;
 
-    (async () => {
-      const { animate } = await import("animejs");
-      if (cancelled) return;
-      orbs.forEach((orb, i) => {
-        animate(orb, {
-          translateX: [0, 40 * (i % 2 === 0 ? 1 : -1), 0],
-          translateY: [0, -30 - i * 8, 0],
-          scale: [1, 1.16, 1],
-          opacity: [0.5, 0.9, 0.5],
-          duration: 14000 + i * 3200,
-          ease: "inOutSine",
-          loop: true,
-          delay: i * 900,
-        });
-      });
-    })();
+    const release = trackPointer();
+    const current = { x: 0, y: 0 };
+    let last = { x: Number.NaN, y: Number.NaN };
 
-    // Pointer-reactive light: the aurora leans toward the cursor.
-    let raf = 0;
-    const cur = { x: 0, y: 0 };
-    const target = { x: 0, y: 0 };
-    const onMove = (e: PointerEvent) => {
-      target.x = (e.clientX / window.innerWidth - 0.5) * 46;
-      target.y = (e.clientY / window.innerHeight - 0.5) * 30;
-    };
-    const loop = () => {
-      cur.x += (target.x - cur.x) * 0.06;
-      cur.y += (target.y - cur.y) * 0.06;
-      node.style.setProperty("--aurora-x", `${cur.x.toFixed(2)}px`);
-      node.style.setProperty("--aurora-y", `${cur.y.toFixed(2)}px`);
-      raf = requestAnimationFrame(loop);
-    };
-    if (window.matchMedia("(pointer: fine)").matches) {
-      window.addEventListener("pointermove", onMove);
-      raf = requestAnimationFrame(loop);
-    }
+    const stop = onTick((_time, delta) => {
+      const targetX = (pointer.x / window.innerWidth - 0.5) * 46;
+      const targetY = (pointer.y / window.innerHeight - 0.5) * 30;
+      current.x = damp(current.x, targetX, 0.94, delta);
+      current.y = damp(current.y, targetY, 0.94, delta);
+
+      const x = Math.round(current.x * 10) / 10;
+      const y = Math.round(current.y * 10) / 10;
+      if (x === last.x && y === last.y) return;
+      last = { x, y };
+      node.style.setProperty("--aurora-x", `${x}px`);
+      node.style.setProperty("--aurora-y", `${y}px`);
+    });
 
     return () => {
-      cancelled = true;
-      window.removeEventListener("pointermove", onMove);
-      cancelAnimationFrame(raf);
+      stop();
+      release();
     };
   }, [reduced]);
 
   return (
-    <div ref={root} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div
+      ref={root}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden [contain:paint]"
+    >
       <div
         className="absolute inset-0"
         style={{ transform: "translate3d(var(--aurora-x, 0px), var(--aurora-y, 0px), 0)" }}
       >
-        {ORBS.map((orb) => (
+        {ORBS.map((orb, i) => (
           <div
             key={orb.key}
-            data-orb
-            className={`absolute rounded-full blur-[130px] opacity-60 ${orb.className}`}
+            className={`aurora-orb absolute rounded-full blur-[90px] ${orb.className}`}
+            style={{ animationDelay: `${i * -6}s` }}
           />
         ))}
       </div>
-      <div className="absolute inset-0 dot-grid opacity-[0.14]" />
-      <div className="absolute inset-0 bg-veil" />
+      <div className="dot-grid absolute inset-0 opacity-[0.12]" />
+      <div className="bg-veil absolute inset-0" />
       <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-background" />
     </div>
   );

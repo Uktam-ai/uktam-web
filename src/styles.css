@@ -291,51 +291,94 @@
 }
 
 
-@utility reveal {
-  opacity: 0;
-  transform: translate3d(0, 26px, 0) scale(0.985);
-  filter: blur(6px);
-  transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 1.05s var(--ease-out-expo),
-    filter 0.9s var(--ease-out-expo);
-  will-change: opacity, transform, filter;
-}
+/* ---------- reveal primitives ---------- */
 
-@utility reveal-in {
-  opacity: 1;
-  transform: none;
-  filter: blur(0);
-}
+/*
+ * Every reveal is gated behind `.js`, which an inline script in the document
+ * head adds before first paint. Without scripting the page renders in its
+ * final state rather than a screen of invisible content.
+ *
+ * `--delay` is set per instance from React; `--i` is the stagger index within
+ * a group.
+ */
+@layer components {
+  .reveal,
+  .reveal-wipe,
+  .split {
+    --delay: 0ms;
+  }
 
-/* ---------- per-character headline reveals ---------- */
+  .js .reveal {
+    opacity: 0;
+    /* No blur here. It is expensive to composite, it degrades text rendering
+       mid-transition, and it is the tell of a templated reveal. */
+    transform: translate3d(0, 24px, 0);
+    transition:
+      opacity var(--duration-reveal) var(--ease-out-expo) var(--delay),
+      transform var(--duration-reveal) var(--ease-out-expo) var(--delay);
+  }
 
-@utility split-word {
-  display: inline-block;
-  white-space: nowrap;
-}
+  .js .reveal[data-in] {
+    opacity: 1;
+    transform: none;
+  }
 
-@utility split-char {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-  padding-bottom: 0.12em;
-  margin-bottom: -0.12em;
-}
+  /* Mask wipe: the frame opens while the content inside counter-moves, so the
+     subject reads as uncovered rather than slid into place. */
+  .js .reveal-wipe {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--duration-wipe) var(--ease-in-out-quart) var(--delay);
+    will-change: clip-path;
+  }
 
-@utility split-inner {
-  display: inline-block;
-  transform: translate3d(0, 108%, 0) rotate(6deg) scale(0.96);
-  opacity: 0;
-  transition:
-    transform 1.05s var(--ease-out-expo),
-    opacity 0.7s ease-out;
-  will-change: transform, opacity;
-}
+  .js .reveal-wipe[data-in] {
+    clip-path: inset(0 0 0 0);
+  }
 
-@utility split-in {
-  transform: none;
-  opacity: 1;
+  .js .reveal-wipe-inner {
+    display: block;
+    transform: translate3d(0, 10%, 0) scale(1.06);
+    transition: transform var(--duration-wipe) var(--ease-in-out-quart) var(--delay);
+    will-change: transform;
+  }
+
+  .js .reveal-wipe[data-in] .reveal-wipe-inner {
+    transform: none;
+  }
+
+  /* ---------- masked text ---------- */
+
+  .split-group {
+    display: inline-block;
+    white-space: nowrap;
+    /* Per character rather than per line, so the step has to be much smaller. */
+    --split-step: 22ms;
+  }
+
+  .split-word {
+    display: inline-block;
+    /* An overflow box clips descenders, so pad the box and pull it back. */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+
+  .js .split-word {
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .js .split-inner {
+    display: inline-block;
+    transform: translate3d(0, 110%, 0);
+    /* No will-change: the hero alone splits into ~30 nodes, and pinning a
+       layer for each one costs more than the transition saves. */
+    transition: transform var(--duration-reveal) var(--ease-out-expo)
+      calc(var(--delay) + var(--i, 0) * var(--split-step, 60ms));
+  }
+
+  .js .split[data-in] .split-inner {
+    transform: none;
+  }
 }
 
 
@@ -356,6 +399,13 @@
   &:hover .marquee-track {
     animation-play-state: paused;
   }
+}
+
+@utility marquee-skew {
+  width: max-content;
+  /* --scroll-skew is written per frame by useScrollVelocity. */
+  transform: skewX(var(--scroll-skew, 0deg));
+  transition: transform 450ms var(--ease-out-quint);
 }
 
 @utility marquee-track {
@@ -379,6 +429,64 @@
   }
 }
 
+/* ---------- nav ---------- */
+
+@utility site-nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+  transition:
+    background-color var(--duration-base) var(--ease-out-expo),
+    border-color var(--duration-base) var(--ease-out-expo);
+
+  &[data-condensed] {
+    border-bottom: 1px solid var(--border);
+    background-color: color-mix(in oklab, var(--background) 72%, transparent);
+    backdrop-filter: blur(16px);
+  }
+}
+
+@utility site-nav-progress {
+  height: 1px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background-image: var(--gradient-hero);
+  /* No transition: the value is written every frame from the scroll position,
+     so easing it would only add lag between the scroll and the bar. */
+}
+
+@utility nav-link {
+  position: relative;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  transition: color var(--duration-instant) var(--ease-snap);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.25rem;
+    height: 1px;
+    background-image: var(--gradient-hero);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform var(--duration-fast) var(--ease-out-quint);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--foreground);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
 /* ---------- magnetic cursor ---------- */
 
 @layer base {
@@ -393,61 +501,39 @@
   }
 }
 
+/*
+ * The ring is a fixed 32px scaled by transform rather than resized. Animating
+ * width and height drives layout every frame; scale stays on the compositor.
+ * Colour transitions are capped at --duration-fast so the cursor never lags
+ * behind the thing it is reacting to.
+ */
 @utility cursor-ring {
   position: absolute;
   top: 0;
   left: 0;
-  display: grid;
-  place-items: center;
-  height: 34px;
-  width: 34px;
+  height: 32px;
+  width: 32px;
   border-radius: 9999px;
-  border: 1.5px solid color-mix(in oklab, var(--cyan) 85%, transparent);
-  background: color-mix(in oklab, var(--indigo) 14%, transparent);
-  box-shadow: 0 0 24px -6px color-mix(in oklab, var(--cyan) 70%, transparent);
-  backdrop-filter: blur(2px) saturate(140%);
-  will-change: transform, width, height;
+  border: 1.5px solid color-mix(in oklab, var(--primary) 80%, transparent);
+  background: color-mix(in oklab, var(--primary) 12%, transparent);
   transition:
-    background-color 0.5s var(--ease-out-expo),
-    border-color 0.5s var(--ease-out-expo),
-    box-shadow 0.5s var(--ease-out-expo),
-    opacity 0.35s ease;
+    background-color var(--duration-fast) var(--ease-snap),
+    border-color var(--duration-fast) var(--ease-snap),
+    opacity var(--duration-fast) linear;
 
-
-  &[data-mode="hover"] {
-    background: color-mix(in oklab, var(--purple) 22%, transparent);
-    border-color: color-mix(in oklab, var(--purple) 75%, transparent);
-    box-shadow: 0 0 40px -8px color-mix(in oklab, var(--purple) 60%, transparent);
+  &[data-mode="hover"],
+  &[data-mode="install"] {
+    background: color-mix(in oklab, var(--primary) 18%, transparent);
+    border-color: color-mix(in oklab, var(--emerald) 70%, transparent);
   }
 
   &[data-mode="text"] {
-    background: color-mix(in oklab, var(--cyan) 85%, transparent);
+    background: var(--emerald);
     border-color: transparent;
-    backdrop-filter: none;
   }
 
   &[data-down] {
-    background: color-mix(in oklab, var(--cyan) 34%, transparent);
-    border-color: color-mix(in oklab, var(--cyan) 90%, transparent);
-  }
-}
-
-@utility cursor-label {
-  font-family: var(--font-mono);
-  font-size: 0.5625rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--foreground);
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(4px);
-  transition:
-    opacity 0.3s ease,
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-
-  &[data-show] {
-    opacity: 1;
-    transform: none;
+    background: color-mix(in oklab, var(--emerald) 30%, transparent);
   }
 }
 
@@ -458,14 +544,13 @@
   height: 6px;
   width: 6px;
   border-radius: 9999px;
-  background: var(--foreground);
-  box-shadow: 0 0 12px color-mix(in oklab, var(--cyan) 80%, transparent);
+  background: var(--emerald);
   transition:
-    opacity 0.3s ease,
-    background-color 0.3s ease;
+    opacity var(--duration-fast) linear,
+    background-color var(--duration-instant) linear;
 
-  &[data-mode="hover"] {
-    background: var(--cyan);
+  &[data-mode="text"] {
+    opacity: 0 !important;
   }
 }
 
@@ -525,6 +610,16 @@
   }
 }
 
+/*
+ * Ambient drift, in CSS rather than anime.js. This is a fire-and-forget loop
+ * with no scroll or pointer input, so it belongs on the compositor instead of
+ * costing a JS animation instance per orb.
+ */
+@utility aurora-orb {
+  opacity: 0.55;
+  animation: drift 22s ease-in-out infinite;
+}
+
 @keyframes drift {
 
   0% {
@@ -553,9 +648,31 @@
   html {
     scroll-behavior: auto;
   }
+
   .marquee-track {
     animation: none !important;
   }
+
+  /*
+   * Put every reveal primitive straight into its resting state. Relying on the
+   * blanket transition-duration override below is not enough: an element that
+   * never intersects never receives `data-in`, and would stay invisible.
+   */
+  .js .reveal,
+  .js .reveal[data-in] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .reveal-wipe {
+    clip-path: none;
+  }
+
+  .js .reveal-wipe-inner,
+  .js .split-inner {
+    transform: none;
+  }
+
   *,
   *::before,
   *::after {

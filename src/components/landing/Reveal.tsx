@@ -1,26 +1,49 @@
-import type { ReactNode } from "react";
-import { useInView } from "@/hooks/use-reveal";
-import { SplitText } from "./SplitText";
+import type { CSSProperties, ReactNode } from "react";
+
+import { useReveal } from "@/hooks/use-reveal";
 import { cn } from "@/lib/utils";
+
+import { SplitText } from "./SplitText";
+
+/**
+ * `fade` lifts and fades a block of content — the workhorse for body copy.
+ *
+ * `wipe` opens a clip-path mask while the content inside counter-moves, so the
+ * subject appears to be uncovered rather than to slide in. It costs an extra
+ * element, so it is reserved for things with real visual weight: the phone,
+ * imagery, the feature cards.
+ */
+type RevealVariant = "fade" | "wipe";
+
+type RevealTag = "div" | "section" | "li" | "span" | "p" | "figure";
 
 export function Reveal({
   children,
   delay = 0,
+  variant = "fade",
   className,
   as: Tag = "div",
 }: {
   children: ReactNode;
+  /** Milliseconds before the reveal starts. */
   delay?: number;
+  variant?: RevealVariant;
   className?: string;
-  as?: "div" | "section" | "li" | "span" | "p" | "h2";
+  as?: RevealTag;
 }) {
-  const { ref, inView } = useInView<HTMLDivElement>();
+  const ref = useReveal<HTMLDivElement>();
+  const style = delay ? ({ "--delay": `${delay}ms` } as CSSProperties) : undefined;
+
+  if (variant === "wipe") {
+    return (
+      <Tag ref={ref as never} className={cn("reveal-wipe", className)} style={style}>
+        <span className="reveal-wipe-inner">{children}</span>
+      </Tag>
+    );
+  }
+
   return (
-    <Tag
-      ref={ref as never}
-      className={cn("reveal", inView && "reveal-in", className)}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
+    <Tag ref={ref as never} className={cn("reveal", className)} style={style}>
       {children}
     </Tag>
   );
@@ -34,9 +57,8 @@ export function SectionHeading({
   align = "center",
 }: {
   kicker: string;
-  /** Plain string — rendered as a per-character mask reveal. */
   title: string;
-  /** Optional trailing clause rendered in the brand gradient. */
+  /** Optional trailing clause carried in the brand gradient. */
   highlight?: string;
   blurb?: string;
   align?: "center" | "left";
@@ -46,12 +68,12 @@ export function SectionHeading({
       <Reveal>
         <span className="mono-label text-primary">{kicker}</span>
       </Reveal>
-      <h2 className="mt-4 text-3xl font-bold leading-[1.1] sm:text-4xl md:text-5xl">
-        <SplitText text={title} delay={60} />
+      <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl">
+        <SplitText text={title} />
         {highlight ? (
           <>
             {" "}
-            <SplitText text={highlight} delay={60 + title.length * 14} gradient />
+            <SplitText text={highlight} delay={90} gradient />
           </>
         ) : null}
       </h2>

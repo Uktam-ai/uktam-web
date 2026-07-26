@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Github } from "lucide-react";
+
+import { onTick } from "@/lib/ticker";
+
 import { PLAY_STORE_URL, GITHUB_URL } from "./data";
 
 const LINKS = [
@@ -10,45 +13,76 @@ const LINKS = [
 ];
 
 export function Nav() {
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const progressRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 40);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? (y / max) * 100 : 0);
+    const header = headerRef.current;
+    const progress = progressRef.current;
+    if (!header || !progress) return;
+
+    // Cached because reading scrollHeight forces a layout, and the old code did
+    // it on every single scroll event.
+    let maxScroll = 0;
+    const measure = () => {
+      maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    measure();
+
+    const resizeObserver = new ResizeObserver(measure);
+    resizeObserver.observe(document.documentElement);
+
+    let lastCondensed: boolean | null = null;
+    let lastProgress = -1;
+
+    const stop = onTick(() => {
+      const y = window.scrollY;
+
+      const condensed = y > 40;
+      if (condensed !== lastCondensed) {
+        lastCondensed = condensed;
+        header.toggleAttribute("data-condensed", condensed);
+      }
+
+      // Rounded so we only touch the DOM when the bar visibly moves.
+      const ratio = maxScroll > 0 ? Math.min(1, Math.max(0, y / maxScroll)) : 0;
+      const rounded = Math.round(ratio * 1000) / 1000;
+      if (rounded !== lastProgress) {
+        lastProgress = rounded;
+        // scaleX, not width — width is a layout property and animating it
+        // reflows the header on every frame.
+        progress.style.transform = `scaleX(${rounded})`;
+      }
+    });
+
+    return () => {
+      stop();
+      resizeObserver.disconnect();
+    };
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        scrolled ? "border-b border-border bg-background/72 backdrop-blur-xl" : ""
-      }`}
-    >
+    <header ref={headerRef} className="site-nav">
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="relative grid h-8 w-8 place-items-center rounded-lg bg-gradient-hero text-[13px] font-bold text-primary-foreground">
-            U
-          </span>
+        <a href="#top" className="flex items-center gap-2.5" aria-label="Uktam.ai, back to top">
+          <img
+            src="/brand/logo-96.webp"
+            alt=""
+            width={32}
+            height={32}
+            className="h-8 w-8"
+            decoding="async"
+          />
           <span className="font-display text-[15px] font-bold tracking-tight">
             Uktam<span className="text-muted-foreground">.ai</span>
           </span>
         </a>
 
         <ul className="hidden items-center gap-8 md:flex">
-          {LINKS.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                className="relative text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-right after:scale-x-0 after:bg-gradient-hero after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.16,1,0.3,1)] hover:after:origin-left hover:after:scale-x-100"
-              >
-                {l.label}
+          {LINKS.map((link) => (
+            <li key={link.href}>
+              <a href={link.href} className="nav-link">
+                {link.label}
               </a>
             </li>
           ))}
@@ -60,7 +94,7 @@ export function Nav() {
             target="_blank"
             rel="noreferrer"
             aria-label="Uktam.ai on GitHub"
-            className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+            className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground transition-colors duration-(--duration-fast) hover:border-primary/50 hover:text-foreground"
           >
             <Github className="h-4 w-4" />
           </a>
@@ -69,17 +103,15 @@ export function Nav() {
             data-cursor="hover"
             target="_blank"
             rel="noreferrer"
-            className="rounded-lg bg-gradient-hero px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
+            className="rounded-lg bg-gradient-hero px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03]"
           >
             Get on Play Store
           </a>
         </div>
       </nav>
+
       <div className="h-px w-full bg-border/60">
-        <div
-          className="h-px bg-gradient-hero transition-[width] duration-300 ease-out"
-          style={{ width: `${progress}%` }}
-        />
+        <div ref={progressRef} className="site-nav-progress" />
       </div>
     </header>
   );
