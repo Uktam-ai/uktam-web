@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { SMOOTHING } from "@/lib/motion";
 import { hasFinePointer, pointer, trackPointer } from "@/lib/pointer";
 import { damp, onTick } from "@/lib/ticker";
 
@@ -32,8 +33,8 @@ export function Aurora() {
     const stop = onTick((_time, delta) => {
       const targetX = (pointer.x / window.innerWidth - 0.5) * 46;
       const targetY = (pointer.y / window.innerHeight - 0.5) * 30;
-      current.x = damp(current.x, targetX, 0.94, delta);
-      current.y = damp(current.y, targetY, 0.94, delta);
+      current.x = damp(current.x, targetX, SMOOTHING.ambientLight, delta);
+      current.y = damp(current.y, targetY, SMOOTHING.ambientLight, delta);
 
       const x = Math.round(current.x * 10) / 10;
       const y = Math.round(current.y * 10) / 10;

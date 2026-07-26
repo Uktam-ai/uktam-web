@@ -52,6 +52,27 @@ export const ANIME_EASE = {
   snap: "out(2)",
 } as const;
 
+/**
+ * Smoothing factors for `damp()` — the fraction of the remaining distance a
+ * value still has to travel after roughly one frame. Lower is snappier.
+ *
+ * These are the JS-side counterpart to the easing curves above: anything
+ * following the pointer or the scroll position is damped rather than
+ * transitioned, because its target moves every frame.
+ */
+export const SMOOTHING = {
+  /** Cursor dot — near-instant, it should feel welded to the pointer. */
+  cursorDot: 0.25,
+  /** Cursor ring — trails visibly behind the dot. */
+  cursorRing: 0.7,
+  /** Magnetic pull toward a button. */
+  magnetic: 0.82,
+  /** Scroll velocity feeding the marquee skew. */
+  velocity: 0.86,
+  /** Ambient light leaning toward the pointer — slowest of the set. */
+  ambientLight: 0.94,
+} as const;
+
 /** Stagger steps in milliseconds. */
 export const STAGGER = {
   /** Between lines of a heading. */

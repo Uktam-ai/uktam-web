@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { SMOOTHING } from "@/lib/motion";
 import { hasFinePointer, pointer, trackPointer } from "@/lib/pointer";
 import { damp, onTick } from "@/lib/ticker";
 
@@ -59,11 +60,11 @@ export function Cursor() {
         dot.style.opacity = "1";
       }
 
-      ringPos.x = damp(ringPos.x, pointer.x, 0.7, delta);
-      ringPos.y = damp(ringPos.y, pointer.y, 0.7, delta);
-      dotPos.x = damp(dotPos.x, pointer.x, 0.25, delta);
-      dotPos.y = damp(dotPos.y, pointer.y, 0.25, delta);
-      size.current = damp(size.current, size.target, 0.75, delta);
+      ringPos.x = damp(ringPos.x, pointer.x, SMOOTHING.cursorRing, delta);
+      ringPos.y = damp(ringPos.y, pointer.y, SMOOTHING.cursorRing, delta);
+      dotPos.x = damp(dotPos.x, pointer.x, SMOOTHING.cursorDot, delta);
+      dotPos.y = damp(dotPos.y, pointer.y, SMOOTHING.cursorDot, delta);
+      size.current = damp(size.current, size.target, SMOOTHING.cursorRing, delta);
 
       ring.style.transform = `translate3d(${ringPos.x.toFixed(1)}px, ${ringPos.y.toFixed(1)}px, 0) translate(-50%, -50%) scale(${(size.current / 32).toFixed(3)})`;
       dot.style.transform = `translate3d(${dotPos.x.toFixed(1)}px, ${dotPos.y.toFixed(1)}px, 0) translate(-50%, -50%)`;

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { SMOOTHING } from "@/lib/motion";
 import { hasFinePointer, pointer, trackPointer } from "@/lib/pointer";
 import { damp, onTick } from "@/lib/ticker";
 
@@ -34,8 +35,8 @@ export function useMagnetic<T extends HTMLElement = HTMLElement>(strength = 0.35
       const reach = Math.max(rect.width, rect.height) / 2 + radius;
       const inReach = pointer.seen && Math.hypot(dx, dy) < reach;
 
-      current.x = damp(current.x, inReach ? dx * strength : 0, 0.82, delta);
-      current.y = damp(current.y, inReach ? dy * strength : 0, 0.82, delta);
+      current.x = damp(current.x, inReach ? dx * strength : 0, SMOOTHING.magnetic, delta);
+      current.y = damp(current.y, inReach ? dy * strength : 0, SMOOTHING.magnetic, delta);
 
       // Once settled at rest, stop writing until the pointer comes back.
       if (!inReach && Math.abs(current.x) < 0.05 && Math.abs(current.y) < 0.05) {
@@ -96,32 +97,6 @@ export function useTilt<T extends HTMLElement = HTMLElement>(max = 7) {
   return ref;
 }
 
-/** Vertical parallax, published as `--py-shift` in pixels. */
-export function useParallax<T extends HTMLElement = HTMLElement>(intensity = 40) {
-  const ref = useRef<T | null>(null);
-  const reduced = usePrefersReducedMotion();
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || reduced) return;
-
-    let last = Number.NaN;
-    return onTick(() => {
-      const rect = node.getBoundingClientRect();
-      // Skip the work entirely while off screen.
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-
-      const progress = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
-      const shift = Math.round(progress * intensity * 100) / 100;
-      if (shift === last) return;
-      last = shift;
-      node.style.setProperty("--py-shift", `${shift}px`);
-    });
-  }, [reduced, intensity]);
-
-  return ref;
-}
-
 /**
  * Smoothed scroll velocity, published as `--scroll-skew` in degrees.
  *
@@ -145,7 +120,7 @@ export function useScrollVelocity<T extends HTMLElement = HTMLElement>(
 
     return onTick((_time, delta) => {
       const y = window.scrollY;
-      velocity = damp(velocity, y - lastScroll, 0.86, delta);
+      velocity = damp(velocity, y - lastScroll, SMOOTHING.velocity, delta);
       lastScroll = y;
 
       const skew = Math.max(

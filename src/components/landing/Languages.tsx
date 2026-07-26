@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 
 import { useInView, usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { DURATION } from "@/lib/motion";
 import { onTick } from "@/lib/ticker";
 
 import { Reveal } from "./Reveal";
@@ -79,11 +80,10 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
 
     // Counted on the shared ticker. This was the last thing on the page still
     // pulling in anime.js, which cost ~22 kB gzipped to tween one integer.
-    const DURATION = 1400;
     let elapsed = 0;
     const stop = onTick((_time, delta) => {
       elapsed += delta;
-      const t = Math.min(1, elapsed / DURATION);
+      const t = Math.min(1, elapsed / (DURATION.reveal + DURATION.base));
       // easeOutCubic
       setShown(Math.round(value * (1 - Math.pow(1 - t, 3))));
       if (t >= 1) stop();
