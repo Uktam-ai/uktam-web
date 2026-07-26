@@ -56,37 +56,44 @@ export function Reveal({
   );
 }
 
+/**
+ * There is deliberately no kicker slot here.
+ *
+ * A small uppercase tracked label above every section heading is scaffolding,
+ * not voice — it appears on nearly every generated landing page regardless of
+ * what the page is about. The headings below carry their own subject, and the
+ * nav already names the sections.
+ *
+ * `lead` is set in muted ink and `title` at full strength, so emphasis comes
+ * from contrast within one sentence rather than from a gradient fill.
+ */
 export function SectionHeading({
-  kicker,
+  lead,
   title,
-  highlight,
   blurb,
   align = "center",
 }: {
-  kicker: string;
+  /** Quieter opening clause. Optional. */
+  lead?: string;
   title: string;
-  /** Optional trailing clause carried in the brand gradient. */
-  highlight?: string;
   blurb?: string;
   align?: "center" | "left";
 }) {
   return (
     <div className={cn("max-w-2xl", align === "center" ? "mx-auto text-center" : "text-left")}>
-      <Reveal>
-        <span className="mono-label text-primary">{kicker}</span>
-      </Reveal>
-      <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl">
-        <SplitText text={title} />
-        {highlight ? (
+      <h2 className="text-3xl sm:text-4xl md:text-5xl">
+        {lead ? (
           <>
-            {" "}
-            <SplitText text={highlight} delay={90} gradient />
+            <SplitText text={lead} className="text-muted-foreground" />{" "}
           </>
         ) : null}
+        <SplitText text={title} delay={lead ? 90 : 0} />
       </h2>
       {blurb ? (
         <Reveal delay={200}>
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground">{blurb}</p>
+          <p className="mt-5 max-w-[62ch] text-base leading-relaxed text-muted-foreground">
+            {blurb}
+          </p>
         </Reveal>
       ) : null}
     </div>

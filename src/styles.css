@@ -6,10 +6,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Uktam.ai design system.
- * Dark-first. Blue -> indigo -> purple gradients, emerald reserved
- * exclusively for offline/privacy signals.
- * All color values use oklch.
+ * Uktam.ai design system. See DESIGN.md for the reasoning.
+ *
+ * Dark-first, oklch throughout. Colour means language: cyan is the source,
+ * green is the target, matching the semantic the Android app already uses.
+ * Green additionally marks every offline/on-device signal. Nothing is tinted
+ * for decoration.
  */
 
 @theme inline {
@@ -154,13 +156,6 @@
     var(--indigo) 62%,
     var(--purple) 100%
   );
-  --gradient-text: linear-gradient(
-    100deg,
-    oklch(0.88 0.12 205) 0%,
-    oklch(0.78 0.16 262) 38%,
-    oklch(0.72 0.21 288) 72%,
-    oklch(0.78 0.18 312) 100%
-  );
   --gradient-veil: radial-gradient(
     120% 90% at 50% -10%,
     color-mix(in oklab, var(--indigo) 38%, transparent) 0%,
@@ -201,7 +196,7 @@
     font-family: var(--font-display);
     font-weight: 900;
     line-height: 0.88;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.04em;
     text-wrap: balance;
   }
 
@@ -245,12 +240,6 @@
     outline-offset: 3px;
     border-radius: 2px;
   }
-}
-
-@utility text-gradient {
-  background-image: var(--gradient-text);
-  background-clip: text;
-  color: transparent;
 }
 
 @utility bg-gradient-hero {

@@ -20,10 +20,7 @@ export function Languages() {
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         <div className="max-w-2xl">
           <Reveal>
-            <span className="mono-label text-emerald">Languages</span>
-          </Reveal>
-          <Reveal delay={80}>
-            <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl">
               Four Indic languages today. More on the way.
             </h2>
           </Reveal>

@@ -66,9 +66,8 @@ export function Pipeline() {
         <div className="lg:sticky lg:top-0 lg:flex lg:min-h-screen lg:flex-col lg:justify-center">
           <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8">
             <SectionHeading
-              kicker="The pipeline"
-              title="Voice in, voice out."
-              highlight="Four local stages."
+              lead="Voice in, voice out."
+              title="Four local stages, none of them remote."
             />
 
             <div ref={trackRef} className="pipeline-track mt-14">

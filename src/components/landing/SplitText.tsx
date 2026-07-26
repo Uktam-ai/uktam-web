@@ -25,7 +25,6 @@ export function SplitText({
   className,
   mode = "lines",
   delay = 0,
-  gradient = false,
 }: {
   text: string;
   as?: ElementType;
@@ -33,7 +32,6 @@ export function SplitText({
   mode?: SplitMode;
   /** Milliseconds before the first fragment moves. */
   delay?: number;
-  gradient?: boolean;
 }) {
   const revealRef = useReveal<HTMLElement>({ threshold: 0.25 });
   const nodeRef = useRef<HTMLElement | null>(null);
@@ -88,13 +86,13 @@ export function SplitText({
                   className="split-word"
                   style={{ "--i": charIndex++ } as CSSProperties}
                 >
-                  <span className={cn("split-inner", gradient && "text-gradient")}>{char}</span>
+                  <span className="split-inner">{char}</span>
                 </span>
               ))}
             </span>
           ) : (
             <span data-word className="split-word" aria-hidden>
-              <span className={cn("split-inner", gradient && "text-gradient")}>{word}</span>
+              <span className="split-inner">{word}</span>
             </span>
           )}
           {w < words.length - 1 ? <span aria-hidden> </span> : null}

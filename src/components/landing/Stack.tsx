@@ -9,9 +9,8 @@ export function Stack() {
           <div>
             <SectionHeading
               align="left"
-              kicker="Under the hood"
-              title="Native Android,"
-              highlight="native models"
+              lead="Native Android,"
+              title="native models."
               blurb="Built with modern Android practice and open research from AI4Bharat and Sarvam AI, compiled down to run on ordinary phone hardware."
             />
 

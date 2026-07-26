@@ -12,7 +12,7 @@ export function CallToAction() {
           <h2 className="text-3xl font-bold leading-[1.1] sm:text-5xl">
             Translate anywhere.
             <br />
-            <span className="text-gradient">Even with no signal.</span>
+            <span className="text-emerald">Even with no signal.</span>
           </h2>
         </Reveal>
         <Reveal delay={100}>
@@ -28,7 +28,7 @@ export function CallToAction() {
               data-cursor="install"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-hero px-6 py-3.5 font-display text-sm font-semibold text-primary-foreground transition-[filter,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:brightness-110 glow-primary"
+              className="btn-primary"
             >
               Get it on Google Play
             </a>

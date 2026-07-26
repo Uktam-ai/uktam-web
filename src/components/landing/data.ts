@@ -3,23 +3,23 @@ export const GITHUB_URL = "https://github.com/ashb155/uktam";
 
 export const PILLARS = [
   {
-    label: "01 / Privacy",
+    label: "Privacy",
     title: "100% offline & private",
     body: "No audio and no transcript ever leaves your device. Speech recognition, translation and speech synthesis all run locally on your phone's silicon.",
     emerald: true,
   },
   {
-    label: "02 / Indic-first",
+    label: "Indic-first",
     title: "Made for India, by Indian AI",
     body: "Built strictly on models researched and trained for Indian languages — AI4Bharat and Sarvam AI — so dialects, nuance and grammar land properly.",
   },
   {
-    label: "03 / Optimised",
+    label: "Optimised",
     title: "Custom quantized for mobile",
     body: "Multi-billion parameter models custom-quantized to GGUF and ONNX for this project, cutting memory and battery cost while holding near-parity accuracy.",
   },
   {
-    label: "04 / Independence",
+    label: "Independence",
     title: "No round trip, ever",
     body: "Speech lands as text in about 200 ms on device. Nothing queues behind an API and nothing degrades when the signal does — dead zones, remote areas and aeroplanes all behave identically.",
   },
