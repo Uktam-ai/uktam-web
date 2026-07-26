@@ -1,87 +1,105 @@
 import { ArrowDown, ShieldCheck } from "lucide-react";
+
+import { useMagnetic } from "@/hooks/use-scroll-fx";
+
 import { Aurora } from "./Aurora";
+import { LivingHeadline } from "./LivingHeadline";
 import { PhoneMockup } from "./PhoneMockup";
 import { Reveal } from "./Reveal";
-
-import { SplitText } from "./SplitText";
 import { HERO_STATS, PLAY_STORE_URL } from "./data";
 
+/**
+ * Entrance timings. These are deliberately sequenced rather than fired at once:
+ * badge, then headline, then the rule that anchors it, then the actions. The
+ * phone uncovers last, once the claim above it has landed.
+ */
+const STEP = {
+  badge: 0,
+  headline: 120,
+  subhead: 720,
+  actions: 820,
+  stats: 920,
+  phone: 700,
+} as const;
+
 export function Hero() {
+  const installRef = useMagnetic<HTMLAnchorElement>(0.22, 70);
+
   return (
-    <section id="top" className="relative overflow-hidden pb-24 pt-32 sm:pb-32 sm:pt-40">
+    <section id="top" className="relative overflow-hidden pb-20 pt-28 sm:pb-28 sm:pt-32">
       <Aurora />
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-16 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald/35 bg-emerald/10 px-3 py-1.5 text-xs font-medium text-emerald glow-emerald">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              Zero data leaves your phone
-            </span>
-          </Reveal>
 
-          <h1 className="mt-7 text-[2.6rem] font-bold leading-[1.03] sm:text-6xl lg:text-[4.1rem]">
-            <span className="block">
-              <SplitText text="Speak Hindi." mode="chars" delay={120} />
-            </span>
-            <span className="block">
-              <SplitText text="Hear Tamil." mode="chars" delay={420} />
-            </span>
-            <span className="block">
-              <SplitText text="No internet." mode="chars" delay={720} gradient />
-            </span>
-          </h1>
+      <div className="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
+        <Reveal delay={STEP.badge}>
+          <span className="offline-pill">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Zero data leaves your phone
+          </span>
+        </Reveal>
 
-          <Reveal delay={170}>
-            <p className="mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Uktam.ai is a real-time, fully offline Indic speech-to-speech pipeline that runs
-              entirely on your Android device. Speech recognition, translation and text-to-speech —
-              all local, all private, all instant.
-            </p>
-          </Reveal>
+        <Reveal delay={STEP.headline} className="mt-8">
+          <LivingHeadline />
+        </Reveal>
 
-          <Reveal delay={250}>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <a
-                href={PLAY_STORE_URL}
-                data-cursor="install"
-                target="_blank"
-                rel="noreferrer"
-                className="group inline-flex items-center gap-3 rounded-xl bg-gradient-hero px-5 py-3.5 font-display text-sm font-semibold text-primary-foreground transition-[box-shadow,filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:brightness-110 glow-primary"
-              >
-                <GooglePlayGlyph />
-                <span className="text-left leading-tight">
-                  <span className="block text-[10px] font-medium uppercase tracking-[0.14em] opacity-80">
-                    Get it on
+        {/*
+          items-start, not items-end. The phone is the tallest thing in this
+          row, and bottom-aligning pushed the primary CTA below the fold on a
+          900px viewport.
+        */}
+        <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_auto] lg:items-start lg:gap-16">
+          <div>
+            <Reveal delay={STEP.subhead}>
+              <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+                A real-time Indic speech-to-speech pipeline that runs entirely on your Android
+                device. Recognition, translation and speech — all local, all private, all yours.
+              </p>
+            </Reveal>
+
+            <Reveal delay={STEP.actions}>
+              <div className="mt-9 flex flex-wrap items-center gap-3">
+                <a
+                  ref={installRef}
+                  href={PLAY_STORE_URL}
+                  data-cursor="install"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary"
+                >
+                  <GooglePlayGlyph />
+                  <span className="text-left leading-tight">
+                    <span className="block text-[10px] font-medium uppercase tracking-[0.14em] opacity-80">
+                      Get it on
+                    </span>
+                    Google Play
                   </span>
-                  Google Play
-                </span>
-              </a>
-              <a
-                href="#pipeline"
-                data-cursor="hover"
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3.5 font-display text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
-              >
-                How it works
-                <ArrowDown className="h-4 w-4" />
-              </a>
-            </div>
-          </Reveal>
+                </a>
+                <a href="#pipeline" data-cursor="hover" className="btn-ghost">
+                  How it works
+                  <ArrowDown className="h-4 w-4" />
+                </a>
+              </div>
+            </Reveal>
 
-          <Reveal delay={330}>
-            <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-7">
-              {HERO_STATS.map((stat) => (
-                <div key={stat.label}>
-                  <dt className="font-mono text-lg font-bold text-foreground">{stat.value}</dt>
-                  <dd className="mt-1 text-xs text-muted-foreground">{stat.label}</dd>
-                </div>
-              ))}
-            </dl>
+            <Reveal delay={STEP.stats}>
+              <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-border pt-7">
+                {HERO_STATS.map((stat) => (
+                  <div key={stat.label}>
+                    <dt className="font-mono text-lg font-bold text-foreground">{stat.value}</dt>
+                    <dd className="mt-1 text-xs text-muted-foreground">{stat.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+          </div>
+
+          <Reveal
+            variant="wipe"
+            delay={STEP.phone}
+            className="justify-self-center lg:justify-self-end"
+          >
+            <PhoneMockup />
           </Reveal>
         </div>
-
-        <Reveal delay={200}>
-          <PhoneMockup />
-        </Reveal>
       </div>
     </section>
   );

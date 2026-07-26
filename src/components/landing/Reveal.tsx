@@ -36,8 +36,15 @@ export function Reveal({
 
   if (variant === "wipe") {
     return (
+      // Three elements, and each one is load-bearing. The observed node must
+      // stay unclipped: a clip-path that collapses the box to zero area also
+      // zeroes its intersection ratio, so an element hiding itself this way can
+      // never trigger its own reveal. The mask carries the clip, and the inner
+      // node carries the counter-move.
       <Tag ref={ref as never} className={cn("reveal-wipe", className)} style={style}>
-        <span className="reveal-wipe-inner">{children}</span>
+        <span className="reveal-wipe-mask">
+          <span className="reveal-wipe-inner">{children}</span>
+        </span>
       </Tag>
     );
   }

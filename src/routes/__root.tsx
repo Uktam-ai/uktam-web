@@ -121,7 +121,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    // The inline script below adds a `js` class to this element before React
+    // hydrates, so the client DOM intentionally differs from the server markup
+    // here. Suppression is scoped to <html>'s own attributes and does not
+    // extend to any descendant.
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/*
           Marks the document as scripted before first paint. Reveal styles are

@@ -25,6 +25,17 @@ export const PILLARS = [
   },
 ];
 
+/**
+ * Language pairs the hero headline cycles through. Each is a direction the app
+ * actually supports, and the two sides are always different languages.
+ */
+export const HEADLINE_PAIRS = [
+  { from: "hi", to: "ta" },
+  { from: "kn", to: "hi" },
+  { from: "ta", to: "te" },
+  { from: "te", to: "kn" },
+] as const;
+
 /** Headline figures under the hero. Every one is measured, not aspirational. */
 export const HERO_STATS = [
   { value: "~200 ms", label: "On-device ASR" },

@@ -325,13 +325,15 @@
 
   /* Mask wipe: the frame opens while the content inside counter-moves, so the
      subject reads as uncovered rather than slid into place. */
-  .js .reveal-wipe {
+  /* The clip lives on the mask, never on the observed element — see Reveal.tsx. */
+  .js .reveal-wipe-mask {
+    display: block;
     clip-path: inset(0 0 100% 0);
     transition: clip-path var(--duration-wipe) var(--ease-in-out-quart) var(--delay);
     will-change: clip-path;
   }
 
-  .js .reveal-wipe[data-in] {
+  .js .reveal-wipe[data-in] .reveal-wipe-mask {
     clip-path: inset(0 0 0 0);
   }
 
@@ -426,6 +428,154 @@
   }
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ---------- hero ---------- */
+
+@utility hero-headline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.25rem, 1rem + 5.4vw, 5.25rem);
+  /* Loose enough to seat Indic matras and descenders, which sit well outside
+     the Latin box. Below about 1.05 the swap slots clip. */
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+}
+
+/*
+ * Every script stacked in one grid cell, so the slot is as wide as its widest
+ * member and cycling never reflows the headline. Without this, layout shift
+ * would land on the largest element on the page.
+ */
+@utility script-swap {
+  display: inline-grid;
+  overflow: hidden;
+  /* `top` rather than `bottom`: the slot is taller than the Latin cap height
+     because of the matras, and aligning to the bottom pushed the swapped word
+     off the shared baseline. */
+  vertical-align: top;
+}
+
+@utility script-swap-item {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition:
+    transform var(--duration-base) var(--ease-out-quint),
+    opacity var(--duration-base) var(--ease-out-quint);
+
+  /* The app colours translation direction; the headline says the same thing. */
+  &[data-tone="source"] {
+    color: var(--cyan);
+  }
+
+  &[data-tone="target"] {
+    color: var(--emerald);
+  }
+
+  &[data-state="active"] {
+    transform: none;
+    opacity: 1;
+  }
+
+  &[data-state="out"] {
+    transform: translate3d(0, -110%, 0);
+    opacity: 0;
+  }
+
+  /* Queued scripts snap into place below with no transition — animating them
+     back down would drag a visible ghost across the slot. */
+  &[data-state="waiting"] {
+    transform: translate3d(0, 110%, 0);
+    opacity: 0;
+    transition: none;
+  }
+}
+
+@utility caption-swap {
+  animation: caption-in var(--duration-base) var(--ease-out-quint) both;
+}
+
+@keyframes caption-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility hero-rule {
+  margin-top: 1.75rem;
+  height: 1px;
+  width: 100%;
+  max-width: 34rem;
+  background: linear-gradient(
+    to right,
+    var(--emerald),
+    color-mix(in oklab, var(--emerald) 30%, transparent) 60%,
+    transparent
+  );
+}
+
+@utility offline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--emerald) 35%, transparent);
+  background: color-mix(in oklab, var(--emerald) 10%, transparent);
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--emerald);
+}
+
+/* ---------- buttons ---------- */
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.75rem;
+  background-image: var(--gradient-hero);
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-foreground);
+  box-shadow: var(--glow-primary);
+  transition:
+    filter var(--duration-fast) var(--ease-snap),
+    box-shadow var(--duration-fast) var(--ease-snap);
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(1.12);
+  }
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  transition:
+    border-color var(--duration-fast) var(--ease-snap),
+    background-color var(--duration-fast) var(--ease-snap);
+
+  &:hover,
+  &:focus-visible {
+    border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+    background-color: var(--surface);
   }
 }
 
@@ -664,7 +814,7 @@
     transform: none;
   }
 
-  .js .reveal-wipe {
+  .js .reveal-wipe-mask {
     clip-path: none;
   }
 
