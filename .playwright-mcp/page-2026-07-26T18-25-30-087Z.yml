@@ -1,0 +1,333 @@
+- generic [ref=f26e2]:
+    - banner [ref=f26e3]:
+        - navigation [ref=f26e4]:
+            - link "Uktam.ai, back to top" [ref=f26e5] [cursor=pointer]:
+                - /url: "#top"
+                - generic [ref=f26e6]: Uktam.ai
+            - list [ref=f26e7]:
+                - listitem [ref=f26e8]:
+                    - link "Why" [ref=f26e9] [cursor=pointer]:
+                        - /url: "#why"
+                - listitem [ref=f26e10]:
+                    - link "Pipeline" [ref=f26e11] [cursor=pointer]:
+                        - /url: "#pipeline"
+                - listitem [ref=f26e12]:
+                    - link "Languages" [ref=f26e13] [cursor=pointer]:
+                        - /url: "#languages"
+                - listitem [ref=f26e14]:
+                    - link "Stack" [ref=f26e15] [cursor=pointer]:
+                        - /url: "#stack"
+            - generic [ref=f26e16]:
+                - link "Uktam.ai on GitHub" [ref=f26e17] [cursor=pointer]:
+                    - /url: https://github.com/ashb155/uktam
+                - link "Get on Play Store" [ref=f26e21] [cursor=pointer]:
+                    - /url: https://play.google.com/store/apps/details?id=com.uktam.ai
+    - main [ref=f26e23]:
+        - generic [ref=f26e25]:
+            - generic [ref=f26e26]:
+                - generic [ref=f26e27]: Zero data leaves your phone
+                - generic [ref=f26e33]:
+                    - heading "Speak Hindi, source language Hear Tamil, target language No internet." [level=1] [ref=f26e34]:
+                        - generic [ref=f26e35]:
+                            - text: Speak
+                            - img "Hindi, source language" [ref=f26e36]:
+                                - generic [ref=f26e37]: हिन्दी.
+                                - generic [ref=f26e38]: ಕನ್ನಡ.
+                                - generic [ref=f26e39]: தமிழ்.
+                                - generic [ref=f26e40]: తెలుగు.
+                        - generic [ref=f26e41]:
+                            - text: Hear
+                            - img "Tamil, target language" [ref=f26e42]:
+                                - generic [ref=f26e43]: हिन्दी.
+                                - generic [ref=f26e44]: ಕನ್ನಡ.
+                                - generic [ref=f26e45]: தமிழ்.
+                                - generic [ref=f26e46]: తెలుగు.
+                        - generic [ref=f26e47]: No internet.
+                    - paragraph [ref=f26e49]:
+                        - generic [ref=f26e50]: Hindi → Tamil
+                        - generic [ref=f26e51]: /
+                        - generic [ref=f26e52]: translated on device
+                - generic [ref=f26e53]:
+                    - paragraph [ref=f26e55]: A real-time Indic speech-to-speech pipeline that runs entirely on your Android device. Recognition, translation and speech — all local, all private, all yours.
+                    - generic [ref=f26e57]:
+                        - link "Get it on Google Play" [ref=f26e58] [cursor=pointer]:
+                            - /url: https://play.google.com/store/apps/details?id=com.uktam.ai
+                            - generic [ref=f26e65]:
+                                - generic [ref=f26e66]: Get it on
+                                - text: Google Play
+                        - link "How it works" [ref=f26e67] [cursor=pointer]:
+                            - /url: "#pipeline"
+                    - generic [ref=f26e71]:
+                        - generic [ref=f26e72]:
+                            - term [ref=f26e73]: ~200 ms
+                            - definition [ref=f26e74]: On-device ASR
+                        - generic [ref=f26e75]:
+                            - term [ref=f26e76]: "0"
+                            - definition [ref=f26e77]: Network calls
+                        - generic [ref=f26e78]:
+                            - term [ref=f26e79]: GPL-3.0
+                            - definition [ref=f26e80]: Open source
+            - generic [ref=f26e86]:
+                - generic [ref=f26e87]: Uktam.ai
+                - generic [ref=f26e101]:
+                    - generic [ref=f26e102]: हिन्दी
+                    - generic [ref=f26e106]: ಕನ್ನಡ
+                - generic [ref=f26e107]:
+                    - article [ref=f26e108]:
+                        - paragraph [ref=f26e109]: मैं अभी बाहर जा रहा हूं
+                        - paragraph [ref=f26e111]: ನಾನು ಈಗಲೇ ಹೊರಡುತ್ತಿದ್ದೇನೆ.
+                        - paragraph [ref=f26e117]: "ASR: 198ms | Translation 7.58s"
+                    - article [ref=f26e118]:
+                        - paragraph [ref=f26e119]: ನೀನು ಎಲ್ಲಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ
+                        - paragraph [ref=f26e121]: तुम कहाँ जा रहे हो?
+                        - paragraph [ref=f26e127]: "ASR: 203ms | Translation 7.656s"
+                    - article [ref=f26e128]:
+                        - paragraph [ref=f26e129]: मैं अभी कॉलेज को जाके वापस शाम पांच बजे को आऊंगा
+                        - paragraph [ref=f26e131]: ನಾನು ಕಾಲೇಜಿಗೆ ಹೋಗಿ ಸಂಜೆ ೫ ಗಂಟೆಗೆ ಹಿಂತಿರುಗುತ್ತೇನೆ.
+                        - paragraph [ref=f26e137]: "ASR: 314ms | Translation 11.024s"
+        - generic [ref=f26e147]:
+            - generic [ref=f26e148]:
+                - generic [ref=f26e149]:
+                    - generic [ref=f26e150]: हिन्दी
+                    - generic [ref=f26e151]: Hindi
+                - generic [ref=f26e153]:
+                    - generic [ref=f26e154]: ಕನ್ನಡ
+                    - generic [ref=f26e155]: Kannada
+                - generic [ref=f26e157]:
+                    - generic [ref=f26e158]: தமிழ்
+                    - generic [ref=f26e159]: Tamil
+                - generic [ref=f26e161]:
+                    - generic [ref=f26e162]: తెలుగు
+                    - generic [ref=f26e163]: Telugu
+                - generic [ref=f26e165]:
+                    - generic [ref=f26e166]: हिन्दी
+                    - generic [ref=f26e167]: Hindi
+                - generic [ref=f26e169]:
+                    - generic [ref=f26e170]: ಕನ್ನಡ
+                    - generic [ref=f26e171]: Kannada
+                - generic [ref=f26e173]:
+                    - generic [ref=f26e174]: தமிழ்
+                    - generic [ref=f26e175]: Tamil
+                - generic [ref=f26e177]:
+                    - generic [ref=f26e178]: తెలుగు
+                    - generic [ref=f26e179]: Telugu
+            - generic [ref=f26e181]:
+                - generic [ref=f26e182]:
+                    - generic [ref=f26e183]: हिन्दी
+                    - generic [ref=f26e184]: Hindi
+                - generic [ref=f26e186]:
+                    - generic [ref=f26e187]: ಕನ್ನಡ
+                    - generic [ref=f26e188]: Kannada
+                - generic [ref=f26e190]:
+                    - generic [ref=f26e191]: தமிழ்
+                    - generic [ref=f26e192]: Tamil
+                - generic [ref=f26e194]:
+                    - generic [ref=f26e195]: తెలుగు
+                    - generic [ref=f26e196]: Telugu
+                - generic [ref=f26e198]:
+                    - generic [ref=f26e199]: हिन्दी
+                    - generic [ref=f26e200]: Hindi
+                - generic [ref=f26e202]:
+                    - generic [ref=f26e203]: ಕನ್ನಡ
+                    - generic [ref=f26e204]: Kannada
+                - generic [ref=f26e206]:
+                    - generic [ref=f26e207]: தமிழ்
+                    - generic [ref=f26e208]: Tamil
+                - generic [ref=f26e210]:
+                    - generic [ref=f26e211]: తెలుగు
+                    - generic [ref=f26e212]: Telugu
+        - generic [ref=f26e215]:
+            - generic [ref=f26e216]:
+                - heading [level=2] [ref=f26e217]:
+                    - generic "Cloud translators send your voice away." [ref=f26e218]:
+                        - generic [ref=f26e219]: Cloud
+                        - generic [ref=f26e221]: translators
+                        - generic [ref=f26e223]: send
+                        - generic [ref=f26e225]: your
+                        - generic [ref=f26e227]: voice
+                        - generic [ref=f26e229]: away.
+                    - generic "This one never does." [ref=f26e231]:
+                        - generic [ref=f26e232]: This
+                        - generic [ref=f26e234]: one
+                        - generic [ref=f26e236]: never
+                        - generic [ref=f26e238]: does.
+                - paragraph [ref=f26e241]: "Four decisions shape the whole app: run locally, use Indic-native models, quantize hard, and never wait on a network."
+            - article [ref=f26e243]:
+                - text: Privacy
+                - heading "100% offline & private" [level=3] [ref=f26e244]
+                - paragraph [ref=f26e245]: No audio and no transcript ever leaves your device. Speech recognition, translation and speech synthesis all run locally on your phone's silicon.
+            - generic [ref=f26e246]:
+                - article [ref=f26e248]:
+                    - text: Indic-first
+                    - heading "Made for India, by Indian AI" [level=3] [ref=f26e249]
+                    - paragraph [ref=f26e250]: Built strictly on models researched and trained for Indian languages — AI4Bharat and Sarvam AI — so dialects, nuance and grammar land properly.
+                - article [ref=f26e252]:
+                    - text: Optimised
+                    - heading "Custom quantized for mobile" [level=3] [ref=f26e253]
+                    - paragraph [ref=f26e254]: Multi-billion parameter models custom-quantized to GGUF and ONNX for this project, cutting memory and battery cost while holding near-parity accuracy.
+                - article [ref=f26e256]:
+                    - text: Independence
+                    - heading "No round trip, ever" [level=3] [ref=f26e257]
+                    - paragraph [ref=f26e258]: Speech lands as text in about 200 ms on device. Nothing queues behind an API and nothing degrades when the signal does — dead zones, remote areas and aeroplanes all behave identically.
+        - generic [ref=f26e262]:
+            - heading [level=2] [ref=f26e264]:
+                - generic "Voice in, voice out." [ref=f26e265]:
+                    - generic [ref=f26e266]: Voice
+                    - generic [ref=f26e268]: in,
+                    - generic [ref=f26e270]: voice
+                    - generic [ref=f26e272]: out.
+                - generic "Four local stages, none of them remote." [ref=f26e274]:
+                    - generic [ref=f26e275]: Four
+                    - generic [ref=f26e277]: local
+                    - generic [ref=f26e279]: stages,
+                    - generic [ref=f26e281]: none
+                    - generic [ref=f26e283]: of
+                    - generic [ref=f26e285]: them
+                    - generic [ref=f26e287]: remote.
+            - list [ref=f26e291]:
+                - listitem [ref=f26e292]:
+                    - article [ref=f26e293]:
+                        - generic [ref=f26e294]: "01"
+                        - generic [ref=f26e300]:
+                            - heading "Speak" [level=3] [ref=f26e301]
+                            - paragraph [ref=f26e302]: Microphone
+                            - paragraph [ref=f26e303]: live
+                            - paragraph [ref=f26e305]: Talk naturally in Hindi, Kannada, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.
+                - listitem [ref=f26e306]:
+                    - article [ref=f26e307]:
+                        - generic [ref=f26e308]: "02"
+                        - generic [ref=f26e312]:
+                            - heading "Recognise" [level=3] [ref=f26e313]
+                            - paragraph [ref=f26e314]: Sherpa-ONNX · IndicConformer
+                            - paragraph [ref=f26e315]: ~200 ms
+                            - generic:
+                                - paragraph: AI4Bharat's IndicConformer transcribes speech in about 200 ms, entirely locally, with no cloud ASR endpoint involved.
+                - listitem [ref=f26e316]:
+                    - article [ref=f26e317]:
+                        - generic [ref=f26e318]: "03"
+                        - generic [ref=f26e325]:
+                            - heading "Translate" [level=3] [ref=f26e326]
+                            - paragraph [ref=f26e327]: llama.cpp · Sarvam Translate
+                            - paragraph [ref=f26e328]: 7–11 s
+                            - generic:
+                                - paragraph: Sarvam Translate runs through custom JNI bindings over llama.cpp. A multi-billion parameter model on phone silicon takes a few seconds — and it takes them whether or not you have signal.
+                - listitem [ref=f26e329]:
+                    - article [ref=f26e330]:
+                        - generic [ref=f26e331]: "04"
+                        - generic [ref=f26e338]:
+                            - heading "Speak back" [level=3] [ref=f26e339]
+                            - paragraph [ref=f26e340]: Android native TTS
+                            - paragraph [ref=f26e341]: instant
+                            - generic:
+                                - paragraph: The translated text is spoken aloud through Android's offline text-to-speech engine — a full speech-to-speech loop.
+            - paragraph [ref=f26e342]: "network calls in this pipeline: 0"
+        - generic [ref=f26e344]:
+            - generic [ref=f26e345]:
+                - heading "Four Indic languages today. More on the way." [level=2] [ref=f26e347]
+                - paragraph [ref=f26e349]: Speech recognition, translation and text-to-speech in every direction between the supported languages.
+            - list [ref=f26e350]:
+                - listitem [ref=f26e351]:
+                    - paragraph [ref=f26e352]: हिन्दी
+                    - paragraph [ref=f26e353]: Hindi
+                    - paragraph [ref=f26e354]: hi
+                - listitem [ref=f26e355]:
+                    - paragraph [ref=f26e356]: ಕನ್ನಡ
+                    - paragraph [ref=f26e357]: Kannada
+                    - paragraph [ref=f26e358]: kn
+                - listitem [ref=f26e359]:
+                    - paragraph [ref=f26e360]: தமிழ்
+                    - paragraph [ref=f26e361]: Tamil
+                    - paragraph [ref=f26e362]: ta
+                - listitem [ref=f26e363]:
+                    - paragraph [ref=f26e364]: తెలుగు
+                    - paragraph [ref=f26e365]: Telugu
+                    - paragraph [ref=f26e366]: te
+                - listitem [ref=f26e367]:
+                    - paragraph [ref=f26e369]: More Indic languages coming soon
+            - generic [ref=f26e370]:
+                - generic [ref=f26e371]:
+                    - paragraph [ref=f26e372]: "0"
+                    - paragraph [ref=f26e373]: Indic languages
+                - generic [ref=f26e374]:
+                    - paragraph [ref=f26e375]: "0"
+                    - paragraph [ref=f26e376]: API calls made
+                - generic [ref=f26e377]:
+                    - paragraph [ref=f26e378]: 0%
+                    - paragraph [ref=f26e379]: On-device compute
+        - generic [ref=f26e382]:
+            - generic [ref=f26e383]:
+                - generic [ref=f26e384]:
+                    - heading [level=2] [ref=f26e385]:
+                        - generic "Native Android," [ref=f26e386]:
+                            - generic [ref=f26e387]: Native
+                            - generic [ref=f26e389]: Android,
+                        - generic "native models." [ref=f26e391]:
+                            - generic [ref=f26e392]: native
+                            - generic [ref=f26e394]: models.
+                    - paragraph [ref=f26e397]: Built with modern Android practice and open research from AI4Bharat and Sarvam AI, compiled down to run on ordinary phone hardware.
+                - generic [ref=f26e398]:
+                    - generic [ref=f26e400]:
+                        - term [ref=f26e401]: Language
+                        - definition [ref=f26e402]: Kotlin
+                    - generic [ref=f26e404]:
+                        - term [ref=f26e405]: UI
+                        - definition [ref=f26e406]: Jetpack Compose · Material 3
+                    - generic [ref=f26e408]:
+                        - term [ref=f26e409]: Architecture
+                        - definition [ref=f26e410]: MVVM · StateFlow · Coroutines
+                    - generic [ref=f26e412]:
+                        - term [ref=f26e413]: ASR
+                        - definition [ref=f26e414]: Sherpa-ONNX · AI4Bharat IndicConformer
+                    - generic [ref=f26e416]:
+                        - term [ref=f26e417]: Translation
+                        - definition [ref=f26e418]: llama.cpp (JNI) · Sarvam Translate
+                    - generic [ref=f26e420]:
+                        - term [ref=f26e421]: Build
+                        - definition [ref=f26e422]: Gradle KTS · CMake · Android NDK
+                    - generic [ref=f26e424]:
+                        - term [ref=f26e425]: Delivery
+                        - definition [ref=f26e426]: Play Asset Delivery
+                    - generic [ref=f26e428]:
+                        - term [ref=f26e429]: Licence
+                        - definition [ref=f26e430]: GPL-3.0
+            - generic [ref=f26e431]:
+                - generic [ref=f26e433]:
+                    - text: Device requirements
+                    - generic [ref=f26e434]:
+                        - generic [ref=f26e435]:
+                            - term [ref=f26e436]: Android
+                            - definition [ref=f26e437]: 14+ (API level 34)
+                        - generic [ref=f26e438]:
+                            - term [ref=f26e439]: Memory
+                            - definition [ref=f26e440]: 6 GB RAM recommended
+                        - generic [ref=f26e441]:
+                            - term [ref=f26e442]: First run
+                            - definition [ref=f26e443]: ~1–2.5 GB model download
+                        - generic [ref=f26e444]:
+                            - term [ref=f26e445]: After setup
+                            - definition [ref=f26e446]: Permanently offline
+                - generic [ref=f26e448]:
+                    - text: Dynamic model selection
+                    - paragraph [ref=f26e449]: "The app sizes the translation model to your hardware so it never runs out of memory:"
+                    - generic [ref=f26e450]:
+                        - generic [ref=f26e451]:
+                            - generic [ref=f26e452]: RAM > 6 GB
+                            - generic [ref=f26e453]: Q4_K_S · higher accuracy
+                        - generic [ref=f26e454]:
+                            - generic [ref=f26e455]: RAM ≤ 6 GB
+                            - generic [ref=f26e456]: Q2_K · lighter footprint
+        - generic [ref=f26e460]:
+            - heading "Translate anywhere. Even with no signal." [level=2] [ref=f26e462]: Translate anywhere.Even with no signal.
+            - paragraph [ref=f26e464]: Live on Google Play. Download once, download the models once, then never need a network again.
+            - generic [ref=f26e466]:
+                - link "Get it on Google Play" [ref=f26e467] [cursor=pointer]:
+                    - /url: https://play.google.com/store/apps/details?id=com.uktam.ai
+                - generic [ref=f26e468]: App Store — coming soon
+            - link "Read the source on GitHub" [ref=f26e473] [cursor=pointer]:
+                - /url: https://github.com/ashb155/uktam
+    - contentinfo [ref=f26e477]:
+        - generic [ref=f26e478]:
+            - paragraph [ref=f26e479]: Uktam.ai
+            - paragraph [ref=f26e480]: GPL-3.0 · Models by AI4Bharat & Sarvam AI
+            - link "GitHub" [ref=f26e481] [cursor=pointer]:
+                - /url: https://github.com/ashb155/uktam

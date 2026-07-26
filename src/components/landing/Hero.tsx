@@ -1,8 +1,9 @@
 import { ArrowDown, ShieldCheck } from "lucide-react";
 
-import { useMagnetic } from "@/hooks/use-scroll-fx";
+import { DeferredFx, loadFerrofluid } from "@/components/fx/DeferredFx";
+import { GradualBlur } from "@/components/fx/GradualBlur";
+import SpecularButton from "@/components/fx/SpecularButton";
 
-import { Aurora } from "./Aurora";
 import { LivingHeadline } from "./LivingHeadline";
 import { PhoneMockup } from "./PhoneMockup";
 import { Reveal } from "./Reveal";
@@ -23,11 +24,12 @@ const STEP = {
 } as const;
 
 export function Hero() {
-  const installRef = useMagnetic<HTMLAnchorElement>(0.22, 70);
-
   return (
     <section id="top" className="relative overflow-hidden pb-20 pt-28 sm:pb-28 sm:pt-32">
-      <Aurora />
+      {/* Replaces the CSS aurora that used to sit here: two ambient layers in
+          the same space would just fight each other. Deferred, so the hero
+          text never waits on a shader to compile. */}
+      <DeferredFx load={loadFerrofluid} />
 
       {/*
         One row, phone included, aligned to the top. Putting the phone in a
@@ -57,13 +59,12 @@ export function Hero() {
 
             <Reveal delay={STEP.actions}>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <a
-                  ref={installRef}
+                <SpecularButton
                   href={PLAY_STORE_URL}
                   data-cursor="install"
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-primary"
+                  className="btn-primary relative isolate"
                 >
                   <GooglePlayGlyph />
                   <span className="text-left leading-tight">
@@ -72,7 +73,7 @@ export function Hero() {
                     </span>
                     Google Play
                   </span>
-                </a>
+                </SpecularButton>
                 <a href="#pipeline" data-cursor="hover" className="btn-ghost">
                   How it works
                   <ArrowDown className="h-4 w-4" />
@@ -101,6 +102,10 @@ export function Hero() {
           <PhoneMockup />
         </Reveal>
       </div>
+      {/* The hero ends on a hard line against the strip below it, with the
+          fluid backdrop stopping mid-motion. Ramping the blur over the last
+          few rem lets it settle out instead of being cut off. */}
+      <GradualBlur position="bottom" height="7rem" strength={1.6} />
     </section>
   );
 }

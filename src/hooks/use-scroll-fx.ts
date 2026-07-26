@@ -15,51 +15,6 @@ import { usePrefersReducedMotion } from "./use-reveal";
  * times a second for a purely visual change.
  */
 
-/** Magnetic attraction: the element eases toward the pointer within `radius`. */
-export function useMagnetic<T extends HTMLElement = HTMLElement>(strength = 0.35, radius = 120) {
-  const ref = useRef<T | null>(null);
-  const reduced = usePrefersReducedMotion();
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || reduced || !hasFinePointer()) return;
-
-    const release = trackPointer();
-    const current = { x: 0, y: 0 };
-    let resting = false;
-
-    const stop = onTick((_time, delta) => {
-      const rect = node.getBoundingClientRect();
-      const dx = pointer.x - (rect.left + rect.width / 2);
-      const dy = pointer.y - (rect.top + rect.height / 2);
-      const reach = Math.max(rect.width, rect.height) / 2 + radius;
-      const inReach = pointer.seen && Math.hypot(dx, dy) < reach;
-
-      current.x = damp(current.x, inReach ? dx * strength : 0, SMOOTHING.magnetic, delta);
-      current.y = damp(current.y, inReach ? dy * strength : 0, SMOOTHING.magnetic, delta);
-
-      // Once settled at rest, stop writing until the pointer comes back.
-      if (!inReach && Math.abs(current.x) < 0.05 && Math.abs(current.y) < 0.05) {
-        if (!resting) {
-          resting = true;
-          node.style.transform = "";
-        }
-        return;
-      }
-      resting = false;
-      node.style.transform = `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0)`;
-    });
-
-    return () => {
-      stop();
-      release();
-      node.style.transform = "";
-    };
-  }, [reduced, strength, radius]);
-
-  return ref;
-}
-
 /** 3D tilt plus a pointer-tracked spotlight, both expressed as CSS variables. */
 export function useTilt<T extends HTMLElement = HTMLElement>(max = 7) {
   const ref = useRef<T | null>(null);

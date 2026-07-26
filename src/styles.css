@@ -888,38 +888,55 @@
 }
 
 /*
- * The ring is a fixed 32px scaled by transform rather than resized. Animating
- * width and height drives layout every frame; scale stays on the compositor.
- * Colour transitions are capped at --duration-fast so the cursor never lags
- * behind the thing it is reacting to.
+ * The reticle. Position and rotation are written per frame from the ticker, so
+ * nothing here may animate transform — a CSS transition on the same property
+ * the script is setting would fight it every frame. Only colour and opacity
+ * transition, capped at --duration-fast so the cursor never lags the thing it
+ * is reacting to.
  */
-@utility cursor-ring {
+@utility cursor-frame {
   position: absolute;
   top: 0;
   left: 0;
-  height: 32px;
-  width: 32px;
-  border-radius: 9999px;
-  border: 1.5px solid color-mix(in oklab, var(--primary) 80%, transparent);
-  background: color-mix(in oklab, var(--primary) 12%, transparent);
-  transition:
-    background-color var(--duration-fast) var(--ease-snap),
-    border-color var(--duration-fast) var(--ease-snap),
-    opacity var(--duration-fast) linear;
+  height: 0;
+  width: 0;
+  transition: opacity var(--duration-fast) linear;
 
-  &[data-mode="hover"],
-  &[data-mode="install"] {
-    background: color-mix(in oklab, var(--primary) 18%, transparent);
-    border-color: color-mix(in oklab, var(--emerald) 70%, transparent);
+  &[data-down] .cursor-corner {
+    border-color: var(--emerald);
+  }
+}
+
+@utility cursor-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12px;
+  width: 12px;
+  border: 2px solid color-mix(in oklab, var(--primary) 85%, transparent);
+  transition: border-color var(--duration-fast) var(--ease-snap);
+
+  /* Each bracket keeps only the two edges that meet at its own corner. */
+  &[data-corner="0"] {
+    border-right: none;
+    border-bottom: none;
+  }
+  &[data-corner="1"] {
+    border-left: none;
+    border-bottom: none;
+  }
+  &[data-corner="2"] {
+    border-left: none;
+    border-top: none;
+  }
+  &[data-corner="3"] {
+    border-right: none;
+    border-top: none;
   }
 
-  &[data-mode="text"] {
-    background: var(--emerald);
-    border-color: transparent;
-  }
-
-  &[data-down] {
-    background: color-mix(in oklab, var(--emerald) 30%, transparent);
+  .cursor-frame[data-mode="hover"] &,
+  .cursor-frame[data-mode="install"] & {
+    border-color: color-mix(in oklab, var(--emerald) 85%, transparent);
   }
 }
 
@@ -1071,5 +1088,24 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- specular button ---------- */
+
+/*
+ * The canvas extends past the button on every side so the rim glow can bleed
+ * outside the edge instead of being clipped flat against it.
+ */
+@utility specular-fx {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  z-index: 0;
+
+  & canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 }

@@ -9,6 +9,7 @@ import { Stack } from "@/components/landing/Stack";
 import { CallToAction, Footer } from "@/components/landing/CallToAction";
 import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { Cursor } from "@/components/landing/Cursor";
+import { DeferredFx, loadSplashCursor } from "@/components/fx/DeferredFx";
 
 const SITE_URL = "https://uktam.ai";
 const TITLE = "Uktam.ai — Offline Indic Speech Translation for Android";
@@ -72,6 +73,7 @@ function Index() {
   return (
     <div className="min-h-screen bg-background">
       <SmoothScroll />
+      <DeferredFx load={loadSplashCursor} />
       <Cursor />
       <Nav />
       <main>
