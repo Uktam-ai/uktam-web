@@ -1,45 +1,62 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
-import { Reveal, SectionHeading } from "./Reveal";
-import { LANGUAGES, STATS } from "./data";
-import { useInView, usePrefersReducedMotion } from "@/hooks/use-reveal";
 
+import { useInView, usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { onTick } from "@/lib/ticker";
+
+import { Reveal } from "./Reveal";
+import { LANGUAGES, STATS } from "./data";
+
+/**
+ * The one inverted section on the page.
+ *
+ * Every other surface is dark, which flattens the Indic scripts into glowing
+ * tiles. On paper they read as what they are — typography — and the break in
+ * the page's rhythm marks this as the section about the languages themselves.
+ */
 export function Languages() {
   return (
-    <section id="languages" className="relative border-t border-border py-24 sm:py-32">
+    <section id="languages" className="section-paper relative py-24 sm:py-32">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <SectionHeading
-          kicker="Languages"
-          title="Four Indic languages today."
-          highlight="More on the way."
-          blurb="Real-time speech recognition, translation and text-to-speech in every direction between the supported languages."
-        />
+        <div className="max-w-2xl">
+          <Reveal>
+            <span className="mono-label text-green-deep">Languages</span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl">
+              Four Indic languages today. More on the way.
+            </h2>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-5 max-w-xl text-base leading-relaxed opacity-70">
+              Speech recognition, translation and text-to-speech in every direction between the
+              supported languages.
+            </p>
+          </Reveal>
+        </div>
 
-        <ul className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-5">
-          {LANGUAGES.map((lang, i) => (
-            <Reveal as="li" key={lang.code} delay={i * 80}>
-              <div className="card-ring group h-full rounded-2xl p-6 text-center">
-                <p className="text-3xl font-semibold leading-tight text-foreground">
-                  {lang.script}
-                </p>
-                <p className="mt-3 text-sm font-medium">{lang.name}</p>
-                <p className="mono-label mt-1 text-muted-foreground">{lang.code}</p>
-              </div>
+        <ul className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-current/15 bg-current/15 md:grid-cols-5">
+          {LANGUAGES.map((language, i) => (
+            <Reveal as="li" key={language.code} delay={i * 80} className="specimen">
+              <p lang={language.code} className="specimen-script">
+                {language.script}
+              </p>
+              <p className="mt-4 text-sm font-medium">{language.name}</p>
+              <p className="mono-label mt-1 opacity-55">{language.code}</p>
             </Reveal>
           ))}
-          <Reveal as="li" delay={360}>
-            <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-dashed border-border p-6 text-center">
-              <Plus className="h-5 w-5 text-muted-foreground" />
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                More Indic languages coming soon
-              </p>
-            </div>
+          {/* Spans the row on the two-column layout — five tiles across two
+              columns would otherwise leave an orphan cell showing the grid's
+              own background. */}
+          <Reveal as="li" delay={360} className="specimen col-span-2 opacity-60 md:col-span-1">
+            <Plus className="h-5 w-5" />
+            <p className="mt-3 text-xs leading-relaxed">More Indic languages coming soon</p>
           </Reveal>
         </ul>
 
-        <div className="mt-16 grid gap-5 rounded-3xl border border-border bg-surface/60 p-8 sm:grid-cols-3 sm:p-10">
-          {STATS.map((s) => (
-            <Counter key={s.label} {...s} />
+        <div className="mt-14 grid gap-8 border-t border-current/15 pt-10 sm:grid-cols-3">
+          {STATS.map((stat) => (
+            <Counter key={stat.label} {...stat} />
           ))}
         </div>
       </div>
@@ -50,40 +67,38 @@ export function Languages() {
 function Counter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const reduced = usePrefersReducedMotion();
   const { ref, inView } = useInView<HTMLDivElement>(0.4);
-  const [n, setN] = useState(0);
+  const [shown, setShown] = useState(0);
   const done = useRef(false);
 
   useEffect(() => {
     if (!inView || done.current) return;
     done.current = true;
     if (reduced || value === 0) {
-      setN(value);
+      setShown(value);
       return;
     }
-    let cancelled = false;
-    (async () => {
-      const { animate } = await import("animejs");
-      if (cancelled) return;
-      const obj = { v: 0 };
-      animate(obj, {
-        v: value,
-        duration: 1500,
-        ease: "out(3)",
-        onUpdate: () => setN(Math.round(obj.v)),
-      });
-    })();
-    return () => {
-      cancelled = true;
-    };
+
+    // Counted on the shared ticker. This was the last thing on the page still
+    // pulling in anime.js, which cost ~22 kB gzipped to tween one integer.
+    const DURATION = 1400;
+    let elapsed = 0;
+    const stop = onTick((_time, delta) => {
+      elapsed += delta;
+      const t = Math.min(1, elapsed / DURATION);
+      // easeOutCubic
+      setShown(Math.round(value * (1 - Math.pow(1 - t, 3))));
+      if (t >= 1) stop();
+    });
+    return stop;
   }, [inView, reduced, value]);
 
   return (
-    <div ref={ref} className="text-center sm:text-left">
-      <p className="font-mono text-4xl font-bold text-gradient">
-        {n}
+    <div ref={ref}>
+      <p className="font-mono text-4xl font-bold">
+        {shown}
         {suffix}
       </p>
-      <p className="mono-label mt-2 text-muted-foreground">{label}</p>
+      <p className="mono-label mt-2 opacity-55">{label}</p>
     </div>
   );
 }

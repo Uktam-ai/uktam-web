@@ -1,111 +1,121 @@
-import { useState } from "react";
-import { Mic, AudioLines, Languages as LanguagesIcon, Volume2 } from "lucide-react";
-import { Reveal, SectionHeading } from "./Reveal";
+import { useEffect, useRef, useState } from "react";
+import { AudioLines, Languages as LanguagesIcon, Mic, Volume2 } from "lucide-react";
+
+import { usePrefersReducedMotion } from "@/hooks/use-reveal";
+import { onTick } from "@/lib/ticker";
+
+import { SectionHeading } from "./Reveal";
 import { PIPELINE } from "./data";
 
 const ICONS = [Mic, AudioLines, LanguagesIcon, Volume2];
 
+/**
+ * The centrepiece, driven by scroll rather than hover.
+ *
+ * The section reserves a tall runway and pins its contents, so scrolling
+ * through it advances the pipeline one stage at a time and draws the connector
+ * between them. The previous version only responded to `mouseenter`, which
+ * meant the page's main illustration did nothing at all on a phone.
+ */
 export function Pipeline() {
+  const reduced = usePrefersReducedMotion();
+  const runwayRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const runway = runwayRef.current;
+    const track = trackRef.current;
+    if (!runway || !track) return;
+
+    if (reduced) {
+      setActive(PIPELINE.length - 1);
+      track.style.setProperty("--pipeline-progress", "1");
+      return;
+    }
+
+    let lastIndex = -1;
+    let lastProgress = -1;
+
+    return onTick(() => {
+      const rect = runway.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      if (scrollable <= 0) return;
+
+      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+
+      const rounded = Math.round(progress * 200) / 200;
+      if (rounded !== lastProgress) {
+        lastProgress = rounded;
+        // The connector is a CSS variable, so drawing it costs no re-render.
+        track.style.setProperty("--pipeline-progress", String(rounded));
+      }
+
+      // React state changes at most three times across the whole section.
+      const index = Math.min(PIPELINE.length - 1, Math.floor(progress * PIPELINE.length));
+      if (index !== lastIndex) {
+        lastIndex = index;
+        setActive(index);
+      }
+    });
+  }, [reduced]);
 
   return (
     <section id="pipeline" className="relative border-t border-border">
-      <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8 sm:py-28">
-        <SectionHeading
-          kicker="The pipeline"
-          title="Voice in, voice out —"
-          highlight="four local stages"
-        />
+      <div ref={runwayRef} className="lg:h-[280vh]">
+        <div className="lg:sticky lg:top-0 lg:flex lg:min-h-screen lg:flex-col lg:justify-center">
+          <div className="mx-auto w-full max-w-6xl px-5 py-24 sm:px-8">
+            <SectionHeading
+              kicker="The pipeline"
+              title="Voice in, voice out."
+              highlight="Four local stages."
+            />
 
-        <Reveal delay={100}>
-          <div
-            className="mt-14 flex flex-col gap-3 lg:h-[430px] lg:flex-row"
-            onMouseLeave={() => setActive(0)}
-          >
-            {PIPELINE.map((stage, i) => {
-              const Icon = ICONS[i];
-              const on = active === i;
-              return (
-                <article
-                  key={stage.step}
-                  data-cursor="hover"
-                  onMouseEnter={() => setActive(i)}
-                  onFocus={() => setActive(i)}
-                  tabIndex={0}
-                  className={`group relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border p-6 outline-none transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                    on
-                      ? "border-transparent bg-surface-raised glow-primary lg:flex-[3.4]"
-                      : "border-border bg-surface/60 lg:flex-[1]"
-                  }`}
-                >
-                  {/* gradient wash on the open card */}
-                  <span
-                    aria-hidden
-                    className={`pointer-events-none absolute inset-0 bg-gradient-hero transition-opacity duration-700 ${
-                      on ? "opacity-[0.14]" : "opacity-0"
-                    }`}
-                  />
+            <div ref={trackRef} className="pipeline-track mt-14">
+              <div className="pipeline-rail" aria-hidden />
 
-                  <div className="relative flex items-start justify-between gap-4">
-                    <div
-                      className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl border transition-all duration-500 ${
-                        on
-                          ? "border-transparent bg-gradient-hero text-primary-foreground"
-                          : "border-border bg-surface text-muted-foreground"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <span
-                      className={`mono-label transition-colors duration-500 ${
-                        on ? "text-primary" : "text-muted-foreground"
-                      }`}
-                    >
-                      {stage.step}
-                    </span>
-                  </div>
+              <ol className="relative grid gap-3 lg:grid-cols-4">
+                {PIPELINE.map((stage, i) => {
+                  const Icon = ICONS[i];
+                  const state = i === active ? "active" : i < active ? "done" : "waiting";
+                  return (
+                    <li key={stage.step}>
+                      <article data-state={state} className="pipeline-stage">
+                        <div className="flex items-start justify-between gap-4">
+                          <span className="pipeline-icon">
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <span className="mono-label pipeline-step">{stage.step}</span>
+                        </div>
 
-                  <div className="relative mt-8 lg:mt-0">
-                    <h3
-                      className={`font-display text-xl font-semibold transition-colors duration-500 lg:text-2xl ${
-                        on ? "text-foreground" : "text-muted-foreground"
-                      }`}
-                    >
-                      {stage.title}
-                    </h3>
-                    <p className="mt-2 font-mono text-[11px] text-muted-foreground">
-                      {stage.engine}
-                    </p>
+                        <div className="mt-8">
+                          <h3 className="text-xl font-semibold lg:text-2xl">{stage.title}</h3>
+                          <p className="mt-2 font-mono text-[11px] text-muted-foreground">
+                            {stage.engine}
+                          </p>
+                          {stage.timing ? (
+                            <p className="mono-label mt-3 text-emerald">{stage.timing}</p>
+                          ) : null}
+                          {/* The wrapper is what collapses; the paragraph
+                              inside it is what gets clipped. */}
+                          <div className="pipeline-body mt-4">
+                            <p className="text-sm leading-relaxed text-muted-foreground">
+                              {stage.body}
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
 
-                    {/* revealed body */}
-                    <div
-                      className={`grid transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        on ? "mt-4 grid-rows-[1fr] opacity-100" : "mt-0 grid-rows-[0fr] opacity-0"
-                      }`}
-                    >
-                      <p className="overflow-hidden text-sm leading-relaxed text-muted-foreground lg:max-w-md">
-                        {stage.body}
-                      </p>
-                    </div>
-
-                    <span
-                      aria-hidden
-                      className={`mt-5 block h-[2px] bg-gradient-hero transition-all duration-700 ${
-                        on ? "w-24 opacity-100" : "w-0 opacity-0"
-                      }`}
-                    />
-                  </div>
-                </article>
-              );
-            })}
+            <p className="mx-auto mt-14 max-w-xl text-center font-mono text-xs text-muted-foreground">
+              network calls in this pipeline: <span className="text-emerald">0</span>
+            </p>
           </div>
-        </Reveal>
-
-        <Reveal delay={160}>
-          <p className="mx-auto mt-14 max-w-xl text-center font-mono text-xs text-muted-foreground">
-            network calls in this pipeline: <span className="text-emerald">0</span>
-          </p>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

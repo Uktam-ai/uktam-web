@@ -48,7 +48,7 @@ export const PIPELINE = [
     step: "01",
     title: "Speak",
     engine: "Microphone",
-    timing: null,
+    timing: "live",
     body: "Talk naturally in Hindi, Kannada, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
   },
   {

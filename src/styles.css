@@ -579,6 +579,195 @@
   }
 }
 
+/* ---------- inverted section ---------- */
+
+/*
+ * Cool paper, not cream. A warm off-white with a serif would be the default
+ * "editorial" move; this stays in the product's own cool cast so the flip
+ * reads as the same brand under different light.
+ */
+@utility section-paper {
+  background-color: var(--paper);
+  color: var(--paper-foreground);
+
+  & ::selection {
+    background: color-mix(in oklab, var(--green-deep) 30%, transparent);
+  }
+}
+
+@utility specimen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--paper);
+  padding: 1.5rem 0.75rem;
+  text-align: center;
+  transition: background-color var(--duration-fast) var(--ease-snap);
+
+  &:hover {
+    background-color: color-mix(in oklab, var(--paper-foreground) 5%, var(--paper));
+  }
+}
+
+@utility specimen-script {
+  font-size: clamp(1.875rem, 0.9rem + 3.1vw, 3.25rem);
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* ---------- pipeline ---------- */
+
+@utility pipeline-track {
+  position: relative;
+  --pipeline-progress: 0;
+}
+
+/*
+ * The connector. Scaling a single element beats animating an SVG
+ * stroke-dashoffset here: it is one compositor property, driven straight from
+ * the scroll progress variable with no per-frame style recalculation.
+ */
+@utility pipeline-rail {
+  position: absolute;
+  left: 0;
+  top: 2.75rem;
+  height: 2px;
+  width: 100%;
+  background: color-mix(in oklab, var(--border) 90%, transparent);
+  display: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--gradient-hero);
+    transform: scaleX(var(--pipeline-progress));
+    transform-origin: left center;
+  }
+
+  @media (width >= 64rem) {
+    display: block;
+  }
+}
+
+@utility pipeline-stage {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  /* Opaque, so the connector rail behind the row shows only in the gaps
+     between cards instead of striking through them. */
+  background-color: var(--surface);
+  padding: 1.5rem;
+  transition:
+    border-color var(--duration-base) var(--ease-out-quint),
+    background-color var(--duration-base) var(--ease-out-quint),
+    opacity var(--duration-base) var(--ease-out-quint);
+
+  &[data-state="waiting"] {
+    opacity: 0.42;
+
+    /* Stacked stages are read, not glanced at — keep them legible. */
+    @media (width < 64rem) {
+      opacity: 0.75;
+    }
+  }
+
+  &[data-state="done"] {
+    opacity: 0.72;
+    border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+
+  &[data-state="active"] {
+    border-color: color-mix(in oklab, var(--primary) 65%, transparent);
+    background-color: var(--surface-raised);
+    box-shadow: var(--glow-primary);
+  }
+}
+
+@utility pipeline-icon {
+  display: grid;
+  height: 3rem;
+  width: 3rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--muted-foreground);
+  transition:
+    background-color var(--duration-base) var(--ease-out-quint),
+    color var(--duration-base) var(--ease-out-quint);
+
+  [data-state="active"] & {
+    border-color: transparent;
+    background-image: var(--gradient-hero);
+    color: var(--primary-foreground);
+  }
+}
+
+@utility pipeline-step {
+  color: var(--muted-foreground);
+  transition: color var(--duration-base) var(--ease-out-quint);
+
+  [data-state="active"] & {
+    color: var(--primary);
+  }
+}
+
+@utility pipeline-body {
+  /* Collapsed rather than hidden, so the stage grows into its own explanation
+     as the scroll reaches it. */
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--duration-base) var(--ease-out-quint),
+    opacity var(--duration-base) var(--ease-out-quint);
+
+  > * {
+    overflow: hidden;
+  }
+
+  [data-state="active"] & {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  /*
+   * Below the pinned layout the stages stack, and which one is "active"
+   * depends on scroll position. Collapsing the others there would hide real
+   * copy behind a scroll gesture, so every stage stays open and only the
+   * highlight moves.
+   */
+  @media (width < 64rem) {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+/* ---------- phone mockup ---------- */
+
+@utility phone-turn {
+  border-radius: 1rem;
+  padding: 0.75rem 0.875rem;
+  opacity: 0;
+  transform: translate3d(0, 10px, 0) scale(0.97);
+  transition:
+    opacity var(--duration-base) var(--ease-out-quint),
+    transform var(--duration-base) var(--ease-out-quint);
+
+  &[data-visible] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ---------- nav ---------- */
 
 @utility site-nav {

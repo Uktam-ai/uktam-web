@@ -94,7 +94,9 @@ export function Nav() {
             target="_blank"
             rel="noreferrer"
             aria-label="Uktam.ai on GitHub"
-            className="grid h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground transition-colors duration-(--duration-fast) hover:border-primary/50 hover:text-foreground"
+            // Dropped on the narrowest screens so the primary action keeps its
+            // full label; the same link sits in the footer.
+            className="hidden h-9 w-9 place-items-center rounded-lg border border-border text-muted-foreground transition-colors duration-(--duration-fast) hover:border-primary/50 hover:text-foreground sm:grid"
           >
             <Github className="h-4 w-4" />
           </a>
@@ -103,7 +105,7 @@ export function Nav() {
             data-cursor="hover"
             target="_blank"
             rel="noreferrer"
-            className="rounded-lg bg-gradient-hero px-4 py-2 text-[13px] font-semibold text-primary-foreground transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03]"
+            className="whitespace-nowrap rounded-lg bg-gradient-hero px-3 py-2 text-xs font-semibold text-primary-foreground transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03] sm:px-4 sm:text-[13px]"
           >
             Get on Play Store
           </a>
