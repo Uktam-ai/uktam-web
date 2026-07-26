@@ -22,7 +22,11 @@ const CSS_OUT = path.join(ROOT, "src", "styles", "fonts.css");
 const CHROME_UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
-/** Every Indic string the site renders, keyed by script. */
+/**
+ * Every Indic string the site renders, keyed by script. Entries marked
+ * "headroom" are not rendered anywhere — they only widen the glyph subset so
+ * small copy edits don't immediately produce tofu.
+ */
 const INDIC_SOURCE_TEXT = {
   devanagari: [
     "हिन्दी",
@@ -38,11 +42,8 @@ const INDIC_SOURCE_TEXT = {
     "ನೀನು ಎಲ್ಲಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ",
     "ನಾನು ಕಾಲೇಜಿಗೆ ಹೋಗಿ ಸಂಜೆ ೫ ಗಂಟೆಗೆ ಹಿಂತಿರುಗುತ್ತೇನೆ.",
   ],
-  tamil: [
-    "தமிழ்",
-    "ரயில் நிலையத்திற்கு வழி சொல்லுங்கள்",
-    "இந்த ஆப் இணையம் இல்லாமல் வேலை செய்யும்",
-  ],
+  tamil: ["தமிழ்", "ரயில் நிலையத்திற்கு வழி சொல்லுங்கள்", "இந்த ஆப் இணையம் இல்லாமல் வேலை செய்யும்"],
+  // Telugu appears only as the language name today; the second string is headroom.
   telugu: ["తెలుగు", "మీరు ఎక్కడికి వెళ్తున్నారు"],
 };
 
@@ -77,9 +78,7 @@ function parseFaces(css) {
     // Match on the format() declaration rather than a .woff2 extension —
     // Google's subset endpoint serves from `/l/font?kit=...` with no extension.
     // Fontshare emits protocol-relative URLs.
-    url: body.match(
-      /url\((['"]?)((?:\/\/|https:\/\/)[^'")]+)\1\)\s*format\(['"]woff2['"]\)/,
-    )?.[2],
+    url: body.match(/url\((['"]?)((?:\/\/|https:\/\/)[^'")]+)\1\)\s*format\(['"]woff2['"]\)/)?.[2],
   }));
 }
 
@@ -150,9 +149,9 @@ async function indic() {
   for (const [script, family] of Object.entries(INDIC_FAMILIES)) {
     // Deduplicate to keep the request URL short, and always include digits and
     // the punctuation the transcript lines use.
-    const chars = [
-      ...new Set([...INDIC_SOURCE_TEXT[script].join(""), ..."0123456789.,?!— "]),
-    ].join("");
+    const chars = [...new Set([...INDIC_SOURCE_TEXT[script].join(""), ..."0123456789.,?!— "])].join(
+      "",
+    );
     // Deliberately the v1 API, not css2. The Noto Indic families are variable
     // fonts, and css2 serves the variable file even for a single weight — the
     // variation tables dwarf the handful of glyphs we asked for (54 kB vs
@@ -195,7 +194,10 @@ await writeFile(
   ].join("\n"),
 );
 
-console.log(`\ntotal ${(total / 1024).toFixed(1)} kB across ${
-  results.reduce((n, r) => n + r.rules.length, 0)
-} faces`);
+console.log(
+  `\ntotal ${(total / 1024).toFixed(1)} kB across ${results.reduce(
+    (n, r) => n + r.rules.length,
+    0,
+  )} faces`,
+);
 console.log(`wrote ${path.relative(ROOT, CSS_OUT)}`);
