@@ -49,8 +49,6 @@
   --color-blue-deep: var(--blue-deep);
   --color-green-deep: var(--green-deep);
   --color-teal: var(--teal);
-  --color-panel-deep: var(--panel-deep);
-  --color-panel-deep-foreground: var(--panel-deep-foreground);
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   /*
@@ -125,19 +123,12 @@
   /* Accent only. */
   --purple: oklch(0.491 0.241 293);
 
-  /*
-   * The Languages section breaks the page's rhythm by going *darker* than
-   * everything else, not lighter. A bright panel between dark sections reads
-   * as a flash when you scroll into it; dropping below the canvas gets the
-   * same structural contrast and lets the scripts sit at maximum legibility.
-   */
-  --panel-deep: oklch(0.098 0.024 266);
-  --panel-deep-foreground: oklch(0.975 0.006 268);
-
   --secondary: oklch(0.222 0.043 273);
   --secondary-foreground: oklch(0.982 0.006 268);
   --muted: oklch(0.222 0.043 273);
-  --muted-foreground: oklch(0.735 0.03 272);
+  /* 0.735 left 11px labels at 3.9-4.3:1 on the raised surfaces; this clears
+     4.5:1 everywhere they are used. */
+  --muted-foreground: oklch(0.782 0.028 272);
   --accent: oklch(0.268 0.052 278);
   --accent-foreground: oklch(0.982 0.006 268);
   --destructive: oklch(0.62 0.23 25);
@@ -404,9 +395,12 @@
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 
-  &:hover .marquee-track {
-    animation-play-state: paused;
-  }
+  /*
+   * Deliberately does not pause on hover. The strip is a continuous statement
+   * about breadth, not a list to stop and read; halting it under the cursor
+   * makes an ambient element demand attention, and anyone crossing the page
+   * horizontally trips it by accident.
+   */
 }
 
 @utility marquee-skew {
@@ -541,11 +535,16 @@
 
 /* ---------- buttons ---------- */
 
+/*
+ * Pill, not a rounded rectangle. The specular rim is drawn from a rounded-rect
+ * distance field with its radius clamped to half the height, so anything less
+ * than a full pill here puts the light on a different shape than the button.
+ */
 @utility btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  border-radius: 0.75rem;
+  border-radius: 9999px;
   background-image: var(--gradient-hero);
   padding: 0.875rem 1.25rem;
   font-family: var(--font-display);
@@ -567,7 +566,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 0.75rem;
+  /* Matches btn-primary: the two sit side by side in the hero. */
+  border-radius: 9999px;
   border: 1px solid var(--border);
   padding: 0.875rem 1.25rem;
   font-family: var(--font-display);
@@ -586,11 +586,6 @@
 }
 
 /* ---------- inverted section ---------- */
-
-@utility section-deep {
-  background-color: var(--panel-deep);
-  color: var(--panel-deep-foreground);
-}
 
 /*
  * The brand mark used as ornament rather than identification.
@@ -630,13 +625,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--panel-deep);
+  /* Raised against the page, since the section no longer supplies contrast. */
+  background-color: var(--surface);
   padding: 1.5rem 0.75rem;
   text-align: center;
   transition: background-color var(--duration-fast) var(--ease-snap);
 
   &:hover {
-    background-color: color-mix(in oklab, var(--panel-deep-foreground) 6%, var(--panel-deep));
+    background-color: color-mix(in oklab, var(--foreground) 7%, var(--surface));
   }
 }
 

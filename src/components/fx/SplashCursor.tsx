@@ -618,5 +618,8 @@ export default function SplashCursor() {
     };
   }, []);
 
-  return <div ref={hostRef} aria-hidden className="pointer-events-none fixed inset-0 z-0" />;
+  // Above the sections, below the nav (50) and the reticle (100). At z-0 the
+  // trail rendered behind page content, so any section with a background of
+  // its own became a dead patch the fluid could not cross.
+  return <div ref={hostRef} aria-hidden className="pointer-events-none fixed inset-0 z-30" />;
 }

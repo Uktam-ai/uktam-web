@@ -9,14 +9,18 @@ import { Reveal } from "./Reveal";
 import { LANGUAGES, STATS } from "./data";
 
 /**
- * The one section that breaks the page's surface rhythm, by dropping below the
- * canvas rather than rising above it. The scripts get their contrast — they are
- * the subject here, not decoration — without a bright panel flashing at anyone
- * scrolling through in a dark room.
+ * Sits on the page's own canvas. Any opaque panel here would be a lid: the
+ * cursor fluid renders behind page content, so a section with a background of
+ * its own becomes a dead patch the trail cannot cross. The scripts get their
+ * separation from the raised specimen tiles and the rules between them, which
+ * is structure rather than a slab of colour.
  */
 export function Languages() {
   return (
-    <section id="languages" className="section-deep relative overflow-hidden py-24 sm:py-32">
+    <section
+      id="languages"
+      className="relative overflow-hidden border-t border-border py-24 sm:py-32"
+    >
       {/* The mark is 8-fold symmetric, so it reads as ornament at this scale
           rather than as a logo someone forgot to shrink. Cropped by the section
           edge on purpose: a whole centred logo would be a watermark. */}

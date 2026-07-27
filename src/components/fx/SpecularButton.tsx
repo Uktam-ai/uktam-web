@@ -97,6 +97,9 @@ export default function SpecularButton({
     const host = hostRef.current;
     const fx = fxRef.current;
     if (!host || !fx || prefersReducedMotion()) return;
+    // The rim tracks a cursor. Without one it would spin up a WebGL context to
+    // render nothing, which on a phone is battery spent on an invisible effect.
+    if (!window.matchMedia("(pointer: fine)").matches) return;
 
     // ogl is imported here rather than at module scope so the anchor itself
     // stays in the entry bundle while the renderer does not. The button is

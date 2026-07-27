@@ -86,7 +86,9 @@ export function LivingHeadline() {
           <span aria-hidden> &rarr; </span>
           <span className="text-emerald">{byCode.get(active.to)?.name}</span>
         </span>
-        <span aria-hidden className="text-border">
+        {/* Decorative, hence aria-hidden and exempt from contrast — but at the
+            border token's 11% it was invisible rather than subtle. */}
+        <span aria-hidden className="text-foreground/30">
           /
         </span>
         <span>translated on device</span>

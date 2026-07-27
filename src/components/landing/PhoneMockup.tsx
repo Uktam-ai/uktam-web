@@ -93,7 +93,7 @@ function LanguagePill({ code, active = false }: { code: string; active?: boolean
       lang={code}
       className={cn(
         "flex-1 truncate rounded-full px-3 py-2 text-center text-sm",
-        active ? "bg-primary font-medium text-primary-foreground" : "bg-secondary text-foreground",
+        active ? "bg-indigo font-medium text-primary-foreground" : "bg-secondary text-foreground",
       )}
     >
       {byCode.get(code)?.script}
@@ -115,7 +115,7 @@ function Turn({ turn, visible }: { turn: (typeof CONVERSATION)[number]; visible:
     >
       {/* What was heard, set quieter than what was said — the translation is
           the thing being reached for. */}
-      <p lang={turn.from} className="text-[11px] leading-relaxed text-white/55">
+      <p lang={turn.from} className="text-[11px] leading-relaxed text-white/75">
         {turn.source}
       </p>
 
@@ -133,7 +133,7 @@ function Turn({ turn, visible }: { turn: (typeof CONVERSATION)[number]; visible:
         </span>
       </div>
 
-      <p className="mt-2 font-mono text-[9px] text-white/45">
+      <p className="mt-2 font-mono text-[9px] text-white/70">
         ASR: {turn.asrMs}ms | Translation {turn.translateS}s
       </p>
     </article>
