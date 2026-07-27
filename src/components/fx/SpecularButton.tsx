@@ -160,19 +160,24 @@ export default function SpecularButton({
       const mesh = new Mesh(gl, { geometry, program });
       fx.appendChild(gl.canvas);
 
-      const size = { w: 1, h: 1 };
       const resize = () => {
         // Measured fractionally and centred explicitly: rounding to offsetWidth
         // drifts the field up to a pixel off the CSS border it is tracing.
         const rect = host.getBoundingClientRect();
-        size.w = rect.width;
-        size.h = rect.height;
         renderer.setSize(rect.width + PAD * 2, rect.height + PAD * 2);
         program.uniforms.uCenter.value = [
           (PAD + rect.width / 2) * dpr,
           (PAD + rect.height / 2) * dpr,
         ];
         program.uniforms.uHalfSize.value = [(rect.width / 2) * dpr, (rect.height / 2) * dpr];
+        // Set here, not in the frame loop. The shader's `base` term traces the
+        // distance field whether or not anything is lit, so a radius of 0 is a
+        // visible hard-cornered rectangle around the pill — and the loop's idle
+        // bailout returns before its own assignment, so on a fresh load the
+        // very first frame rendered was exactly that. It stayed until the
+        // pointer came close enough to push past the bailout.
+        program.uniforms.uRadius.value =
+          Math.min(radius, Math.min(rect.width, rect.height) / 2) * dpr;
       };
       const observer = new ResizeObserver(resize);
       observer.observe(host);
@@ -199,8 +204,13 @@ export default function SpecularButton({
       };
       window.addEventListener("pointermove", onPointerMove, { passive: true });
 
-      const lineC = new Color();
-      const baseC = new Color();
+      // Both are props, so they are constant for the life of this effect —
+      // re-parsing them into a Color on every frame bought nothing.
+      const lineC = new Color(lineColor);
+      const baseC = new Color(baseColor);
+      program.uniforms.uLineColor.value = [lineC.r, lineC.g, lineC.b];
+      program.uniforms.uBaseColor.value = [baseC.r, baseC.g, baseC.b];
+
       let angle = 2.4;
       let idleAngle = 2.4;
       let bright = 0;
@@ -227,12 +237,7 @@ export default function SpecularButton({
           return;
         }
 
-        lineC.set(lineColor);
-        baseC.set(baseColor);
         program.uniforms.uAngle.value = angle;
-        program.uniforms.uRadius.value = Math.min(radius, Math.min(size.w, size.h) / 2) * dpr;
-        program.uniforms.uLineColor.value = [lineC.r, lineC.g, lineC.b];
-        program.uniforms.uBaseColor.value = [baseC.r, baseC.g, baseC.b];
         program.uniforms.uIntensity.value = bright;
         renderer.render({ scene: mesh });
       };

@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Github } from "lucide-react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { Github, Menu, X } from "lucide-react";
 
 import { onTick } from "@/lib/ticker";
 
@@ -12,9 +12,53 @@ const LINKS = [
   { href: "#stack", label: "Stack" },
 ];
 
+/** Matches the `md` breakpoint the section links appear at. */
+const DESKTOP_QUERY = "(width >= 48rem)";
+
 export function Nav() {
   const headerRef = useRef<HTMLElement | null>(null);
   const progressRef = useRef<HTMLDivElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const sheetId = useId();
+
+  const closeMenu = useCallback((returnFocus = false) => {
+    setMenuOpen(false);
+    if (returnFocus) toggleRef.current?.focus();
+  }, []);
+
+  // Escape closes and hands focus back; a tap outside just closes. Both are
+  // bound only while the sheet is open, so the shut nav costs no listeners.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu(true);
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const header = headerRef.current;
+      if (header && !header.contains(event.target as Node)) closeMenu();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [menuOpen, closeMenu]);
+
+  // Rotating a phone to landscape can cross into the desktop layout, where the
+  // sheet is display:none and its open state would be stranded — the links are
+  // back in the bar but the toggle still reports itself as expanded.
+  useEffect(() => {
+    const query = window.matchMedia(DESKTOP_QUERY);
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false);
+    };
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -62,7 +106,7 @@ export function Nav() {
   }, []);
 
   return (
-    <header ref={headerRef} className="site-nav">
+    <header ref={headerRef} data-menu-open={menuOpen || undefined} className="site-nav">
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label="Uktam.ai, back to top">
           <img
@@ -109,8 +153,45 @@ export function Nav() {
           >
             Get on Play Store
           </a>
+
+          <button
+            ref={toggleRef}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls={sheetId}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="nav-toggle relative md:hidden"
+          >
+            {menuOpen ? (
+              <X className="h-4 w-4" aria-hidden />
+            ) : (
+              <Menu className="h-4 w-4" aria-hidden />
+            )}
+          </button>
         </div>
       </nav>
+
+      {/*
+        Rendered on every width but never reachable at `md` and up: `md:hidden`
+        takes it out of layout entirely, so the desktop bar is unchanged.
+      */}
+      <div id={sheetId} data-open={menuOpen || undefined} className="nav-sheet md:hidden">
+        <ul className="mx-auto w-full max-w-6xl px-5 pb-3 sm:px-8">
+          {LINKS.map((link, i) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                data-index={String(i + 1).padStart(2, "0")}
+                onClick={() => closeMenu()}
+                className="nav-sheet-link"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="h-px w-full bg-border/60">
         <div ref={progressRef} className="site-nav-progress" />

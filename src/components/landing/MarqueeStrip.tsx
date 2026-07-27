@@ -15,7 +15,18 @@ export function MarqueeStrip() {
       <Marquee speed={28}>
         {LANGUAGES.concat(LANGUAGES).map((language, i) => (
           <span key={`${language.code}-${i}`} className="flex items-center gap-8 px-8">
-            <span lang={language.code} className="font-display text-3xl font-bold sm:text-5xl">
+            {/*
+              The leading is explicit because Tailwind's text-* utilities carry
+              a line-height of their own — 1 at text-5xl — and they sit in a
+              later layer than the `[lang]` rule in base that asks for 1.45. At
+              48px the Kannada and Tamil ink is 60px tall, so the utility's
+              48px line box was clipping 6px off the top and bottom of every
+              script against the marquee's overflow.
+            */}
+            <span
+              lang={language.code}
+              className="font-display text-3xl font-bold leading-[1.45] sm:text-5xl"
+            >
               {language.script}
             </span>
             <span className="mono-label text-muted-foreground">{language.name}</span>
