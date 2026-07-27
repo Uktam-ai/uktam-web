@@ -6,11 +6,31 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type PluginOption } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+// @ts-expect-error -- plain .mjs helper, shared with the build; no types needed.
+import { resolveSiteUrl, writeSiteFiles } from "./scripts/site-url.mjs";
+
 // Plugin order matters: Tailwind and path resolution run before Start's route
 // and server transforms, and the React plugin comes last so it sees the
 // already-transformed output.
 export default defineConfig(async ({ command }) => {
+  // Resolved once per build and substituted into the bundle as __SITE_URL__.
+  // See src/lib/site.ts for why this is not a constant in the source.
+  const siteUrl: string = resolveSiteUrl();
+
   const plugins: PluginOption[] = [
+    {
+      name: "uktam:site-files",
+      // robots.txt and sitemap.xml both embed the origin as an absolute URL, so
+      // they are generated rather than committed — a checked-in copy is a
+      // second place for the domain to be wrong. Written into public/ so the
+      // dev server and the production build pick them up the same way.
+      async buildStart() {
+        await writeSiteFiles(siteUrl);
+      },
+      async configureServer() {
+        await writeSiteFiles(siteUrl);
+      },
+    },
     tailwindcss(),
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tanstackStart({
@@ -34,6 +54,9 @@ export default defineConfig(async ({ command }) => {
 
   return {
     plugins,
+    define: {
+      __SITE_URL__: JSON.stringify(siteUrl),
+    },
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
       // React and Query must each resolve to a single copy — duplicates break
