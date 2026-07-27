@@ -958,6 +958,113 @@
   }
 }
 
+/* ---------- model disclosures ---------- */
+
+/*
+ * Built on native <details>, not a JS accordion.
+ *
+ * The page has to stay readable with scripting off, which rules out anything
+ * whose open state lives in React — and <details> arrives with the keyboard
+ * behaviour, the focus handling and the expanded/collapsed announcement already
+ * correct, which a div with an onClick does not.
+ *
+ * Unlike the FAQ, collapsing is right here: this is the depth behind a summary
+ * someone has already read, not an answer they are scanning for.
+ */
+@utility model-disclosure {
+  border-top: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+
+  &:last-child {
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  }
+
+  /* The default triangle cannot be styled and sits at the wrong optical weight
+     next to mono labels; the +/× below replaces it. Both properties are needed
+     — WebKit only honours the pseudo-element. */
+  & summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  & summary::-webkit-details-marker {
+    display: none;
+  }
+
+  & summary::marker {
+    content: "";
+  }
+}
+
+@utility model-summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.75rem 1rem;
+  padding: 1.125rem 0;
+  transition: color var(--duration-instant) var(--ease-snap);
+
+  &:hover {
+    color: var(--primary);
+  }
+
+  /* Native summary takes focus, so the ring has to land somewhere sensible —
+     inset rather than outset, since the row spans the full column width. */
+  &:focus-visible {
+    outline: 2px solid var(--emerald);
+    outline-offset: -2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+@utility model-marker {
+  display: grid;
+  height: 1.5rem;
+  width: 1.5rem;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  transition:
+    rotate var(--duration-fast) var(--ease-snap),
+    border-color var(--duration-fast) var(--ease-snap),
+    color var(--duration-fast) var(--ease-snap);
+
+  details[open] & {
+    rotate: 45deg;
+    border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+    color: var(--primary);
+  }
+
+  summary:hover & {
+    border-color: color-mix(in oklab, var(--primary) 55%, transparent);
+    color: var(--primary);
+  }
+}
+
+@utility model-body {
+  padding-bottom: 1.25rem;
+
+  /*
+   * The fade is on the panel's own content and only plays on open, so closing
+   * stays instant — an exit animation on a disclosure just delays the reader
+   * who decided they were done with it. Height is deliberately not animated:
+   * <details> gives nothing to interpolate between, and faking a box costs a
+   * measure and a reflow per toggle for a transition nobody asked for.
+   */
+  animation: model-body-in var(--duration-base) var(--ease-out-quint) both;
+}
+
+@keyframes model-body-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ---------- mobile nav ---------- */
 
 /*
@@ -1069,7 +1176,10 @@
 @layer base {
   html.has-custom-cursor,
   html.has-custom-cursor a,
-  html.has-custom-cursor button {
+  html.has-custom-cursor button,
+  /* summary sets cursor: pointer itself, so without it listed here the system
+     arrow reappears over the disclosures while the reticle is also drawn. */
+  html.has-custom-cursor summary {
     cursor: none;
   }
 

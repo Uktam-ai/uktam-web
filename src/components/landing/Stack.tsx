@@ -1,5 +1,7 @@
+import { Plus } from "lucide-react";
+
 import { Reveal, SectionHeading } from "./Reveal";
-import { STACK, REQUIREMENTS } from "./data";
+import { STACK, REQUIREMENTS, MODELS } from "./data";
 
 export function Stack() {
   return (
@@ -26,7 +28,16 @@ export function Stack() {
             </dl>
           </div>
 
-          <div className="lg:pt-24">
+          {/*
+            No top offset. This column used to be pushed down 96px, which was
+            fine when it held two short cards, but the model disclosures made it
+            the taller of the two — the panels ran 166px past the bottom of the
+            spec table beside them, and the section read as lopsided. Dropping
+            the offset closes that to about 70px, which is as level as the two
+            get without padding one of them to match, and it aligns the first
+            card's top edge with the heading rather than with nothing.
+          */}
+          <div>
             <Reveal>
               <div className="rounded-3xl border border-border bg-surface/60 p-8">
                 <span className="mono-label text-primary">Device requirements</span>
@@ -43,20 +54,40 @@ export function Stack() {
 
             <Reveal delay={120}>
               <div className="mt-5 rounded-3xl border border-border bg-background p-8">
-                <span className="mono-label text-emerald">Dynamic model selection</span>
+                <span className="mono-label text-emerald">The three models</span>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  The app sizes the translation model to your hardware so it never runs out of
-                  memory:
+                  One per stage, all of them resident on the device. Open any of them for what it is
+                  and why it was chosen.
                 </p>
-                <div className="mt-5 space-y-3 font-mono text-xs">
-                  <div className="flex items-center justify-between rounded-xl border border-primary/30 bg-primary/10 px-4 py-3">
-                    <span className="text-muted-foreground">RAM &gt; 6 GB</span>
-                    <span className="font-semibold text-foreground">Q4_K_S · higher accuracy</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
-                    <span className="text-muted-foreground">RAM ≤ 6 GB</span>
-                    <span className="font-semibold text-foreground">Q2_K · lighter footprint</span>
-                  </div>
+
+                <div className="mt-6">
+                  {MODELS.map((model) => (
+                    <details key={model.name} className="model-disclosure">
+                      <summary data-cursor="hover" className="model-summary">
+                        <span>
+                          <span className="block font-display text-[15px] font-semibold text-foreground">
+                            {model.name}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-muted-foreground">
+                            {model.role}
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-3">
+                          <span className="font-mono text-[11px] text-muted-foreground">
+                            {model.meta}
+                          </span>
+                          <span aria-hidden className="model-marker">
+                            <Plus className="h-3.5 w-3.5" />
+                          </span>
+                        </span>
+                      </summary>
+                      <div className="model-body">
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {model.body}
+                        </p>
+                      </div>
+                    </details>
+                  ))}
                 </div>
               </div>
             </Reveal>
