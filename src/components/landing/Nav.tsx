@@ -109,12 +109,19 @@ export function Nav() {
     <header ref={headerRef} data-menu-open={menuOpen || undefined} className="site-nav">
       <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 sm:px-8">
         <a href="#top" className="flex items-center gap-2.5" aria-label="Uktam.ai, back to top">
+          {/*
+            The mark is drawn in blues, greens and violets that all sit close to
+            the dark canvas in lightness, so unbacked it read as a smudge at
+            32px. Same white disc the phone mockup puts behind it, for the same
+            reason — and the rosette's outline is itself near-circular, so a
+            circle wastes less of the chip than a rounded square would.
+          */}
           <img
             src="/brand/mandala.svg"
             alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8"
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-full bg-white p-[3px]"
             decoding="async"
           />
           <span className="font-display text-[15px] font-bold tracking-tight">
