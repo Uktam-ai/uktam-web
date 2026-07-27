@@ -13,7 +13,7 @@ const ALPHA_CUTOFF = 128;
 /**
  * Segment the artwork into the shapes it was actually drawn from.
  *
- * Quantising colour is the wrong tool here: a smooth gradient across one petal
+ * Quantizing colour is the wrong tool here: a smooth gradient across one petal
  * gets sliced into arbitrary bands that each need their own path, which is both
  * enormous and visibly hatched. What separates two real shapes is not colour
  * distance but a *discontinuity* — a white outline, an alpha step, a hard edge.
@@ -196,7 +196,7 @@ export function loopArea(points) {
 }
 
 /**
- * Flag vertices that sit on a genuine corner rather than a quantisation step.
+ * Flag vertices that sit on a genuine corner rather than a quantization step.
  *
  * Curvature is measured across a span of several pixels, not between immediate
  * neighbours: at one-pixel range every staircase step looks like a 90-degree

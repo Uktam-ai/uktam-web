@@ -70,7 +70,7 @@ export function decodePng(path) {
     }
   }
 
-  // Normalise everything to RGBA.
+  // Normalize everything to RGBA.
   const data = new Uint8ClampedArray(w * h * 4);
   for (let i = 0, n = w * h; i < n; i++) {
     let r,
