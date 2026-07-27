@@ -10,6 +10,13 @@ const TURN_INTERVAL_MS = 2200;
 const byCode = new Map(LANGUAGES.map((language) => [language.code, language]));
 
 /**
+ * The two languages selected in the mockup, in the order the exchange opens
+ * with. Derived rather than written down so it cannot disagree with
+ * CONVERSATION, and fixed so the selector never reorders itself.
+ */
+const PAIR = [CONVERSATION[0].from, CONVERSATION[0].to] as const;
+
+/**
  * The app's translate screen.
  *
  * Blue is your turn, green is the reply coming back, and the pills track
@@ -64,12 +71,18 @@ export function PhoneMockup() {
             </span>
           </header>
 
-          {/* Follows the turn being spoken, so the pills flip when the reply
-              comes back. */}
+          {/*
+            The pair is fixed and only the highlight moves. Previously each pill
+            was fed the current turn's `from` and `to`, which meant the two
+            traded places every time the reply came back — the selector appeared
+            to rearrange itself mid-conversation, which the real app's header
+            does not do. Now Kannada simply lights up when Kannada is the one
+            being spoken.
+          */}
           <div className="flex items-center gap-2 border-b border-border/60 px-3.5 pb-4">
-            <LanguagePill code={current.from} active />
+            <LanguagePill code={PAIR[0]} tone="source" active={current.from === PAIR[0]} />
             <ArrowLeftRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-            <LanguagePill code={current.to} />
+            <LanguagePill code={PAIR[1]} tone="target" active={current.from === PAIR[1]} />
           </div>
 
           <div className="flex min-h-[318px] flex-col gap-3 px-3 py-4">
@@ -90,13 +103,36 @@ export function PhoneMockup() {
   );
 }
 
-function LanguagePill({ code, active = false }: { code: string; active?: boolean }) {
+/*
+ * Lit in the colour of the side it is, not one colour for "selected".
+ *
+ * The page already means something specific by these two: blue is the outbound
+ * voice, green is the reply coming back, and the transcript bubbles below use
+ * exactly this pair. A single indigo highlight for whichever pill was active
+ * ignored that — Kannada would light up blue while its own bubble underneath
+ * was green. The greens are the same token, so the pill and the turn it
+ * belongs to now match.
+ */
+const ACTIVE_TONE = {
+  source: "bg-indigo text-primary-foreground",
+  target: "bg-green-deep text-white",
+} as const;
+
+function LanguagePill({
+  code,
+  tone,
+  active = false,
+}: {
+  code: string;
+  tone: keyof typeof ACTIVE_TONE;
+  active?: boolean;
+}) {
   return (
     <span
       lang={code}
       className={cn(
         "flex-1 truncate rounded-full px-3 py-2 text-center text-sm",
-        active ? "bg-indigo font-medium text-primary-foreground" : "bg-secondary text-foreground",
+        active ? cn("font-medium", ACTIVE_TONE[tone]) : "bg-secondary text-foreground",
       )}
     >
       {byCode.get(code)?.script}

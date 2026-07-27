@@ -185,6 +185,39 @@ export const FAQ = [
   },
 ] as const;
 
+/**
+ * The three models, in pipeline order, each behind a disclosure.
+ *
+ * This replaced a standalone "dynamic model selection" panel that showed two
+ * rows of quantization thresholds and nothing else. The thresholds were the
+ * most interesting thing on that card and the least explained — they now sit
+ * inside the model they actually describe, next to why that model needs them.
+ *
+ * `meta` is what the closed row has to earn its place with: a summary that says
+ * only "Translation" gives a reader no reason to open it, so each one carries
+ * the figure or the runtime that makes it worth a click.
+ */
+export const MODELS = [
+  {
+    name: "IndicConformer",
+    role: "Speech recognition",
+    meta: "AI4Bharat · ~200 ms",
+    body: "AI4Bharat's Conformer acoustic model, trained on Indian languages rather than adapted to them, which is what keeps recognition honest across accents and code-mixing. It runs through Sherpa-ONNX on the phone's own compute and returns text in roughly 200 milliseconds — fast enough that the transcript appears while you are still talking.",
+  },
+  {
+    name: "Sarvam Translate",
+    role: "Translation",
+    meta: "llama.cpp · 7–11 s",
+    body: "A multi-billion parameter translation model reached through custom JNI bindings over llama.cpp, quantized to GGUF specifically for this project. The app picks the build your hardware can hold: above 6 GB of RAM it loads Q4_K_S for higher accuracy, at or below 6 GB it loads Q2_K for a lighter memory footprint. Either way it takes 7 to 11 seconds, because this is a language model running on a phone rather than in a data centre — and it takes them whether or not you have signal.",
+  },
+  {
+    name: "Android text-to-speech",
+    role: "Speech synthesis",
+    meta: "Platform native · instant",
+    body: "The final step uses the offline voices Android already ships, so there is no fourth model to download and nothing to warm up. It speaks the translation as soon as the text exists, which closes the loop: voice in, voice out, no network touched at any point.",
+  },
+] as const;
+
 export const REQUIREMENTS = [
   { k: "Android", v: "14+ (API level 34)" },
   { k: "Memory", v: "6 GB RAM recommended" },
