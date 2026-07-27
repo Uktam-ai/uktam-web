@@ -813,6 +813,35 @@
 
 /* ---------- nav ---------- */
 
+/*
+ * Offscreen until focused, so the first Tab stop on the page is a way past the
+ * nav rather than the first link inside it. Sits above `.site-nav` (z-index 50)
+ * because it has to be legible over the condensed bar it is escaping.
+ *
+ * `top` is animated rather than a transform so the resting position is genuinely
+ * outside the viewport — a translated element still contributes scroll height.
+ * It moves only on focus, which is not a scroll-linked path.
+ */
+@utility skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 60;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--emerald);
+  background-color: var(--background);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: top var(--duration-fast) var(--ease-snap);
+
+  &:focus-visible {
+    top: 1rem;
+  }
+}
+
 @utility site-nav {
   position: fixed;
   inset-inline: 0;

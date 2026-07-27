@@ -1,4 +1,4 @@
-export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.uktam.ai";
+export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=ai.uktam";
 export const GITHUB_URL = "https://github.com/ashb155/uktam";
 
 export const PILLARS = [

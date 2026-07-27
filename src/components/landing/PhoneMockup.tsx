@@ -54,7 +54,10 @@ export function PhoneMockup() {
               decoding="async"
             />
             <span className="font-display text-base font-bold tracking-tight">Uktam.ai</span>
-            <span className="ml-auto flex items-center gap-2.5 text-foreground/85">
+            {/* Chrome from the real app's header. Depicted, not operable — a
+                screen reader announcing three unlabelled icons here would be
+                describing controls that do not exist on this page. */}
+            <span className="ml-auto flex items-center gap-2.5 text-foreground/85" aria-hidden>
               <Sun className="h-[15px] w-[15px]" />
               <Info className="h-[15px] w-[15px]" />
               <Settings className="h-[15px] w-[15px]" />
@@ -65,7 +68,7 @@ export function PhoneMockup() {
               comes back. */}
           <div className="flex items-center gap-2 border-b border-border/60 px-3.5 pb-4">
             <LanguagePill code={current.from} active />
-            <ArrowLeftRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <ArrowLeftRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
             <LanguagePill code={current.to} />
           </div>
 
