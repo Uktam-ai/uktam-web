@@ -69,6 +69,10 @@
 :root {
   --radius: 0.875rem;
 
+  /* .site-nav's own height (h-16) plus a little air, so an anchored heading
+     lands below the bar rather than flush against it. */
+  --scroll-offset: 4.5rem;
+
   /*
    * Motion. Mirrors src/lib/motion.ts — change both together.
    * Two speeds: entrances are slow and deliberate, feedback is near-instant.
@@ -166,6 +170,19 @@
 
   html {
     scroll-behavior: smooth;
+
+    /*
+     * The nav is fixed, so without this every anchor jump parks its target
+     * underneath it. Only Lenis was compensating, and Lenis is disabled on
+     * touch and under reduced-motion — which is to say it was compensating on
+     * exactly the pointer where the section links are hidden, and not on the
+     * one where the mobile menu's whole job is jumping between sections.
+     *
+     * Covers native jumps, CSS smooth scroll, and `scrollIntoView`. Lenis
+     * measures the rendered nav instead of reading this, so the two agree
+     * without either having to trust a number written in the other.
+     */
+    scroll-padding-top: var(--scroll-offset);
   }
 
   body {
