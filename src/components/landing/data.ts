@@ -14,7 +14,7 @@ export const PILLARS = [
     body: "Built strictly on models researched and trained for Indian languages — AI4Bharat and Sarvam AI — so dialects, nuance and grammar land properly.",
   },
   {
-    label: "Optimised",
+    label: "Optimized",
     title: "Custom quantized for mobile",
     body: "Multi-billion parameter models custom-quantized to GGUF and ONNX for this project, cutting memory and battery cost while holding near-parity accuracy.",
   },
@@ -53,7 +53,7 @@ export const PIPELINE = [
   },
   {
     step: "02",
-    title: "Recognise",
+    title: "Recognize",
     engine: "Sherpa-ONNX · IndicConformer",
     timing: "~200 ms",
     body: "AI4Bharat's IndicConformer transcribes speech in about 200 ms, entirely locally, with no cloud ASR endpoint involved.",
