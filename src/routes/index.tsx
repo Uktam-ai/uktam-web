@@ -7,10 +7,12 @@ import { Why } from "@/components/landing/Why";
 import { Pipeline } from "@/components/landing/Pipeline";
 import { Languages } from "@/components/landing/Languages";
 import { Stack } from "@/components/landing/Stack";
+import { Faq } from "@/components/landing/Faq";
 import { CallToAction, Footer } from "@/components/landing/CallToAction";
 import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { Cursor } from "@/components/landing/Cursor";
 import { DeferredFx, loadSplashCursor } from "@/components/fx/DeferredFx";
+import { FAQ } from "@/components/landing/data";
 
 const TITLE = "Uktam.ai — Offline Indic Speech Translation for Android";
 const DESCRIPTION =
@@ -54,23 +56,47 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
+/**
+ * One @graph rather than two script tags, so the FAQ and the application are
+ * explicitly the same page's data instead of two unrelated assertions.
+ *
+ * The FAQPage entries are mapped straight out of the FAQ array the section
+ * renders from. That is not tidiness: Google requires the answer in the markup
+ * to be the answer on the page, and the reliable way to guarantee that is for
+ * there to be one copy of the text. Editing an answer cannot leave the
+ * structured data behind.
+ */
 const JSON_LD = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Uktam.ai",
-  applicationCategory: "UtilitiesApplication",
-  operatingSystem: "Android 14+",
-  description: DESCRIPTION,
-  url: SITE_URL,
-  image: OG_IMAGE,
-  license: "https://www.gnu.org/licenses/gpl-3.0.html",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  inLanguage: ["hi", "kn", "ta", "te"],
-  author: {
-    "@type": "Organization",
-    name: "Uktam.ai",
-    url: "https://github.com/ashb155/uktam",
-  },
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": `${SITE_URL}/#app`,
+      name: "Uktam.ai",
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Android 14+",
+      description: DESCRIPTION,
+      url: SITE_URL,
+      image: OG_IMAGE,
+      license: "https://www.gnu.org/licenses/gpl-3.0.html",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      inLanguage: ["hi", "kn", "ta", "te"],
+      author: {
+        "@type": "Organization",
+        name: "Uktam.ai",
+        url: "https://github.com/ashb155/uktam",
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${SITE_URL}/#faq`,
+      mainEntity: FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    },
+  ],
 };
 
 function Index() {
@@ -94,6 +120,7 @@ function Index() {
         <Pipeline />
         <Languages />
         <Stack />
+        <Faq />
         <CallToAction />
       </main>
 

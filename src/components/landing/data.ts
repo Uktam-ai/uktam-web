@@ -133,6 +133,58 @@ export const STACK = [
   { k: "Licence", v: "GPL-3.0" },
 ];
 
+/**
+ * The questions someone actually asks before installing this, and the ones an
+ * answer engine needs a source for.
+ *
+ * Two rules here, both load-bearing:
+ *
+ * Every answer is self-contained. "Yes, after the first run" is useless as a
+ * citation — anything quoting it has to carry the subject with it, so each
+ * answer restates what it is answering about. That is also what makes them read
+ * properly when a screen reader jumps straight to one.
+ *
+ * Every claim is already made somewhere else on this page or in the repo:
+ * REQUIREMENTS for the hardware and download figures, PIPELINE for the
+ * timings, STACK for the licence, LANGUAGES for the pairs. Nothing is invented
+ * here, because this array is also the source for the FAQPage structured data
+ * and inventing a number would be inventing it in the thing Google reads.
+ */
+export const FAQ = [
+  {
+    q: "Does Uktam.ai work without an internet connection?",
+    a: "Yes. After the one-time model download on first launch, Uktam.ai never needs a network again. Speech recognition, translation and speech synthesis all run on the phone, so the app behaves identically in a dead zone, on a flight or in a remote area as it does on wifi.",
+  },
+  {
+    q: "Which languages does Uktam.ai translate between?",
+    a: "Hindi, Kannada, Tamil and Telugu, in every direction between them — twelve language pairs. More Indic languages are planned.",
+  },
+  {
+    q: "Is my voice or transcript ever uploaded?",
+    a: "No. No audio and no transcript leaves the device. The app makes zero network calls while translating, because every model it uses is running locally on the phone's own silicon.",
+  },
+  {
+    q: "How much storage does Uktam.ai need?",
+    a: "Roughly 1 to 2.5 GB, downloaded once on first run depending on which model your hardware gets. After that the app is permanently offline and downloads nothing further.",
+  },
+  {
+    q: "What Android version and hardware does it need?",
+    a: "Android 14 or newer (API level 34), with 6 GB of RAM recommended. The app sizes its translation model to the device: over 6 GB it loads a higher-accuracy build, at or below 6 GB it loads a lighter one so it does not run out of memory.",
+  },
+  {
+    q: "How fast is an offline translation?",
+    a: "Speech becomes text in about 200 milliseconds. The translation itself takes roughly 7 to 11 seconds, because a multi-billion parameter model is running on phone hardware rather than in a data centre. Speaking the result back is instant.",
+  },
+  {
+    q: "Is Uktam.ai free, and is the source available?",
+    a: "Yes to both. Uktam.ai is free on Google Play and the source is published under the GPL-3.0 licence.",
+  },
+  {
+    q: "Is there an iPhone version?",
+    a: "Not yet. Uktam.ai is Android-only today; an iOS version is planned but not released.",
+  },
+] as const;
+
 export const REQUIREMENTS = [
   { k: "Android", v: "14+ (API level 34)" },
   { k: "Memory", v: "6 GB RAM recommended" },
