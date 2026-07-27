@@ -18,7 +18,17 @@ dist-ssr
 
 # Wrangler / Cloudflare
 .wrangler/
+# Wrangler reads .dev.vars plus per-environment suffixes, and all of them hold
+# real secrets. `*.local` above does not cover either these or a bare `.env`.
 .dev.vars
+.dev.vars.*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
 
 # Editor directories and files
 .vscode/*
@@ -36,3 +46,9 @@ dist-ssr
 
 # Playwright MCP debug artifacts
 .playwright-mcp/
+
+# Ad-hoc screenshots from visual iteration. Reference assets that are meant to
+# be kept live in docs/reference/, not the repo root.
+/*.png
+/*.jpg
+/*.webp
