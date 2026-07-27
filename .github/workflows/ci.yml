@@ -1,0 +1,51 @@
+name: CI
+
+# Vercel already builds every pull request, so this deliberately does not build
+# again — it runs the three checks Vercel's build does not: ESLint, the
+# TypeScript program, and the spell/spelling-convention pass. A build that
+# succeeds while `tsc --noEmit` fails is entirely possible here, because Vite
+# transpiles per-module and never type-checks across the program.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A force-push or a rapid second push makes the in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: lint · typecheck · spelling
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      # Run all three even when an earlier one fails, so a single push reports
+      # every problem instead of only the first.
+      - name: ESLint
+        id: lint
+        run: bun run lint
+
+      - name: Typecheck
+        id: typecheck
+        if: ${{ !cancelled() }}
+        run: bun run typecheck
+
+      - name: Spelling
+        id: spell
+        if: ${{ !cancelled() }}
+        run: bun run spell
