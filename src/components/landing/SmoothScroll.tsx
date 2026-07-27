@@ -3,6 +3,16 @@ import { useEffect } from "react";
 import { usePrefersReducedMotion } from "@/hooks/use-reveal";
 import { onTick } from "@/lib/ticker";
 
+/** Breathing room between the bar and whatever the anchor landed on. */
+const NAV_CLEARANCE = 8;
+
+/** The fixed nav's rendered height, plus clearance. Falls back to the token's intent. */
+function navOffset(): number {
+  const nav = document.querySelector("header");
+  const height = nav?.getBoundingClientRect().height ?? 64;
+  return height + NAV_CLEARANCE;
+}
+
 type LenisInstance = {
   raf: (time: number) => void;
   scrollTo: (target: unknown, options?: unknown) => void;
@@ -36,7 +46,10 @@ export function SmoothScroll() {
       const target = document.querySelector(hash);
       if (!target) return;
       event.preventDefault();
-      lenis.scrollTo(target, { offset: -72, duration: 1.4 });
+      // Measured rather than hardcoded, so this cannot drift from the nav's
+      // actual height the way a literal 72 could. `scroll-padding-top` in
+      // styles.css does the same job for every path that is not Lenis.
+      lenis.scrollTo(target, { offset: -navOffset(), duration: 1.4 });
     };
 
     void (async () => {
