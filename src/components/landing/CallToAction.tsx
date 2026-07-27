@@ -43,9 +43,9 @@ export function CallToAction() {
             href={GITHUB_URL}
             target="_blank"
             rel="noreferrer"
-            className="mt-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="tap-safe mt-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
-            <Github className="h-4 w-4" />
+            <Github className="h-4 w-4" aria-hidden />
             Read the source on GitHub
           </a>
         </Reveal>
@@ -68,7 +68,7 @@ export function Footer() {
           href={GITHUB_URL}
           target="_blank"
           rel="noreferrer"
-          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="tap-safe text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           GitHub
         </a>

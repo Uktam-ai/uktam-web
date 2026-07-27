@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 
 import { prefersReducedMotion } from "@/lib/motion";
+import { hasFinePointer } from "@/lib/pointer";
 
 /**
  * Magnetic-fluid contours drifting behind the hero.
@@ -149,10 +150,22 @@ export default function Ferrofluid() {
     const container = containerRef.current;
     if (!container || prefersReducedMotion()) return;
 
+    /*
+     * This is the one effect on the page that still runs on a phone — the
+     * cursor trail, the reticle, the specular rim and Lenis all bail on a
+     * coarse pointer, because each of them is a reply to a pointer that a
+     * touch screen does not have. A backdrop has no such tell, so it stays.
+     *
+     * What it does not get is the pixel count. A full-screen fragment shader
+     * at devicePixelRatio 3 on a mid-range Android is four to nine times the
+     * work of the same shader at 1, for a blurred contour field nobody is
+     * reading pixel-peeped detail from. Desktop keeps the 2x cap it had.
+     */
+    const fine = hasFinePointer();
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      dpr: fine ? Math.min(window.devicePixelRatio || 1, 2) : 1,
       alpha: true,
-      antialias: true,
+      antialias: fine,
     });
     const gl = renderer.gl;
     const canvas = gl.canvas as HTMLCanvasElement;
@@ -202,7 +215,10 @@ export default function Ferrofluid() {
       target[0] = (event.clientX - rect.left) * scale;
       target[1] = (rect.height - (event.clientY - rect.top)) * scale;
     };
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    // On a touch screen `pointermove` only fires mid-drag, so the only thing
+    // this would do is push the fluid around while the user is trying to
+    // scroll past it.
+    if (fine) window.addEventListener("pointermove", onPointerMove, { passive: true });
 
     // Offscreen and hidden-tab frames are wasted GPU time on a backdrop.
     let inView = true;

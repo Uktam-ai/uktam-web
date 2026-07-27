@@ -136,7 +136,12 @@ function Turn({ turn, visible }: { turn: (typeof CONVERSATION)[number]; visible:
         </span>
       </div>
 
-      <p className="mt-2 font-mono text-[9px] text-white/70">
+      {/*
+        Was 9px, which is below what anyone can actually read on the device
+        this is a picture of. 10px is the most the longest line takes before it
+        wraps inside the bubble at the 292px mockup width.
+      */}
+      <p className="mt-2 font-mono text-[10px] leading-none text-white/70">
         ASR: {turn.asrMs}ms | Translation {turn.translateS}s
       </p>
     </article>
