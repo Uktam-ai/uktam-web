@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import { Nav } from "@/components/landing/Nav";
 import { Hero } from "@/components/landing/Hero";
 import { MarqueeStrip } from "@/components/landing/MarqueeStrip";
@@ -11,7 +12,6 @@ import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { Cursor } from "@/components/landing/Cursor";
 import { DeferredFx, loadSplashCursor } from "@/components/fx/DeferredFx";
 
-const SITE_URL = "https://uktam.ai";
 const TITLE = "Uktam.ai — Offline Indic Speech Translation for Android";
 const DESCRIPTION =
   "Real-time, fully offline speech-to-speech translation between Hindi, Kannada, Tamil and Telugu. Every model runs on your Android device — nothing leaves your phone.";
@@ -19,7 +19,11 @@ const DESCRIPTION =
 // Rendered by the browser from the real design tokens and webfonts, so the
 // share card is the page rather than an approximation of it. Source and
 // regeneration steps are in DESIGN.md.
-const OG_IMAGE = `${SITE_URL}/brand/og.png`;
+//
+// Absolute because og:image has to be — a relative one is ignored by every
+// crawler that matters — and resolved from the deployment rather than written
+// down, so it cannot point at a domain this build is not served from.
+const OG_IMAGE = absoluteUrl("/brand/og.png");
 
 export const Route = createFileRoute("/")({
   head: () => ({

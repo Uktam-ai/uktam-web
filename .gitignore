@@ -49,6 +49,11 @@ dist-ssr
 # Claude Code local workspace
 .claude/
 
+# Generated per-build from the deployment origin — see scripts/site-url.mjs.
+# Committing them would be a second place for the domain to go stale.
+public/robots.txt
+public/sitemap.xml
+
 # Playwright MCP debug artifacts
 .playwright-mcp/
 
