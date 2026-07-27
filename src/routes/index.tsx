@@ -75,8 +75,15 @@ function Index() {
       <SmoothScroll />
       <DeferredFx load={loadSplashCursor} />
       <Cursor />
+      {/*
+        First focusable element in the document, so keyboard and switch users
+        can clear the nav in one Tab instead of walking every link in it.
+      */}
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <MarqueeStrip />
         <Why />
