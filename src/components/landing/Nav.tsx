@@ -10,6 +10,7 @@ const LINKS = [
   { href: "#pipeline", label: "Pipeline" },
   { href: "#languages", label: "Languages" },
   { href: "#stack", label: "Stack" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 /** Matches the `md` breakpoint the section links appear at. */
