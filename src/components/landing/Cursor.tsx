@@ -39,6 +39,13 @@ export function Cursor() {
     if (reduced || !hasFinePointer()) return;
     setEnabled(true);
 
+    // `enabled` is a dependency because the first pass through here runs while
+    // it is still false — the component renders null until it flips, so every
+    // ref below is null and the guard bails before anything is wired up. Only
+    // the second pass, after the reticle is actually in the DOM, can attach.
+    // Without it the effect never ran again (`reduced` does not change on a
+    // machine that is not mid-preference-change) and the whole cursor was
+    // inert: markup present, listeners absent, transform never written.
     const wrap = wrapRef.current;
     const dot = dotRef.current;
     const corners = cornerRefs.current.filter(Boolean) as HTMLDivElement[];
@@ -155,7 +162,7 @@ export function Cursor() {
       document.removeEventListener("mouseleave", onLeave);
       document.documentElement.classList.remove("has-custom-cursor");
     };
-  }, [reduced]);
+  }, [reduced, enabled]);
 
   if (reduced || !enabled) return null;
 
