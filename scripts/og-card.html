@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Uktam.ai — share card frame</title>
+    <!--
+      The share card, drawn from the real webfonts and the real design tokens so
+      it is the page rather than an approximation of it. `scripts/build-og.mjs`
+      screenshots this file once per frame and encodes the result; nothing here
+      is meant to be opened by a visitor.
+
+      A frame is addressed as ?i=<pair>&e=<position>&r=<degrees>. `e` is how far
+      the swap into pair `i` has travelled, 0 exclusive to 1 inclusive, so e=1
+      is a settled headline. `r` is the mark's rotation, which runs
+      independently of the swap — the two motions share the card but not a
+      clock.
+
+      Neither is a time. The easing and the rotation schedule both live in
+      build-og.mjs, which decides where each frame is sampled; this file only
+      draws the position it is handed.
+    -->
+    <style>
+      /*
+       * Faces are the same files the site ships, addressed relative to this
+       * file. `block` rather than `swap`: a headless screenshot has no second
+       * chance to repaint, so a fallback that swaps in after the capture is a
+       * card rendered in Arial.
+       */
+      @font-face {
+        font-family: "Satoshi";
+        src: url("../public/fonts/satoshi-400.woff2") format("woff2");
+        font-weight: 400;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Satoshi";
+        src: url("../public/fonts/satoshi-700.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Satoshi";
+        src: url("../public/fonts/satoshi-900.woff2") format("woff2");
+        font-weight: 900;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("../public/fonts/plex-mono-500.woff2") format("woff2");
+        font-weight: 500;
+        font-display: block;
+      }
+      /*
+       * No unicode-range here, unlike src/styles/fonts.css. On the site the
+       * ranges keep three unused Indic faces off the wire; this file is read
+       * from disk by one browser that is going to render all four scripts
+       * anyway, and a range that disagreed with the subset would silently drop
+       * a glyph to tofu in the finished card.
+       */
+      @font-face {
+        font-family: "Noto Sans Devanagari";
+        src: url("../public/fonts/noto-devanagari-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Sans Kannada";
+        src: url("../public/fonts/noto-kannada-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Sans Tamil";
+        src: url("../public/fonts/noto-tamil-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Sans Telugu";
+        src: url("../public/fonts/noto-telugu-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+
+      /* Mirrors :root in src/styles.css. Kept as literals rather than imported
+         because Tailwind v4 owns that file and this page has no build step. */
+      :root {
+        --background: oklch(0.168 0.036 266);
+        --foreground: oklch(0.982 0.006 268);
+        --indigo: oklch(0.485 0.242 263);
+        --cyan: oklch(0.613 0.188 253);
+        --emerald: oklch(0.773 0.153 163);
+        --muted-foreground: oklch(0.782 0.028 272);
+
+        --font-display:
+          "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil",
+          "Noto Sans Telugu", sans-serif;
+        --font-mono: "IBM Plex Mono", monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      body {
+        background: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-display);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      /* The page's own veil, pulled toward the mark so the right half is lit
+         rather than evenly washed. */
+      .veil {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          78% 108% at 76% 26%,
+          color-mix(in oklab, var(--indigo) 40%, transparent) 0%,
+          transparent 62%
+        );
+      }
+
+      .content {
+        position: relative;
+        height: 100%;
+        padding: 64px 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 48px;
+      }
+
+      .left {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+      }
+
+      /* ── Lockup ─────────────────────────────────────────────────────── */
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /*
+       * The mark is drawn in blues, greens and violets that all sit close to
+       * this canvas in lightness, so unbacked it reads as a smudge. Same white
+       * disc the nav and the phone mockup put behind it, for the same reason,
+       * and the rosette's outline is near-circular so a circle wastes less of
+       * the chip than a rounded square would.
+       */
+      .disc {
+        background: #fff;
+        border-radius: 9999px;
+        display: grid;
+        place-items: center;
+      }
+
+      .lockup .disc {
+        width: 52px;
+        height: 52px;
+        padding: 4px;
+      }
+
+      .wordmark {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      .wordmark .tld {
+        color: var(--muted-foreground);
+      }
+
+      /* ── Headline ───────────────────────────────────────────────────── */
+
+      /*
+       * 1.24, against the site's 1.06. The site can run that tight because the
+       * headline there is one element among many and has the whole viewport to
+       * breathe into; here three lines and a swap slot share a fixed 630px, and
+       * at 1.06 the line box is shorter than the ink. Kannada stacks its
+       * conjuncts below the baseline — ಕನ್ನಡ drops a full subscript ನ under the
+       * second syllable — and Devanagari hangs the ि matra down past it, both
+       * of which land outside a 1.06 box and get taken off by the slot's clip.
+       */
+      h1 {
+        font-size: 72px;
+        font-weight: 900;
+        line-height: 1.24;
+        letter-spacing: -0.04em;
+      }
+
+      h1 .line {
+        display: block;
+      }
+
+      /*
+       * Every script stacked in one grid cell, so the slot is permanently as
+       * wide as its widest member. On the site this is what keeps cycling out
+       * of the CLS figure; here it is what stops the headline re-flowing
+       * between frames, which in a GIF would read as the text jittering.
+       *
+       * The clip is what makes the swap a swap rather than a crossfade, so it
+       * cannot simply be dropped — instead the box is padded past the ink and
+       * the padding is taken straight back off as margin. The slot ends up
+       * clipping in the gap between lines rather than through the glyphs, and
+       * the headline's layout is unchanged either way.
+       */
+      .swap {
+        display: inline-grid;
+        overflow: hidden;
+        vertical-align: top;
+        padding-block: 0.16em;
+        margin-block: -0.16em;
+      }
+
+      .swap-item {
+        grid-area: 1 / 1;
+        white-space: nowrap;
+        opacity: 0;
+      }
+
+      .swap-item[data-tone="source"] {
+        color: var(--cyan);
+      }
+
+      .swap-item[data-tone="target"] {
+        color: var(--emerald);
+      }
+
+      /* The thesis line: unbroken under the whole exchange, because nothing
+         crossed the device boundary. */
+      .rule {
+        margin-top: 26px;
+        height: 2px;
+        width: 520px;
+        background: linear-gradient(
+          to right,
+          var(--emerald),
+          color-mix(in oklab, var(--emerald) 30%, transparent) 60%,
+          transparent
+        );
+      }
+
+      .caption {
+        margin-top: 18px;
+        font-family: var(--font-mono);
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted-foreground);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .caption .from {
+        color: var(--cyan);
+      }
+
+      .caption .to {
+        color: var(--emerald);
+      }
+
+      .caption .sep {
+        color: color-mix(in oklab, var(--foreground) 30%, transparent);
+      }
+
+      .sub {
+        font-size: 21px;
+        line-height: 1.45;
+        color: var(--muted-foreground);
+        max-width: 28ch;
+      }
+
+      .facts {
+        margin-top: 14px;
+        font-family: var(--font-mono);
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--emerald);
+      }
+
+      /* ── Mark ───────────────────────────────────────────────────────── */
+
+      .mark {
+        flex: none;
+        position: relative;
+        display: grid;
+        place-items: center;
+      }
+
+      .mark .disc {
+        width: 312px;
+        height: 312px;
+        padding: 20px;
+        box-shadow:
+          0 0 0 1px color-mix(in oklab, var(--foreground) 22%, transparent),
+          0 40px 110px -30px color-mix(in oklab, var(--indigo) 90%, transparent);
+      }
+
+      /*
+       * The mark turns; the white disc behind it does not. Rotating the disc
+       * would be invisible work on a circle and would drag its 1px ring and
+       * drop shadow through the resampler once per frame, which the encoder
+       * would then have to spend real bytes describing.
+       */
+      .mark .disc {
+        position: relative;
+      }
+
+      .mark img {
+        width: 100%;
+        height: 100%;
+        transform-origin: 50% 50%;
+      }
+
+      /*
+       * The rosette spins; the waveform at its centre does not.
+       *
+       * Turning the whole mark tumbles the waveform with it, and a waveform on
+       * its side reads as a broken image rather than a rotating one — the
+       * petals are ornament and can point anywhere, the glyph means something
+       * and has an up. So the mark is drawn twice: the lower copy rotates, and
+       * an unrotated copy on top is clipped back to the core.
+       *
+       * The clip radius is the core disc's own: it measures 167 units across in
+       * the 512 viewBox, so 83.5/512 lands the seam on the boundary between the
+       * disc and the first ring of petals, which is the strongest edge in the
+       * artwork and the one place a seam has nothing to show against.
+       */
+      .mark .core {
+        position: absolute;
+        inset: 20px;
+        width: auto;
+        height: auto;
+        clip-path: circle(16.3% at 50% 50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="veil"></div>
+
+      <div class="content">
+        <div class="left">
+          <div class="lockup">
+            <span class="disc"
+              ><img src="../public/brand/mandala.svg" alt="" width="44" height="44"
+            /></span>
+            <span class="wordmark">Uktam<span class="tld">.ai</span></span>
+          </div>
+
+          <div>
+            <h1>
+              <span class="line">Speak <span class="swap" id="swap-from"></span></span>
+              <span class="line">Hear <span class="swap" id="swap-to"></span></span>
+              <span class="line">No internet.</span>
+            </h1>
+
+            <div class="rule"></div>
+
+            <p class="caption" id="caption">
+              <span><span class="from"></span> &rarr; <span class="to"></span></span>
+              <span class="sep">/</span>
+              <span>translated on device</span>
+            </p>
+          </div>
+
+          <div>
+            <p class="sub">
+              Real-time Indic speech translation that runs entirely on your Android device.
+            </p>
+            <p class="facts">4 languages · 0 network calls · GPL-3.0</p>
+          </div>
+        </div>
+
+        <div class="mark">
+          <span class="disc">
+            <img id="mark" src="../public/brand/mandala.svg" alt="" />
+            <img class="core" src="../public/brand/mandala.svg" alt="" aria-hidden="true" />
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mirrors LANGUAGES and HEADLINE_PAIRS in src/components/landing/data.ts.
+      // Duplicated rather than imported because this file is opened over
+      // file:// with no bundler in front of it; build-og.mjs asserts the two
+      // stay in agreement, so a language added there fails the build here
+      // instead of quietly rendering last month's card.
+      const LANGUAGES = [
+        { code: "hi", name: "Hindi", script: "हिन्दी" },
+        { code: "kn", name: "Kannada", script: "ಕನ್ನಡ" },
+        { code: "ta", name: "Tamil", script: "தமிழ்" },
+        { code: "te", name: "Telugu", script: "తెలుగు" },
+      ];
+      const PAIRS = [
+        { from: "hi", to: "ta" },
+        { from: "kn", to: "hi" },
+        { from: "ta", to: "te" },
+        { from: "te", to: "kn" },
+      ];
+
+      const byCode = new Map(LANGUAGES.map((l) => [l.code, l]));
+
+      function buildSlot(el, tone) {
+        for (const language of LANGUAGES) {
+          const span = document.createElement("span");
+          span.className = "swap-item";
+          span.dataset.code = language.code;
+          span.dataset.tone = tone;
+          span.lang = language.code;
+          // The full stop rides inside the slot. Left outside, it would sit
+          // against the widest script's edge and float away from a short one.
+          span.textContent = `${language.script}.`;
+          el.append(span);
+        }
+      }
+
+      /**
+       * Places one slot for a swap that is `p` of the way from `prevCode` to
+       * `code`. Outgoing rides up and out, incoming arrives from below —
+       * the same direction the site's `.script-swap-item` states describe.
+       */
+      function paintSlot(el, code, prevCode, eased) {
+        for (const item of el.children) {
+          const isIncoming = item.dataset.code === code;
+          const isOutgoing = item.dataset.code === prevCode && prevCode !== code;
+
+          if (isIncoming) {
+            item.style.opacity = String(eased);
+            item.style.transform = `translate3d(0, ${(1 - eased) * 110}%, 0)`;
+          } else if (isOutgoing) {
+            item.style.opacity = String(1 - eased);
+            item.style.transform = `translate3d(0, ${eased * -110}%, 0)`;
+          } else {
+            item.style.opacity = "0";
+            item.style.transform = "translate3d(0, 110%, 0)";
+          }
+        }
+      }
+
+      const params = new URLSearchParams(location.search);
+      const index = Number(params.get("i") ?? 0);
+      const eased = Math.min(1, Math.max(0, Number(params.get("e") ?? 1)));
+
+      document.getElementById("mark").style.transform =
+        `rotate(${Number(params.get("r") ?? 0)}deg)`;
+
+      const pair = PAIRS[index % PAIRS.length];
+      const prev = PAIRS[(index - 1 + PAIRS.length) % PAIRS.length];
+
+      const from = document.getElementById("swap-from");
+      const to = document.getElementById("swap-to");
+      buildSlot(from, "source");
+      buildSlot(to, "target");
+      paintSlot(from, pair.from, prev.from, eased);
+      paintSlot(to, pair.to, prev.to, eased);
+
+      // The caption names the pair that is arriving, and arrives with it —
+      // matching the site, where it is keyed on the pair and replays its fade.
+      const caption = document.getElementById("caption");
+      caption.querySelector(".from").textContent = byCode.get(pair.from).name;
+      caption.querySelector(".to").textContent = byCode.get(pair.to).name;
+      caption.style.opacity = String(eased);
+      caption.style.transform = `translate3d(0, ${(1 - eased) * 6}px, 0)`;
+    </script>
+  </body>
+</html>

@@ -79,6 +79,45 @@ pairs while the caption names the current direction. Each swap slot is an
 `inline-grid` with every script stacked in one cell, so it is permanently as
 wide as its widest member — measured CLS is 0.0000.
 
+## Share card
+
+`public/brand/og.gif`, with `public/brand/og.png` as its first frame. Both are
+built by `bun run og` from `scripts/og-card.html` — a real browser, the real
+webfonts, the real tokens — so the card is the page rather than a redraw of it.
+Regenerate after changing the hero copy, the language list or the mark.
+
+The card animates because the signature does. A still frame can say the app
+translates; only the cycle can show it, and og:image is the one animated surface
+a link unfurl has. Support is split — Slack, Discord, Telegram and iMessage play
+it, Facebook and LinkedIn flatten it to frame one, X gets the PNG deliberately —
+so the sequence starts on a settled card and every platform that refuses to
+animate still lands on a finished composition.
+
+The mark sits on a white disc, at both sizes, the same treatment the nav and the
+phone mockup use. Unbacked it is a smudge against the canvas, and an unfurl is
+often the only place the logo is seen at all.
+
+It also drifts, the way the ambient mandala in the Languages section does — and
+three things about that are decided rather than inherited:
+
+- **The rosette turns; the waveform at its centre does not.** The mark is drawn
+  twice, the lower copy rotating and an unrotated copy clipped back to the core.
+  Petals are ornament and may point anywhere; the waveform is a glyph and has an
+  up, and on its side it reads as a broken image rather than a moving one.
+- **45° per loop, not the section's 3°/s.** A GIF has to return to its first
+  frame, so the turn per loop must be an angle the rosette looks the same at.
+  6.4°/s is the closest the loop length allows; matching 3°/s exactly would take
+  a 15-second loop and about twice the bytes.
+- **The swap eases as a quadratic, not `--ease-out-quint`.** The site's curve is
+  three quarters travelled 80ms in, which is right at 60fps and collapses into a
+  hard cut at the 12.5fps a GIF delay can hold. The motion is resampled for the
+  frame rate rather than transcribed into it.
+
+The headline also sets looser than the page's — 1.24 against 1.06. Kannada
+stacks conjuncts below the baseline and Devanagari hangs the `ि` matra past
+them; at 1.06 both fall outside the line box and the swap slot's clip takes them
+off.
+
 ## Bans observed
 
 No gradient text. No uppercase eyebrow above every section. No numbered markers
