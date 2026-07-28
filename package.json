@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "fonts": "bun scripts/fetch-fonts.mjs",
     "logo": "bun scripts/trace-logo.mjs",
+    "og": "bun scripts/build-og.mjs",
     "spell": "cspell --no-progress \"**/*.{ts,tsx,md,css,json,mjs}\"",
     "typecheck": "tsc --noEmit",
     "check": "bun run lint && bun run typecheck && bun run spell"

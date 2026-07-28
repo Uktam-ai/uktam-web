@@ -14,7 +14,16 @@ bun run dev        # http://localhost:8080
 bun run build
 bun run check      # lint + typecheck + spelling — what CI runs
 bun run format
+bun run og         # rebuild the share card — needs Chrome and ffmpeg
 ```
+
+`bun run og` is deliberately not wired into `build`. It shells out to whatever
+Chrome and ffmpeg the machine already has rather than adding a browser and an
+encoder to `package.json` for a file that changes twice a year, so its output is
+committed. Re-run it after touching the hero copy, `LANGUAGES`,
+`HEADLINE_PAIRS` or the brand mark — the script asserts the card's copy of the
+language data still matches `data.ts` and fails rather than shipping a stale
+card.
 
 `bun run build` never type-checks: Vite transpiles per module, so a green build
 alongside a broken TypeScript program is entirely possible. Run `check`.
