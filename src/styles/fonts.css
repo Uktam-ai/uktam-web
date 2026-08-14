@@ -60,8 +60,8 @@
   font-display: swap;
   unicode-range:
     U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a,
-    U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942,
-    U+947-949, U+94b, U+94d, U+2014;
+    U+91c-91d, U+91f-920, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939,
+    U+93e-942, U+947-949, U+94b, U+94d, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Devanagari";
@@ -71,8 +71,8 @@
   font-display: swap;
   unicode-range:
     U+20-21, U+2c, U+2e, U+30-39, U+3f, U+901-902, U+905-907, U+90a, U+90f-910, U+915, U+917, U+91a,
-    U+91c-91d, U+91f, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939, U+93e-942,
-    U+947-949, U+94b, U+94d, U+2014;
+    U+91c-91d, U+91f-920, U+924, U+926, U+928, U+92a, U+92c-930, U+932, U+935-936, U+938-939,
+    U+93e-942, U+947-949, U+94b, U+94d, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Kannada";
@@ -95,6 +95,26 @@
     U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c82, U+c87-c88, U+c8e, U+c95, U+c97, U+c9c, U+c9f, U+ca1,
     U+ca4, U+ca6, U+ca8, U+cb0, U+cb2, U+cb8-cb9, U+cbe-cc2, U+cc6-cc7, U+cca-ccb, U+ccd, U+cd5,
     U+ceb, U+2014;
+}
+@font-face {
+  font-family: "Noto Sans Malayalam";
+  src: url("/fonts/noto-malayalam-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+d02, U+d0e, U+d15, U+d19, U+d1f, U+d28, U+d2a, U+d2e-d2f,
+    U+d32-d33, U+d35, U+d3e-d3f, U+d41, U+d46-d47, U+d4a-d4b, U+d4d, U+d7e, U+2014;
+}
+@font-face {
+  font-family: "Noto Sans Malayalam";
+  src: url("/fonts/noto-malayalam-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+d02, U+d0e, U+d15, U+d19, U+d1f, U+d28, U+d2a, U+d2e-d2f,
+    U+d32-d33, U+d35, U+d3e-d3f, U+d41, U+d46-d47, U+d4a-d4b, U+d4d, U+d7e, U+2014;
 }
 @font-face {
   font-family: "Noto Sans Tamil";

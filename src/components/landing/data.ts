@@ -31,9 +31,11 @@ export const PILLARS = [
  */
 export const HEADLINE_PAIRS = [
   { from: "hi", to: "ta" },
+  { from: "ml", to: "kn" },
+  { from: "mr", to: "te" },
+  { from: "ta", to: "ml" },
+  { from: "te", to: "mr" },
   { from: "kn", to: "hi" },
-  { from: "ta", to: "te" },
-  { from: "te", to: "kn" },
 ] as const;
 
 /** Headline figures under the hero. Every one is measured, not aspirational. */
@@ -49,7 +51,7 @@ export const PIPELINE = [
     title: "Speak",
     engine: "Microphone",
     timing: "live",
-    body: "Talk naturally in Hindi, Kannada, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
+    body: "Talk naturally in Hindi, Kannada, Malayalam, Marathi, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
   },
   {
     step: "02",
@@ -74,11 +76,21 @@ export const PIPELINE = [
   },
 ];
 
+/**
+ * Note there is no `font` key. There used to be one naming the script's Noto
+ * family, and nothing ever read it — the face is chosen by the fallback chain
+ * in `--font-display`, per codepoint, which is what makes a mixed-script line
+ * work at all. Adding a language means adding its family to that stack in
+ * styles.css and its strings to INDIC_SOURCE_TEXT in scripts/fetch-fonts.mjs,
+ * not annotating it here.
+ */
 export const LANGUAGES = [
-  { script: "हिन्दी", name: "Hindi", code: "hi", font: "devanagari" },
-  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn", font: "kannada" },
-  { script: "தமிழ்", name: "Tamil", code: "ta", font: "tamil" },
-  { script: "తెలుగు", name: "Telugu", code: "te", font: "telugu" },
+  { script: "हिन्दी", name: "Hindi", code: "hi" },
+  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn" },
+  { script: "മലയാളം", name: "Malayalam", code: "ml" },
+  { script: "मराठी", name: "Marathi", code: "mr" },
+  { script: "தமிழ்", name: "Tamil", code: "ta" },
+  { script: "తెలుగు", name: "Telugu", code: "te" },
 ];
 
 /**
@@ -116,9 +128,19 @@ export const CONVERSATION = [
   },
 ];
 
+/**
+ * Both counts are derived, not typed. A hand-kept four in the structured data
+ * survived a whole pass over this file when the fifth and sixth languages
+ * landed, so any number that is really a fact about LANGUAGES is computed from
+ * it here and cannot go stale on its own.
+ *
+ * The second row used to read "0 API calls made", which is the hero's own
+ * "0 network calls" said twice on one page. Every direction between n
+ * languages is n(n-1), and that is the figure this section is actually about.
+ */
 export const STATS = [
-  { value: 4, suffix: "", label: "Indic languages" },
-  { value: 0, suffix: "", label: "API calls made" },
+  { value: LANGUAGES.length, suffix: "", label: "Indic languages" },
+  { value: LANGUAGES.length * (LANGUAGES.length - 1), suffix: "", label: "Language pairs" },
   { value: 100, suffix: "%", label: "On-device compute" },
 ];
 
@@ -157,7 +179,7 @@ export const FAQ = [
   },
   {
     q: "Which languages does Uktam.ai translate between?",
-    a: "Hindi, Kannada, Tamil and Telugu, in every direction between them — twelve language pairs. More Indic languages are planned.",
+    a: "Hindi, Kannada, Malayalam, Marathi, Tamil and Telugu, in every direction between them — thirty language pairs. More Indic languages are planned.",
   },
   {
     q: "Is my voice or transcript ever uploaded?",

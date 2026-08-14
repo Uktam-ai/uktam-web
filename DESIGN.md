@@ -37,9 +37,15 @@ Rule: colour means language. Nothing else gets tinted for decoration.
 - **IBM Plex Mono** — data only: latency figures, language codes, stack rows.
   Kept despite being a reflex-reject default because the values it sets are
   genuinely machine output, and it was already the project's committed face.
-- **Noto Sans Devanagari / Kannada / Tamil / Telugu** — glyph-subset to the
-  exact strings rendered. Satoshi has no Indic coverage, so these sit behind it
-  in one stack and the browser falls through per codepoint.
+- **Noto Sans Devanagari / Kannada / Malayalam / Tamil / Telugu** — glyph-subset
+  to the exact strings rendered. Satoshi has no Indic coverage, so these sit
+  behind it in one stack and the browser falls through per codepoint. Marathi
+  rides the Devanagari face; five families cover six languages.
+
+The Languages grid has to fit the widest script name inside one tile at the
+`md` breakpoint, and that is the constraint the next language will hit first.
+മലയാളം sets 4.59em against Tamil's 2.99em, which is why `.specimen-script` caps
+against its own tile with `20cqi` rather than trusting the viewport clamp.
 
 All self-hosted in `public/fonts`. No third-party font requests. Regenerate with
 `bun run fonts` after changing any Indic copy.
@@ -106,8 +112,9 @@ three things about that are decided rather than inherited:
   up, and on its side it reads as a broken image rather than a moving one.
 - **45° per loop, not the section's 3°/s.** A GIF has to return to its first
   frame, so the turn per loop must be an angle the rosette looks the same at.
-  6.4°/s is the closest the loop length allows; matching 3°/s exactly would take
-  a 15-second loop and about twice the bytes.
+  At six pairs the loop runs 10.56s, which puts the drift at 4.26°/s — closer
+  to the target than the four-pair loop's 6.4°/s. Matching 3°/s exactly would
+  take a 15-second loop and the bytes that go with it.
 - **The swap eases as a quadratic, not `--ease-out-quint`.** The site's curve is
   three quarters travelled 80ms in, which is right at 60fps and collapses into a
   hard cut at the 12.5fps a GIF delay can hold. The motion is resampled for the

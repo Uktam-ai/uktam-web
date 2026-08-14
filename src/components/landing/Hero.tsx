@@ -59,6 +59,14 @@ export function Hero() {
 
             <Reveal delay={STEP.actions}>
               <div className="mt-9 flex flex-wrap items-center gap-3">
+                {/*
+                  Plain type, not a badge. This used to draw the Play triangle
+                  and set "Get it on / Google Play" in the badge's own two-line
+                  lockup, tinted to our gradient — which is the one thing Play
+                  brand terms do not allow, and which read as a mistake once the
+                  real badge went into the nav. Naming Google Play in running
+                  text is fine; imitating the artwork is not.
+                */}
                 <SpecularButton
                   href={PLAY_STORE_URL}
                   data-cursor="install"
@@ -66,13 +74,7 @@ export function Hero() {
                   rel="noreferrer"
                   className="btn-primary relative isolate"
                 >
-                  <GooglePlayGlyph />
-                  <span className="text-left leading-tight">
-                    <span className="block text-[10px] font-medium uppercase tracking-[0.14em] opacity-80">
-                      Get it on
-                    </span>
-                    Google Play
-                  </span>
+                  Install on Google Play
                 </SpecularButton>
                 <a href="#pipeline" data-cursor="hover" className="btn-ghost">
                   How it works
@@ -107,19 +109,5 @@ export function Hero() {
           few rem lets it settle out instead of being cut off. */}
       <GradualBlur position="bottom" height="7rem" strength={1.6} />
     </section>
-  );
-}
-
-function GooglePlayGlyph() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="currentColor">
-      <path
-        d="M3.6 1.8a1.3 1.3 0 0 0-.5 1.05v18.3c0 .43.18.8.5 1.05l10-10.2-10-10.2Z"
-        opacity=".9"
-      />
-      <path d="M17.3 8.9 14.5 7.3 4.6 1.5c-.4-.24-.8-.2-1 .3l10 10.2 3.7-3.1Z" opacity=".75" />
-      <path d="M17.3 15.1 20.9 13c.7-.4.7-1.6 0-2l-3.6-2 -3.8 3.1 3.8 3Z" />
-      <path d="m3.6 22.5c.2.5.6.54 1 .3l9.9-5.8 2.8-1.6-3.7-3.1-10 10.2Z" opacity=".85" />
-    </svg>
   );
 }
