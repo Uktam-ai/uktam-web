@@ -657,6 +657,21 @@
   }
 }
 
+/*
+ * The trailing "more languages" tile, stretched to finish its row.
+ *
+ * The span is computed from how many languages there are, so it cannot be left
+ * behind by the next addition; Tailwind only emits the span utilities it can
+ * literally see, hence custom properties rather than a class.
+ */
+@utility specimen-filler {
+  grid-column: span var(--filler-span) / span var(--filler-span);
+
+  @media (width >= 48rem) {
+    grid-column: span var(--filler-span-md) / span var(--filler-span-md);
+  }
+}
+
 @utility specimen-script {
   /*
    * Two limits, whichever is smaller. The viewport clamp sets the type scale;

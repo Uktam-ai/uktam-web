@@ -42,10 +42,17 @@ Rule: colour means language. Nothing else gets tinted for decoration.
   behind it in one stack and the browser falls through per codepoint. Marathi
   rides the Devanagari face; five families cover six languages.
 
-The Languages grid has to fit the widest script name inside one tile at the
-`md` breakpoint, and that is the constraint the next language will hit first.
-മലയാളം sets 4.59em against Tamil's 2.99em, which is why `.specimen-script` caps
-against its own tile with `20cqi` rather than trusting the viewport clamp.
+Two places are sized by the widest script rather than by the layout, and both
+are near their limit. A seventh language wider than മലയാളം hits these first.
+
+- **The specimen tile.** മലയാളം sets 4.59em against Tamil's 2.99em, which is
+  why `.specimen-script` caps against its own tile with `20cqi` instead of
+  trusting the viewport clamp. The tile count no longer matters: the trailing
+  "more" tile computes its span from `LANGUAGES.length`.
+- **The hero swap slot.** It is as wide as its widest member by construction,
+  which is what keeps layout shift at zero. Measured at 320px: `Speak ` is
+  107.3px, the slot 176.2px, the content box 292px. **8.6px of slack.** Past
+  that the line wraps and the hero becomes four lines rather than three.
 
 All self-hosted in `public/fonts`. No third-party font requests. Regenerate with
 `bun run fonts` after changing any Indic copy.

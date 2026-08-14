@@ -140,7 +140,10 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-2">
+        {/* gap-2.5 from `sm`, where the badge grows to h-9: Google asks for
+            clear space of a quarter the badge height, which is 9px there and
+            8px below it. */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
           <a
             href={GITHUB_URL}
             target="_blank"

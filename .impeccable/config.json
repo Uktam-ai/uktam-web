@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": ["src/styles.css"],
+        "createdAt": "2026-08-14T18:55:14.799Z"
+      }
+    ]
+  }
+}

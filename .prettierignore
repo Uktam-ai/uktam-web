@@ -1,6 +1,9 @@
 node_modules
 dist
 .output
+# Where the Vercel preset writes instead of .output. Building locally with
+# NITRO_PRESET=vercel used to leave a tree prettier would sit and chew on.
+.vercel
 .vinxi
 pnpm-lock.yaml
 package-lock.json

@@ -6,6 +6,8 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type PluginOption } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+import { SECURITY_HEADERS } from "./src/lib/security-headers";
+
 // @ts-expect-error -- plain .mjs helper, shared with the build; no types needed.
 import { resolveSiteUrl, writeSiteFiles } from "./scripts/site-url.mjs";
 
@@ -47,7 +49,22 @@ export default defineConfig(async ({ command }) => {
   // costs startup time for no benefit.
   if (command === "build") {
     const { nitro } = await import("nitro/vite");
-    plugins.push(nitro({ defaultPreset: "cloudflare-module" }));
+    plugins.push(
+      nitro({
+        // A fallback, not a decision: Nitro detects Vercel in CI and picks its
+        // own preset there. This is what a local `bun run build` targets, and
+        // what `bun run preview` expects wrangler to serve.
+        defaultPreset: "cloudflare-module",
+        /*
+         * src/server.ts already stamps these on anything SSR returns, which is
+         * the HTML and nothing else — the Vercel build emits a `filesystem`
+         * route ahead of the function, so fonts, brand images and robots.txt
+         * are served by the platform and never reach our handler. The rule
+         * here covers those. Same object either way, so the two cannot drift.
+         */
+        routeRules: { "/**": { headers: { ...SECURITY_HEADERS } } },
+      }),
+    );
   }
 
   plugins.push(viteReact());

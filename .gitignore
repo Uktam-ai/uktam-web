@@ -11,6 +11,9 @@ node_modules
 dist
 dist-ssr
 .output
+
+# The impeccable detector's shared config is committed; its cache is per-machine.
+.impeccable/hook.cache.json
 .vinxi
 .tanstack/**
 .nitro
