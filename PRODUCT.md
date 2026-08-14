@@ -8,8 +8,9 @@ page's job is to make an unbelievable-sounding claim believable.
 ## What it is
 
 An Android app that translates speech to speech between Hindi, Kannada,
-Malayalam, Marathi, Tamil and Telugu with every model running on the device. No network, ever. Built on
-AI4Bharat and Sarvam AI research, quantized to run on ordinary phone hardware.
+Malayalam, Marathi, Tamil and Telugu with every model running on the device. No
+network, ever. Built on AI4Bharat and Sarvam AI research, quantized to run on
+ordinary phone hardware.
 GPL-3.0. App source: github.com/ashb155/uktam
 
 ## Users

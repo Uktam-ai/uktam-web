@@ -164,7 +164,11 @@ export function Nav() {
             data-cursor="hover"
             target="_blank"
             rel="noreferrer"
-            aria-label="Get Uktam.ai on Google Play"
+            // No aria-label here. It would win the accessible name over the
+            // badge's alt, and "Get Uktam.ai on Google Play" does not contain
+            // the words rendered in the artwork — WCAG 2.5.3 Label in Name, so
+            // a speech-input user asking for the control they can read would
+            // miss it. The alt names the link instead, and matches the badge.
             className="inline-block transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03]"
           >
             <img

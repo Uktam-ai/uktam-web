@@ -644,6 +644,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* So the script below can size against the tile rather than the viewport. */
+  container-type: inline-size;
   /* Raised against the page, since the section no longer supplies contrast. */
   background-color: var(--surface);
   padding: 1.5rem 0.75rem;
@@ -656,7 +658,18 @@
 }
 
 @utility specimen-script {
-  font-size: clamp(1.875rem, 0.9rem + 3.1vw, 3.25rem);
+  /*
+   * Two limits, whichever is smaller. The viewport clamp sets the type scale;
+   * the container cap keeps the widest script inside its own tile.
+   *
+   * മലയാളം is 4.59em wide against Tamil's 2.99em, so at the md breakpoint the
+   * viewport clamp alone left 0.1px between the glyphs and the grid rule — the
+   * 1.5rem 0.75rem padding entirely eaten, and one Noto revision away from
+   * clipping. 20cqi is the widest script measured against the cell that holds
+   * it, so it engages only where the clamp is too greedy and every tile stays
+   * the same size because every cell is.
+   */
+  font-size: min(clamp(1.875rem, 0.9rem + 3.1vw, 3.25rem), 20cqi);
   line-height: 1.4;
   font-weight: 600;
 }

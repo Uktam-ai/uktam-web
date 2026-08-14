@@ -2,8 +2,7 @@
 
 Marketing site for **Uktam.ai** — real-time, fully offline speech-to-speech
 translation between Hindi, Kannada, Malayalam, Marathi, Tamil and Telugu. Every
-model runs on the
-Android device; nothing leaves the phone.
+model runs on the Android device; nothing leaves the phone.
 
 App source: <https://github.com/ashb155/uktam>
 

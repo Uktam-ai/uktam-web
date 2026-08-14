@@ -30,7 +30,7 @@ export function CallToAction() {
               rel="noreferrer"
               className="btn-primary"
             >
-              Get it on Google Play
+              Install on Google Play
             </a>
             <span className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl border border-border px-6 py-3.5 font-display text-sm font-medium text-muted-foreground">
               <Apple className="h-4 w-4" />

@@ -12,7 +12,7 @@ import { CallToAction, Footer } from "@/components/landing/CallToAction";
 import { SmoothScroll } from "@/components/landing/SmoothScroll";
 import { Cursor } from "@/components/landing/Cursor";
 import { DeferredFx, loadSplashCursor } from "@/components/fx/DeferredFx";
-import { FAQ } from "@/components/landing/data";
+import { FAQ, LANGUAGES } from "@/components/landing/data";
 
 const TITLE = "Uktam.ai — Offline Indic Speech Translation for Android";
 const DESCRIPTION =
@@ -110,7 +110,11 @@ const JSON_LD = {
       image: OG_IMAGE_STILL,
       license: "https://www.gnu.org/licenses/gpl-3.0.html",
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-      inLanguage: ["hi", "kn", "ta", "te"],
+      // Mapped, not listed, for the same reason the FAQ below is: a hand-kept
+      // copy of this went one release stale the moment a language was added,
+      // and structured data that contradicts the description beside it is
+      // worse than none.
+      inLanguage: LANGUAGES.map((language) => language.code),
       author: {
         "@type": "Organization",
         name: "Uktam.ai",

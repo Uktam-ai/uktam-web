@@ -74,7 +74,7 @@ function easeOutQuad(u) {
  * 3°/s is what this is trying to approximate. It cannot be matched exactly: a
  * GIF has to return to its first frame, so the rotation per loop has to be an
  * angle the rosette looks identical at, and at 3°/s the smallest such angle
- * would need a 15-second loop and roughly twice the bytes.
+ * would need a 15-second loop and the bytes that go with it.
  *
  * 45° over the loop is the closest that constraint allows, and slow enough
  * to read as drift rather than as a spinning logo. The choices below it are not
@@ -250,9 +250,9 @@ function plan() {
 /**
  * Renders every frame, four browsers at a time.
  *
- * Sequential was fine while the mark stood still and only twenty-four frames
- * differed; a rotating mark makes every frame distinct, and eighty-eight cold
- * Chrome starts back to back is several minutes of nothing happening. The pool
+ * Sequential was fine while the mark stood still and only a couple of dozen
+ * frames differed; a rotating mark makes every frame distinct, and a hundred
+ * odd cold Chrome starts back to back is many minutes of nothing. The pool
  * is small on purpose — these are whole browsers, and past about four the disk
  * becomes the limit rather than the CPU.
  */
