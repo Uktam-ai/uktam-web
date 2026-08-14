@@ -76,7 +76,7 @@ function easeOutQuad(u) {
  * angle the rosette looks identical at, and at 3°/s the smallest such angle
  * would need a 15-second loop and roughly twice the bytes.
  *
- * 45° over 7s is 6.4°/s — the closest the loop length allows, and slow enough
+ * 45° over the loop is the closest that constraint allows, and slow enough
  * to read as drift rather than as a spinning logo. The choices below it are not
  * free: 22.5° lands the petals between positions rather than on them, which is
  * a visibly different rosette at the seam rather than a nearly identical one.

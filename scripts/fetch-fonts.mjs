@@ -6,7 +6,7 @@
  *
  * Fonts are self-hosted so the page makes no third-party requests on load.
  * The Indic faces are glyph-subset to exactly the characters the site renders —
- * if you change any Devanagari, Kannada, Tamil or Telugu copy, add it to
+ * if you change any Devanagari, Kannada, Malayalam, Tamil or Telugu copy, add it to
  * INDIC_SOURCE_TEXT below and re-run this script, or those glyphs will render
  * as tofu.
  */
@@ -30,6 +30,7 @@ const CHROME_UA =
 const INDIC_SOURCE_TEXT = {
   devanagari: [
     "हिन्दी",
+    "मराठी",
     "मैं अभी बाहर जा रहा हूं",
     "तुम कहाँ जा रहे हो?",
     "मैं अभी कॉलेज को जाके वापस शाम पांच बजे को आऊंगा",
@@ -42,6 +43,8 @@ const INDIC_SOURCE_TEXT = {
     "ನೀನು ಎಲ್ಲಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ",
     "ನಾನು ಕಾಲೇಜಿಗೆ ಹೋಗಿ ಸಂಜೆ ೫ ಗಂಟೆಗೆ ಹಿಂತಿರುಗುತ್ತೇನೆ.",
   ],
+  // Malayalam appears only as the language name today; the second string is headroom.
+  malayalam: ["മലയാളം", "നിങ്ങൾ എവിടെ പോകുന്നു"],
   tamil: ["தமிழ்", "ரயில் நிலையத்திற்கு வழி சொல்லுங்கள்", "இந்த ஆப் இணையம் இல்லாமல் வேலை செய்யும்"],
   // Telugu appears only as the language name today; the second string is headroom.
   telugu: ["తెలుగు", "మీరు ఎక్కడికి వెళ్తున్నారు"],
@@ -50,6 +53,7 @@ const INDIC_SOURCE_TEXT = {
 const INDIC_FAMILIES = {
   devanagari: "Noto Sans Devanagari",
   kannada: "Noto Sans Kannada",
+  malayalam: "Noto Sans Malayalam",
   tamil: "Noto Sans Tamil",
   telugu: "Noto Sans Telugu",
 };

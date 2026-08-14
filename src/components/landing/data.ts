@@ -31,9 +31,11 @@ export const PILLARS = [
  */
 export const HEADLINE_PAIRS = [
   { from: "hi", to: "ta" },
+  { from: "ml", to: "kn" },
+  { from: "mr", to: "te" },
+  { from: "ta", to: "ml" },
+  { from: "te", to: "mr" },
   { from: "kn", to: "hi" },
-  { from: "ta", to: "te" },
-  { from: "te", to: "kn" },
 ] as const;
 
 /** Headline figures under the hero. Every one is measured, not aspirational. */
@@ -49,7 +51,7 @@ export const PIPELINE = [
     title: "Speak",
     engine: "Microphone",
     timing: "live",
-    body: "Talk naturally in Hindi, Kannada, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
+    body: "Talk naturally in Hindi, Kannada, Malayalam, Marathi, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
   },
   {
     step: "02",
@@ -77,6 +79,8 @@ export const PIPELINE = [
 export const LANGUAGES = [
   { script: "हिन्दी", name: "Hindi", code: "hi", font: "devanagari" },
   { script: "ಕನ್ನಡ", name: "Kannada", code: "kn", font: "kannada" },
+  { script: "മലയാളം", name: "Malayalam", code: "ml", font: "malayalam" },
+  { script: "मराठी", name: "Marathi", code: "mr", font: "devanagari" },
   { script: "தமிழ்", name: "Tamil", code: "ta", font: "tamil" },
   { script: "తెలుగు", name: "Telugu", code: "te", font: "telugu" },
 ];
@@ -117,7 +121,7 @@ export const CONVERSATION = [
 ];
 
 export const STATS = [
-  { value: 4, suffix: "", label: "Indic languages" },
+  { value: 6, suffix: "", label: "Indic languages" },
   { value: 0, suffix: "", label: "API calls made" },
   { value: 100, suffix: "%", label: "On-device compute" },
 ];
@@ -157,7 +161,7 @@ export const FAQ = [
   },
   {
     q: "Which languages does Uktam.ai translate between?",
-    a: "Hindi, Kannada, Tamil and Telugu, in every direction between them — twelve language pairs. More Indic languages are planned.",
+    a: "Hindi, Kannada, Malayalam, Marathi, Tamil and Telugu, in every direction between them — thirty language pairs. More Indic languages are planned.",
   },
   {
     q: "Is my voice or transcript ever uploaded?",

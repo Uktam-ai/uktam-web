@@ -58,11 +58,11 @@
    * render that script.
    */
   --font-display:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil", "Noto Sans Telugu",
-    ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Malayalam",
+    "Noto Sans Tamil", "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
   --font-sans:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Tamil", "Noto Sans Telugu",
-    ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Malayalam",
+    "Noto Sans Tamil", "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
@@ -226,6 +226,8 @@
    */
   [lang="hi"],
   [lang="kn"],
+  [lang="ml"],
+  [lang="mr"],
   [lang="ta"],
   [lang="te"] {
     line-height: 1.45;

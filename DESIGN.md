@@ -37,7 +37,7 @@ Rule: colour means language. Nothing else gets tinted for decoration.
 - **IBM Plex Mono** — data only: latency figures, language codes, stack rows.
   Kept despite being a reflex-reject default because the values it sets are
   genuinely machine output, and it was already the project's committed face.
-- **Noto Sans Devanagari / Kannada / Tamil / Telugu** — glyph-subset to the
+- **Noto Sans Devanagari / Kannada / Malayalam / Tamil / Telugu** — glyph-subset to the
   exact strings rendered. Satoshi has no Indic coverage, so these sit behind it
   in one stack and the browser falls through per codepoint.
 

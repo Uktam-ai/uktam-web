@@ -152,14 +152,31 @@ export function Nav() {
           >
             <Github className="h-4 w-4" />
           </a>
+          {/*
+            Google's own badge rather than a styled button. It is the artwork
+            people scan for, and Play's brand terms require it be used as
+            shipped — so no tint, no rounding and no border of ours over it.
+            The badge already carries its own #a6a6a6 outline, which is what
+            keeps a black plate legible against this canvas.
+          */}
           <a
             href={PLAY_STORE_URL}
             data-cursor="hover"
             target="_blank"
             rel="noreferrer"
-            className="whitespace-nowrap rounded-lg bg-gradient-hero px-3 py-2 text-xs font-semibold text-primary-foreground transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03] sm:px-4 sm:text-[13px]"
+            aria-label="Get Uktam.ai on Google Play"
+            className="inline-block transition-transform duration-(--duration-fast) ease-(--ease-snap) hover:scale-[1.03]"
           >
-            Get on Play Store
+            <img
+              src="/brand/google-play-badge.svg"
+              alt="Get it on Google Play"
+              width={135}
+              height={40}
+              // 32px tall is 108px wide, which clears Google's 60px minimum
+              // and still leaves the toggle room on a 320px screen.
+              className="h-8 w-auto sm:h-9"
+              decoding="async"
+            />
           </a>
 
           <button

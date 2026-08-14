@@ -30,7 +30,7 @@ export function Languages() {
         <div className="max-w-2xl">
           <Reveal>
             <h2 className="text-3xl sm:text-4xl md:text-5xl">
-              Four Indic languages today. More on the way.
+              Six Indic languages today. More on the way.
             </h2>
           </Reveal>
           <Reveal delay={160}>
@@ -41,7 +41,7 @@ export function Languages() {
           </Reveal>
         </div>
 
-        <ul className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-current/15 bg-current/15 md:grid-cols-5">
+        <ul className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-current/15 bg-current/15 md:grid-cols-4">
           {LANGUAGES.map((language, i) => (
             <Reveal as="li" key={language.code} delay={i * 80} className="specimen">
               <p lang={language.code} className="specimen-script">
@@ -51,10 +51,10 @@ export function Languages() {
               <p className="mono-label mt-1 opacity-55">{language.code}</p>
             </Reveal>
           ))}
-          {/* Spans the row on the two-column layout — five tiles across two
-              columns would otherwise leave an orphan cell showing the grid's
-              own background. */}
-          <Reveal as="li" delay={360} className="specimen col-span-2 opacity-60 md:col-span-1">
+          {/* Spans two cells in both layouts. Seven tiles fill neither a
+              two-column nor a four-column grid on their own, and the odd cell
+              left over shows the grid's own background as a gap. */}
+          <Reveal as="li" delay={480} className="specimen col-span-2 opacity-60">
             <Plus className="h-5 w-5" />
             <p className="mt-3 text-xs leading-relaxed">More Indic languages coming soon</p>
           </Reveal>
