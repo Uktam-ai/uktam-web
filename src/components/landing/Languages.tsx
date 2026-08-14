@@ -61,9 +61,9 @@ export function Languages() {
           {/*
             The tile stretches to finish whichever row it lands on, rather than
             carrying a span someone re-tuned by hand. At six languages that is
-            two cells at both widths; at seven it is one at four columns and
-            two at two columns, and neither leaves an odd cell showing the
-            grid's own background through the gap.
+            two cells at both widths; at seven it is one cell at both, and
+            neither leaves an odd cell showing the grid's own background
+            through the gap.
 
             Inline, because Tailwind only ships the span utilities it can see
             in the source and these are computed.
@@ -97,8 +97,26 @@ export function Languages() {
 function Counter({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const reduced = usePrefersReducedMotion();
   const { ref, inView } = useInView<HTMLDivElement>(0.4);
-  const [shown, setShown] = useState(0);
+  /*
+   * Seeded with the real figure, not zero.
+   *
+   * This counts up from nothing, which is fine once it is running and a lie
+   * before it starts: the server-rendered HTML used to say "0 Indic languages"
+   * eight lines under a heading saying six, and say it to anyone with
+   * JavaScript off and to any crawler that does not run it. That broke the
+   * no-JS rule in AGENTS.md and, worse, contradicted the page's own JSON-LD.
+   *
+   * So the markup ships the truth and the client arms the animation on mount.
+   * The reset is invisible because this section sits well below the fold —
+   * the only way to see it is to load a #languages deep link, where a single
+   * frame of the correct number is the better failure anyway.
+   */
+  const [shown, setShown] = useState(value);
   const done = useRef(false);
+
+  useEffect(() => {
+    if (!reduced) setShown(0);
+  }, [reduced]);
 
   useEffect(() => {
     if (!inView || done.current) return;

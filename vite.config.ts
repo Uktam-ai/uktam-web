@@ -59,8 +59,14 @@ export default defineConfig(async ({ command }) => {
          * src/server.ts already stamps these on anything SSR returns, which is
          * the HTML and nothing else — the Vercel build emits a `filesystem`
          * route ahead of the function, so fonts, brand images and robots.txt
-         * are served by the platform and never reach our handler. The rule
-         * here covers those. Same object either way, so the two cannot drift.
+         * are served by the platform and never reach our handler. This rule
+         * lands ahead of that route and covers them. Same object either way,
+         * so the two cannot drift, and both use `set` so neither doubles up.
+         *
+         * Vercel only. The cloudflare-module fallback binds Workers Assets
+         * without `run_worker_first`, so there the static paths are served
+         * before any of our code runs and this never executes. Production is
+         * Vercel, so that gap is theoretical — but it is a gap.
          */
         routeRules: { "/**": { headers: { ...SECURITY_HEADERS } } },
       }),
