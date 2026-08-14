@@ -178,6 +178,18 @@ function assertCardMatchesData() {
     fail("LANGUAGES in data.ts and og-card.html disagree. Update the card.");
   }
 
+  // The card's facts line is the last number on it still typed by hand, and it
+  // is the one a reader sees first. The lists above can agree perfectly while
+  // this still says four.
+  const expected = scriptsOf(data, "data.ts").split(",").length;
+  const claimed = Number(card.match(/class="facts">\s*(\d+)\s+languages/)?.[1]);
+  if (!Number.isFinite(claimed)) {
+    fail("Could not read the languages count out of og-card.html's facts line.");
+  }
+  if (claimed !== expected) {
+    fail(`og-card.html claims ${claimed} languages, data.ts has ${expected}. Update the card.`);
+  }
+
   return pairsOf(data, "data.ts").split(",").length;
 }
 

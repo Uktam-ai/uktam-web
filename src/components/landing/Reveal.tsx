@@ -23,6 +23,7 @@ export function Reveal({
   variant = "fade",
   className,
   as: Tag = "div",
+  style: styleProp,
 }: {
   children: ReactNode;
   /** Milliseconds before the reveal starts. */
@@ -30,9 +31,17 @@ export function Reveal({
   variant?: RevealVariant;
   className?: string;
   as?: RevealTag;
+  /**
+   * Merged ahead of `--delay`, so a caller can pass custom properties a
+   * utility reads without losing the reveal's own timing variable.
+   */
+  style?: CSSProperties;
 }) {
   const ref = useReveal<HTMLDivElement>();
-  const style = delay ? ({ "--delay": `${delay}ms` } as CSSProperties) : undefined;
+  const style =
+    delay || styleProp
+      ? ({ ...styleProp, ...(delay ? { "--delay": `${delay}ms` } : null) } as CSSProperties)
+      : undefined;
 
   if (variant === "wipe") {
     return (

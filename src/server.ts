@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { SECURITY_HEADERS } from "./lib/security-headers";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -43,27 +44,6 @@ function isH3SwallowedErrorBody(body: string): boolean {
     return false;
   }
 }
-
-/**
- * Headers every response carries.
- *
- * Deliberately no Content-Security-Policy here. The shell inlines a
- * synchronous script to set the `.js` class before first paint, and the page
- * inlines JSON-LD; both are blocked by any `script-src` short of
- * `'unsafe-inline'`, which would make the policy decorative. A real CSP needs a
- * per-request nonce threaded through the shell — worth doing, but it is a
- * behaviour change rather than a header, so it is not smuggled in here.
- *
- * Everything below is inert for a site that ships no frames, no cross-origin
- * embeds and no camera/mic/geolocation use.
- */
-const SECURITY_HEADERS: Readonly<Record<string, string>> = {
-  "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
-  "x-content-type-options": "nosniff",
-  "x-frame-options": "DENY",
-  "referrer-policy": "strict-origin-when-cross-origin",
-  "permissions-policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
-};
 
 function withSecurityHeaders(response: Response): Response {
   // A Response from the SSR handler can have immutable headers, so clone rather

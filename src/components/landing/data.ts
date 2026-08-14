@@ -171,7 +171,20 @@ export const STACK = [
  * timings, STACK for the licence, LANGUAGES for the pairs. Nothing is invented
  * here, because this array is also the source for the FAQPage structured data
  * and inventing a number would be inventing it in the thing Google reads.
+ *
+ * Which is why the languages answer is built rather than written. It is the
+ * one answer whose text is a fact about LANGUAGES, and the one most likely to
+ * be edited last — a stale copy of it would be a stale claim inside the
+ * structured data, not merely on the page.
  */
+const LANGUAGE_LIST = new Intl.ListFormat("en-GB", {
+  style: "long",
+  type: "conjunction",
+}).format(LANGUAGES.map((language) => language.name));
+
+/** Every ordered direction between n languages, which is what the app offers. */
+const PAIR_COUNT = LANGUAGES.length * (LANGUAGES.length - 1);
+
 export const FAQ = [
   {
     q: "Does Uktam.ai work without an internet connection?",
@@ -179,7 +192,7 @@ export const FAQ = [
   },
   {
     q: "Which languages does Uktam.ai translate between?",
-    a: "Hindi, Kannada, Malayalam, Marathi, Tamil and Telugu, in every direction between them — thirty language pairs. More Indic languages are planned.",
+    a: `${LANGUAGE_LIST}, in every direction between them — ${PAIR_COUNT} language pairs. More Indic languages are planned.`,
   },
   {
     q: "Is my voice or transcript ever uploaded?",

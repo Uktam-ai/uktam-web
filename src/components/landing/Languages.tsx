@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Plus } from "lucide-react";
 
 import { useInView, usePrefersReducedMotion } from "@/hooks/use-reveal";
@@ -7,6 +7,13 @@ import { onTick } from "@/lib/ticker";
 
 import { Reveal } from "./Reveal";
 import { LANGUAGES, STATS } from "./data";
+
+/**
+ * How many cells the trailing tile has to swallow to square off the grid at a
+ * given column count. Always between 1 and `columns`: a count that already
+ * divides evenly gives the tile a whole row to itself rather than no width.
+ */
+const fillerSpan = (columns: number) => columns - (LANGUAGES.length % columns);
 
 /**
  * Sits on the page's own canvas. Any opaque panel here would be a lid: the
@@ -51,10 +58,27 @@ export function Languages() {
               <p className="mono-label mt-1 opacity-55">{language.code}</p>
             </Reveal>
           ))}
-          {/* Spans two cells in both layouts. Seven tiles fill neither a
-              two-column nor a four-column grid on their own, and the odd cell
-              left over shows the grid's own background as a gap. */}
-          <Reveal as="li" delay={480} className="specimen col-span-2 opacity-60">
+          {/*
+            The tile stretches to finish whichever row it lands on, rather than
+            carrying a span someone re-tuned by hand. At six languages that is
+            two cells at both widths; at seven it is one at four columns and
+            two at two columns, and neither leaves an odd cell showing the
+            grid's own background through the gap.
+
+            Inline, because Tailwind only ships the span utilities it can see
+            in the source and these are computed.
+          */}
+          <Reveal
+            as="li"
+            delay={LANGUAGES.length * 80}
+            className="specimen specimen-filler opacity-60"
+            style={
+              {
+                "--filler-span": fillerSpan(2),
+                "--filler-span-md": fillerSpan(4),
+              } as CSSProperties
+            }
+          >
             <Plus className="h-5 w-5" />
             <p className="mt-3 text-xs leading-relaxed">More Indic languages coming soon</p>
           </Reveal>
