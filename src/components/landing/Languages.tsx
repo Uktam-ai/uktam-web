@@ -37,7 +37,7 @@ export function Languages() {
         <div className="max-w-2xl">
           <Reveal>
             <h2 className="text-3xl sm:text-4xl md:text-5xl">
-              Six Indic languages today. More on the way.
+              Nine languages today. More on the way.
             </h2>
           </Reveal>
           <Reveal delay={160}>

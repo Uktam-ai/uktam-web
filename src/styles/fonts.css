@@ -156,3 +156,43 @@
     U+20-21, U+2c, U+2e, U+30-39, U+3f, U+c0e, U+c15, U+c17, U+c21, U+c24, U+c28, U+c2e, U+c30,
     U+c32-c33, U+c35, U+c3e-c41, U+c46, U+c4d, U+2014;
 }
+@font-face {
+  font-family: "Noto Sans Bengali";
+  src: url("/fonts/noto-bengali-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+982, U+986, U+995, U+99a-99b, U+9a5, U+9a8, U+9aa, U+9ac,
+    U+9af, U+9b2, U+9bc, U+9be-9bf, U+9c7, U+9cb, U+9cd, U+2014;
+}
+@font-face {
+  font-family: "Noto Sans Bengali";
+  src: url("/fonts/noto-bengali-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+982, U+986, U+995, U+99a-99b, U+9a5, U+9a8, U+9aa, U+9ac,
+    U+9af, U+9b2, U+9bc, U+9be-9bf, U+9c7, U+9cb, U+9cd, U+2014;
+}
+@font-face {
+  font-family: "Noto Sans Gujarati";
+  src: url("/fonts/noto-gujarati-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+a82, U+a88, U+a95, U+a97, U+a9b-a9c, U+aa4, U+aae-ab0,
+    U+ab9, U+abe, U+ac0-ac1, U+ac7, U+acb, U+acd, U+2014;
+}
+@font-face {
+  font-family: "Noto Sans Gujarati";
+  src: url("/fonts/noto-gujarati-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+20-21, U+2c, U+2e, U+30-39, U+3f, U+a82, U+a88, U+a95, U+a97, U+a9b-a9c, U+aa4, U+aae-ab0,
+    U+ab9, U+abe, U+ac0-ac1, U+ac7, U+acb, U+acd, U+2014;
+}

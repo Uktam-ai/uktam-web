@@ -48,6 +48,8 @@ const INDIC_SOURCE_TEXT = {
   tamil: ["தமிழ்", "ரயில் நிலையத்திற்கு வழி சொல்லுங்கள்", "இந்த ஆப் இணையம் இல்லாமல் வேலை செய்யும்"],
   // Telugu appears only as the language name today; the second string is headroom.
   telugu: ["తెలుగు", "మీరు ఎక్కడికి వెళ్తున్నారు"],
+  bengali: ["বাংলা", "আপনি কোথায় যাচ্ছেন"],
+  gujarati: ["ગુજરાતી", "તમે ક્યાં જઈ રહ્યા છો"],
 };
 
 const INDIC_FAMILIES = {
@@ -56,6 +58,8 @@ const INDIC_FAMILIES = {
   malayalam: "Noto Sans Malayalam",
   tamil: "Noto Sans Tamil",
   telugu: "Noto Sans Telugu",
+  bengali: "Noto Sans Bengali",
+  gujarati: "Noto Sans Gujarati",
 };
 
 async function fetchText(url, headers = {}) {
