@@ -4,14 +4,13 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig, type PluginOption } from "vite";
-import tsConfigPaths from "vite-tsconfig-paths";
 
 import { SECURITY_HEADERS } from "./src/lib/security-headers";
 
 // @ts-expect-error -- plain .mjs helper, shared with the build; no types needed.
 import { resolveSiteUrl, writeSiteFiles } from "./scripts/site-url.mjs";
 
-// Plugin order matters: Tailwind and path resolution run before Start's route
+// Plugin order matters: Tailwind runs before Start's route
 // and server transforms, and the React plugin comes last so it sees the
 // already-transformed output.
 export default defineConfig(async ({ command }) => {
@@ -34,7 +33,6 @@ export default defineConfig(async ({ command }) => {
       },
     },
     tailwindcss(),
-    tsConfigPaths({ projects: ["./tsconfig.json"] }),
     tanstackStart({
       importProtection: {
         behavior: "error",
@@ -82,16 +80,8 @@ export default defineConfig(async ({ command }) => {
     },
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
-      // React and Query must each resolve to a single copy — duplicates break
-      // hooks and split the query cache across the SSR/client boundary.
-      dedupe: [
-        "react",
-        "react-dom",
-        "react/jsx-runtime",
-        "react/jsx-dev-runtime",
-        "@tanstack/react-query",
-        "@tanstack/query-core",
-      ],
+      // React must resolve to a single copy — duplicates break hooks.
+      dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
     },
     optimizeDeps: {
       include: [

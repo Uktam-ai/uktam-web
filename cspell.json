@@ -150,6 +150,8 @@
     "/[\\u0900-\\u0DFF]+/gu"
   ],
 
+  "useGitignore": true,
+
   "ignorePaths": [
     "node_modules/**",
     ".output/**",
