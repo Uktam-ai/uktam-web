@@ -52,6 +52,10 @@ dist-ssr
 # Claude Code local workspace
 .claude/
 
+# Agent skill installs (per-machine tooling, not site code)
+.agents/
+skills-lock.json
+
 # Generated per-build from the deployment origin — see scripts/site-url.mjs.
 # Committing them would be a second place for the domain to go stale.
 public/robots.txt

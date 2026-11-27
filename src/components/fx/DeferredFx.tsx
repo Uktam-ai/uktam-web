@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState, type ComponentType } from "react";
+import { Suspense, useEffect, useState, type ComponentType } from "react";
 
 /**
  * Loads a decorative effect after the page is interactive, never during SSR.
@@ -52,6 +52,3 @@ export function DeferredFx<P extends object>({
 /** Kept beside the loader so each effect has exactly one import site. */
 export const loadSplashCursor = () => import("./SplashCursor");
 export const loadFerrofluid = () => import("./Ferrofluid");
-
-/** Lazily loaded, but referenced enough to be worth a stable identity. */
-export const LazySpecularButton = lazy(() => import("./SpecularButton"));

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { usePrefersReducedMotion } from "@/hooks/use-reveal";
-import { cn } from "@/lib/utils";
 
 import { HEADLINE_PAIRS, LANGUAGES } from "./data";
 
@@ -129,7 +128,7 @@ function ScriptSwap({
             aria-hidden
             data-state={state}
             data-tone={tone}
-            className={cn("script-swap-item")}
+            className="script-swap-item"
           >
             {/* The full stop rides inside the slot. Left outside, it would sit
                 against the widest script's edge and float away from a short

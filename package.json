@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "build:dev": "vite build --mode development",
     "preview": "wrangler dev -c .output/server/wrangler.json",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -19,7 +18,6 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
-    "@tanstack/react-query": "^5.101.1",
     "@tanstack/react-router": "^1.170.16",
     "@tanstack/react-start": "^1.168.26",
     "@tanstack/router-plugin": "^1.168.18",
@@ -31,9 +29,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.1",
-    "tw-animate-css": "^1.3.4",
-    "vite-tsconfig-paths": "^6.0.2"
+    "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
     "@cspell/dict-en-gb": "^5.0.30",
