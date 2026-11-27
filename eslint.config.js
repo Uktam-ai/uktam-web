@@ -32,7 +32,12 @@ export default tseslint.config(
           ],
         },
       ],
-      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      // Route files export only `Route`, which wraps their components; the
+      // router plugin handles their HMR. Without this, 0.5 flags every one.
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true, extraHOCs: ["createFileRoute", "createRootRoute"] },
+      ],
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
