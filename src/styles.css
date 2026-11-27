@@ -57,11 +57,13 @@
    * render that script.
    */
   --font-display:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Malayalam",
-    "Noto Sans Tamil", "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Bengali", "Noto Sans Gujarati",
+    "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Tamil", "Noto Sans Telugu",
+    ui-sans-serif, system-ui, sans-serif;
   --font-sans:
-    "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Malayalam",
-    "Noto Sans Tamil", "Noto Sans Telugu", ui-sans-serif, system-ui, sans-serif;
+    "Satoshi", "Noto Sans Devanagari", "Noto Sans Bengali", "Noto Sans Gujarati",
+    "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Tamil", "Noto Sans Telugu",
+    ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 

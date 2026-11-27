@@ -151,46 +151,48 @@ function requireFfmpeg() {
  * file:// with no bundler to import through. That copy is allowed to exist and
  * is not allowed to drift, so it is checked against the real one here: adding a
  * language to data.ts should fail this build loudly, not ship a card that is
- * quietly one release out of date.
+ * quietly one release out of date. data.ts is imported directly (Bun runs
+ * TypeScript), so the site may compute its pairs however it likes.
+ *
+ * The card's pairs only have to be a subset of the site's: the hero can cycle
+ * through every direction, but a share card that did would be a GIF of minutes.
  */
-function assertCardMatchesData() {
-  const data = readFileSync(join(root, "src", "components", "landing", "data.ts"), "utf8");
+async function assertCardMatchesData() {
+  const { LANGUAGES, HEADLINE_PAIRS } = await import(
+    pathToFileURL(join(root, "src", "components", "landing", "data.ts")).href
+  );
   const card = readFileSync(cardHtml, "utf8");
 
-  const pairsOf = (source, label) => {
-    const block = source.match(/(?:HEADLINE_)?PAIRS\s*=\s*\[([\s\S]*?)\]/);
-    if (!block) fail(`Could not read the language pairs out of ${label}.`);
-    return [...block[1].matchAll(/from:\s*"(\w+)",\s*to:\s*"(\w+)"/g)]
-      .map((m) => `${m[1]}>${m[2]}`)
-      .join(",");
-  };
-
-  const scriptsOf = (source, label) => {
-    const codes = [...source.matchAll(/code:\s*"(\w{2})"/g)].map((m) => m[1]);
-    if (codes.length === 0) fail(`Could not read the language codes out of ${label}.`);
-    return codes.join(",");
-  };
-
-  if (pairsOf(data, "data.ts") !== pairsOf(card, "og-card.html")) {
-    fail("HEADLINE_PAIRS in data.ts and PAIRS in og-card.html disagree. Update the card.");
+  const block = card.match(/PAIRS\s*=\s*\[([\s\S]*?)\]/);
+  if (!block) fail("Could not read the language pairs out of og-card.html.");
+  const cardPairs = [...block[1].matchAll(/from:\s*"(\w+)",\s*to:\s*"(\w+)"/g)].map(
+    (m) => `${m[1]}>${m[2]}`,
+  );
+  const sitePairs = new Set(HEADLINE_PAIRS.map((p) => `${p.from}>${p.to}`));
+  const stray = cardPairs.filter((pair) => !sitePairs.has(pair));
+  if (cardPairs.length === 0 || stray.length > 0) {
+    fail(`og-card.html shows pairs data.ts does not: ${stray.join(", ") || "(none read)"}.`);
   }
-  if (scriptsOf(data, "data.ts") !== scriptsOf(card, "og-card.html")) {
+
+  const cardCodes = [...card.matchAll(/code:\s*"(\w{2})"/g)].map((m) => m[1]).join(",");
+  if (cardCodes !== LANGUAGES.map((l) => l.code).join(",")) {
     fail("LANGUAGES in data.ts and og-card.html disagree. Update the card.");
   }
 
   // The card's facts line is the last number on it still typed by hand, and it
   // is the one a reader sees first. The lists above can agree perfectly while
   // this still says four.
-  const expected = scriptsOf(data, "data.ts").split(",").length;
   const claimed = Number(card.match(/class="facts">\s*(\d+)\s+languages/)?.[1]);
   if (!Number.isFinite(claimed)) {
     fail("Could not read the languages count out of og-card.html's facts line.");
   }
-  if (claimed !== expected) {
-    fail(`og-card.html claims ${claimed} languages, data.ts has ${expected}. Update the card.`);
+  if (claimed !== LANGUAGES.length) {
+    fail(
+      `og-card.html claims ${claimed} languages, data.ts has ${LANGUAGES.length}. Update the card.`,
+    );
   }
 
-  return pairsOf(data, "data.ts").split(",").length;
+  return cardPairs.length;
 }
 
 async function shoot(chrome, url, out) {
@@ -225,7 +227,7 @@ async function shoot(chrome, url, out) {
 
 const chrome = findChrome();
 requireFfmpeg();
-const pairCount = assertCardMatchesData();
+const pairCount = await assertCardMatchesData();
 
 const work = mkdtempSync(join(tmpdir(), "uktam-og-"));
 

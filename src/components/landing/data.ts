@@ -26,23 +26,41 @@ export const PILLARS = [
 ];
 
 /**
+ * Note there is no `font` key. There used to be one naming the script's Noto
+ * family, and nothing ever read it — the face is chosen by the fallback chain
+ * in `--font-display`, per codepoint, which is what makes a mixed-script line
+ * work at all. Adding a language means adding its family to that stack in
+ * styles.css and its strings to INDIC_SOURCE_TEXT in scripts/fetch-fonts.mjs,
+ * not annotating it here.
+ */
+export const LANGUAGES = [
+  { script: "English", name: "English", code: "en" },
+  { script: "हिन्दी", name: "Hindi", code: "hi" },
+  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn" },
+  { script: "മലയാളം", name: "Malayalam", code: "ml" },
+  { script: "मराठी", name: "Marathi", code: "mr" },
+  { script: "தமிழ்", name: "Tamil", code: "ta" },
+  { script: "తెలుగు", name: "Telugu", code: "te" },
+  { script: "বাংলা", name: "Bengali", code: "bn" },
+  { script: "ગુજરાતી", name: "Gujarati", code: "gu" },
+];
+
+/**
  * Language pairs the hero headline cycles through. Each is a direction the app
  * actually supports, and the two sides are always different languages.
  */
-export const HEADLINE_PAIRS = [
-  { from: "hi", to: "ta" },
-  { from: "ml", to: "kn" },
-  { from: "mr", to: "te" },
-  { from: "ta", to: "ml" },
-  { from: "te", to: "mr" },
-  { from: "kn", to: "hi" },
-] as const;
+export const HEADLINE_PAIRS = Array.from({ length: LANGUAGES.length - 1 }, (_, offset) =>
+  LANGUAGES.map((from, i) => ({
+    from: from.code,
+    to: LANGUAGES[(i + offset + 1) % LANGUAGES.length].code,
+  })),
+).flat();
 
 /** Headline figures under the hero. Every one is measured, not aspirational. */
 export const HERO_STATS = [
   { value: "~200 ms", label: "On-device ASR" },
   { value: "0", label: "Network calls" },
-  { value: "GPL-3.0", label: "Open source" },
+  { value: "19 MB", label: "Play Store install" },
 ];
 
 export const PIPELINE = [
@@ -51,14 +69,14 @@ export const PIPELINE = [
     title: "Speak",
     engine: "Microphone",
     timing: "live",
-    body: "Talk naturally in Hindi, Kannada, Malayalam, Marathi, Tamil or Telugu. Audio is captured and streamed straight into the on-device pipeline.",
+    body: "Talk naturally in English, Hindi, Kannada, Malayalam, Marathi, Tamil, Telugu, Bengali or Gujarati. Audio is captured and streamed straight into the on-device pipeline.",
   },
   {
     step: "02",
     title: "Recognize",
-    engine: "Sherpa-ONNX · IndicConformer",
+    engine: "Sherpa-ONNX · IndicConformer & Parakeet",
     timing: "~200 ms",
-    body: "AI4Bharat's IndicConformer transcribes speech in about 200 ms, entirely locally, with no cloud ASR endpoint involved.",
+    body: "AI4Bharat's IndicConformer and NVIDIA's Parakeet transcribe speech in about 200 ms, entirely locally, with no cloud ASR endpoint involved.",
   },
   {
     step: "03",
@@ -74,23 +92,6 @@ export const PIPELINE = [
     timing: "instant",
     body: "The translated text is spoken aloud through Android's offline text-to-speech engine — a full speech-to-speech loop.",
   },
-];
-
-/**
- * Note there is no `font` key. There used to be one naming the script's Noto
- * family, and nothing ever read it — the face is chosen by the fallback chain
- * in `--font-display`, per codepoint, which is what makes a mixed-script line
- * work at all. Adding a language means adding its family to that stack in
- * styles.css and its strings to INDIC_SOURCE_TEXT in scripts/fetch-fonts.mjs,
- * not annotating it here.
- */
-export const LANGUAGES = [
-  { script: "हिन्दी", name: "Hindi", code: "hi" },
-  { script: "ಕನ್ನಡ", name: "Kannada", code: "kn" },
-  { script: "മലയാളം", name: "Malayalam", code: "ml" },
-  { script: "मराठी", name: "Marathi", code: "mr" },
-  { script: "தமிழ்", name: "Tamil", code: "ta" },
-  { script: "తెలుగు", name: "Telugu", code: "te" },
 ];
 
 /**
@@ -139,7 +140,7 @@ export const CONVERSATION = [
  * languages is n(n-1), and that is the figure this section is actually about.
  */
 export const STATS = [
-  { value: LANGUAGES.length, suffix: "", label: "Indic languages" },
+  { value: LANGUAGES.length, suffix: "", label: "Supported languages" },
   { value: LANGUAGES.length * (LANGUAGES.length - 1), suffix: "", label: "Language pairs" },
   { value: 100, suffix: "%", label: "On-device compute" },
 ];
@@ -148,10 +149,10 @@ export const STACK = [
   { k: "Language", v: "Kotlin" },
   { k: "UI", v: "Jetpack Compose · Material 3" },
   { k: "Architecture", v: "MVVM · StateFlow · Coroutines" },
-  { k: "ASR", v: "Sherpa-ONNX · AI4Bharat IndicConformer" },
+  { k: "ASR", v: "Sherpa-ONNX · IndicConformer & Parakeet" },
   { k: "Translation", v: "llama.cpp (JNI) · Sarvam Translate" },
   { k: "Build", v: "Gradle KTS · CMake · Android NDK" },
-  { k: "Delivery", v: "Play Asset Delivery" },
+  { k: "Delivery", v: "Play Asset Delivery (fast-follow)" },
   { k: "Licence", v: "GPL-3.0" },
 ];
 
@@ -234,10 +235,10 @@ export const FAQ = [
  */
 export const MODELS = [
   {
-    name: "IndicConformer",
+    name: "IndicConformer & Parakeet",
     role: "Speech recognition",
-    meta: "AI4Bharat · ~200 ms",
-    body: "AI4Bharat's Conformer acoustic model, trained on Indian languages rather than adapted to them, which is what keeps recognition honest across accents and code-mixing. It runs through Sherpa-ONNX on the phone's own compute and returns text in roughly 200 milliseconds — fast enough that the transcript appears while you are still talking.",
+    meta: "AI4Bharat & NVIDIA · ~200 ms",
+    body: "AI4Bharat's Conformer acoustic model handles Indian languages across accents and code-mixing, paired with NVIDIA's Parakeet TDT-CTC 110M for English. Both run locally through Sherpa-ONNX on the phone's own compute in roughly 200 milliseconds.",
   },
   {
     name: "Sarvam Translate",

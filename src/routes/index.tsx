@@ -16,7 +16,7 @@ import { FAQ, LANGUAGES } from "@/components/landing/data";
 
 const TITLE = "Uktam.ai — Offline Indic Speech Translation for Android";
 const DESCRIPTION =
-  "Real-time, fully offline speech-to-speech translation between Hindi, Kannada, Malayalam, Marathi, Tamil and Telugu. Every model runs on your Android device — nothing leaves your phone.";
+  "Real-time, fully offline speech-to-speech translation across English, Hindi, Bengali, Gujarati, Kannada, Malayalam, Marathi, Tamil and Telugu. Every model runs on your Android device — nothing leaves your phone.";
 
 /**
  * The headline on a share card, which is not the headline on the page.

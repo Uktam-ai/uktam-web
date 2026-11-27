@@ -87,6 +87,18 @@
         font-weight: 600;
         font-display: block;
       }
+      @font-face {
+        font-family: "Noto Sans Bengali";
+        src: url("../public/fonts/noto-bengali-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Noto Sans Gujarati";
+        src: url("../public/fonts/noto-gujarati-600.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
 
       /* Mirrors :root in src/styles.css. Kept as literals rather than imported
          because Tailwind v4 owns that file and this page has no build step. */
@@ -99,8 +111,9 @@
         --muted-foreground: oklch(0.782 0.028 272);
 
         --font-display:
-          "Satoshi", "Noto Sans Devanagari", "Noto Sans Kannada", "Noto Sans Malayalam",
-          "Noto Sans Tamil", "Noto Sans Telugu", sans-serif;
+          "Satoshi", "Noto Sans Devanagari", "Noto Sans Bengali", "Noto Sans Gujarati",
+          "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Tamil", "Noto Sans Telugu",
+          sans-serif;
         --font-mono: "IBM Plex Mono", monospace;
       }
 
@@ -400,7 +413,7 @@
             <p class="sub">
               Real-time Indic speech translation that runs entirely on your Android device.
             </p>
-            <p class="facts">6 languages · 0 network calls · GPL-3.0</p>
+            <p class="facts">9 languages · 0 network calls · GPL-3.0</p>
           </div>
         </div>
 
@@ -420,20 +433,26 @@
       // stay in agreement, so a language added there fails the build here
       // instead of quietly rendering last month's card.
       const LANGUAGES = [
+        { code: "en", name: "English", script: "English" },
         { code: "hi", name: "Hindi", script: "हिन्दी" },
         { code: "kn", name: "Kannada", script: "ಕನ್ನಡ" },
         { code: "ml", name: "Malayalam", script: "മലയാളം" },
         { code: "mr", name: "Marathi", script: "मराठी" },
         { code: "ta", name: "Tamil", script: "தமிழ்" },
         { code: "te", name: "Telugu", script: "తెలుగు" },
+        { code: "bn", name: "Bengali", script: "বাংলা" },
+        { code: "gu", name: "Gujarati", script: "ગુજરાતી" },
       ];
       const PAIRS = [
+        { from: "en", to: "hi" },
         { from: "hi", to: "ta" },
         { from: "ml", to: "kn" },
         { from: "mr", to: "te" },
-        { from: "ta", to: "ml" },
-        { from: "te", to: "mr" },
-        { from: "kn", to: "hi" },
+        { from: "ta", to: "bn" },
+        { from: "te", to: "gu" },
+        { from: "kn", to: "en" },
+        { from: "bn", to: "mr" },
+        { from: "gu", to: "ml" },
       ];
 
       const byCode = new Map(LANGUAGES.map((l) => [l.code, l]));

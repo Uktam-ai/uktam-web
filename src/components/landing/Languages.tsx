@@ -37,7 +37,7 @@ export function Languages() {
         <div className="max-w-2xl">
           <Reveal>
             <h2 className="text-3xl sm:text-4xl md:text-5xl">
-              Six Indic languages today. More on the way.
+              Nine languages today. More on the way.
             </h2>
           </Reveal>
           <Reveal delay={160}>
@@ -60,10 +60,10 @@ export function Languages() {
           ))}
           {/*
             The tile stretches to finish whichever row it lands on, rather than
-            carrying a span someone re-tuned by hand. At six languages that is
-            two cells at both widths; at seven it is one cell at both, and
-            neither leaves an odd cell showing the grid's own background
-            through the gap.
+            carrying a span someone re-tuned by hand. At nine languages that
+            is one cell on two columns and three on four; at ten it is two at
+            both, and neither leaves an odd cell showing the grid's own
+            background through the gap.
 
             Inline, because Tailwind only ships the span utilities it can see
             in the source and these are computed.
@@ -102,7 +102,7 @@ function Counter({ value, suffix, label }: { value: number; suffix: string; labe
    *
    * This counts up from nothing, which is fine once it is running and a lie
    * before it starts: the server-rendered HTML used to say "0 Indic languages"
-   * eight lines under a heading saying six, and say it to anyone with
+   * eight lines under a heading giving the real count, and say it to anyone with
    * JavaScript off and to any crawler that does not run it. That broke the
    * no-JS rule in AGENTS.md and, worse, contradicted the page's own JSON-LD.
    *
